@@ -13,19 +13,17 @@ class FlashDataReader;
 
 struct Typography
 {
-    static const touchgfx::FontId HEMI_70 = 0;
-    static const touchgfx::FontId HEMI_20 = 1;
-    static const touchgfx::FontId HEMI_40 = 2;
-    static const touchgfx::FontId HEMI_120 = 3;
+    static const touchgfx::FontId SENSOR_VALUES = 0;
+    static const touchgfx::FontId SENSOR_LABEL = 1;
+    static const touchgfx::FontId SENSOR_UNIT = 2;
 };
 
 struct TypographyFontIndex
 {
-    static const touchgfx::FontId HEMI_70 = 0;  // hemi_70_4bpp
-    static const touchgfx::FontId HEMI_20 = 1;  // hemi_20_4bpp
-    static const touchgfx::FontId HEMI_40 = 2;  // hemi_40_4bpp
-    static const touchgfx::FontId HEMI_120 = 3; // hemi_120_4bpp
-    static const uint16_t NUMBER_OF_FONTS = 4;
+    static const touchgfx::FontId SENSOR_VALUES = 0; // bahnschrift_55_4bpp
+    static const touchgfx::FontId SENSOR_LABEL = 1;  // bahnschrift_20_4bpp
+    static const touchgfx::FontId SENSOR_UNIT = 1;   // bahnschrift_20_4bpp
+    static const uint16_t NUMBER_OF_FONTS = 2;
 };
 
 class ApplicationFontProvider : public touchgfx::FontProvider

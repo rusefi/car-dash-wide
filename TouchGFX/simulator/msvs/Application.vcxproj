@@ -20,9 +20,9 @@
     <ClCompile Include="..\..\gui\src\common\FrontendApplication.cpp"/>
     <ClCompile Include="..\..\generated\gui_generated\src\common\FrontendApplicationBase.cpp"/>
     <ClCompile Include="..\..\gui\src\model\Model.cpp"/>
-    <ClCompile Include="..\..\gui\src\screen2_screen\Screen2Presenter.cpp"/>
-    <ClCompile Include="..\..\gui\src\screen2_screen\Screen2View.cpp"/>
-    <ClCompile Include="..\..\generated\gui_generated\src\screen2_screen\Screen2ViewBase.cpp"/>
+    <ClCompile Include="..\..\gui\src\screen1_screen\Screen1Presenter.cpp"/>
+    <ClCompile Include="..\..\gui\src\screen1_screen\Screen1View.cpp"/>
+    <ClCompile Include="..\..\generated\gui_generated\src\screen1_screen\Screen1ViewBase.cpp"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(ApplicationRoot)\assets\texts\texts.xlsx"/>
@@ -170,9 +170,9 @@
     <ClInclude Include="..\..\gui\include\gui\model\Model.hpp"/>
     <ClInclude Include="..\..\gui\include\gui\model\ModelListener.hpp"/>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\common\SimConstants.hpp"/>
-    <ClInclude Include="..\..\gui\include\gui\screen2_screen\Screen2Presenter.hpp"/>
-    <ClInclude Include="..\..\gui\include\gui\screen2_screen\Screen2View.hpp"/>
-    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\screen2_screen\Screen2ViewBase.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\screen1_screen\Screen1Presenter.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\screen1_screen\Screen1View.hpp"/>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\screen1_screen\Screen1ViewBase.hpp"/>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="$(ApplicationRoot)\generated\simulator\touchgfx.rc"/>

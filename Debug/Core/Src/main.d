@@ -58,7 +58,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FatFs/src/diskio.h \
  C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FatFs/src/ff.h \
  ../FATFS/Target/sd_diskio.h ../FATFS/Target/user_diskio.h \
- ../TouchGFX/App/app_touchgfx.h ../Core/Inc/File_Handling.h
+ ../TouchGFX/App/app_touchgfx.h ../Core/Inc/File_Handling.h \
+ ../Core/Inc/Globals.h ../Core/Inc/extern.h ../Core/Inc/Globals.h
 
 ../Core/Inc/main.h:
 
@@ -187,3 +188,9 @@ C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Part
 ../TouchGFX/App/app_touchgfx.h:
 
 ../Core/Inc/File_Handling.h:
+
+../Core/Inc/Globals.h:
+
+../Core/Inc/extern.h:
+
+../Core/Inc/Globals.h:

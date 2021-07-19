@@ -17,6 +17,6 @@ stm32f4xx_hal_msp.c:667:6:HAL_TIM_PWM_MspDeInit	16	static
 stm32f4xx_hal_msp.c:689:6:HAL_UART_MspInit	48	static
 stm32f4xx_hal_msp.c:725:6:HAL_UART_MspDeInit	16	static
 stm32f4xx_hal_msp.c:750:13:HAL_FMC_MspInit	32	static
-stm32f4xx_hal_msp.c:857:6:HAL_SDRAM_MspInit	16	static
-stm32f4xx_hal_msp.c:869:13:HAL_FMC_MspDeInit	8	static
-stm32f4xx_hal_msp.c:944:6:HAL_SDRAM_MspDeInit	16	static
+stm32f4xx_hal_msp.c:860:6:HAL_SDRAM_MspInit	16	static
+stm32f4xx_hal_msp.c:872:13:HAL_FMC_MspDeInit	8	static
+stm32f4xx_hal_msp.c:949:6:HAL_SDRAM_MspDeInit	16	static

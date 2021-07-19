@@ -36,17 +36,17 @@ HAL.hpp:233:17:static touchgfx::LCD& touchgfx::HAL::lcd()	4	static
 FrontendApplicationBase.cpp:17:1:FrontendApplicationBase::FrontendApplicationBase(Model&, FrontendHeap&)	24	static
 Callback.hpp:175:7:constexpr touchgfx::GenericCallback<void>& touchgfx::GenericCallback<void>::operator=(const touchgfx::GenericCallback<void>&)	16	static
 Callback.hpp:424:8:constexpr touchgfx::Callback<FrontendApplicationBase>& touchgfx::Callback<FrontendApplicationBase>::operator=(touchgfx::Callback<FrontendApplicationBase>&&)	16	static
-FrontendApplicationBase.cpp:36:6:void FrontendApplicationBase::gotoScreen2ScreenNoTransition()	48	static
-FrontendApplicationBase.cpp:42:6:void FrontendApplicationBase::gotoScreen2ScreenNoTransitionImpl()	24	static
+FrontendApplicationBase.cpp:34:6:void FrontendApplicationBase::gotoScreen1ScreenNoTransition()	48	static
+FrontendApplicationBase.cpp:40:6:void FrontendApplicationBase::gotoScreen1ScreenNoTransitionImpl()	24	static
 Callback.hpp:175:7:constexpr touchgfx::GenericCallback<void>::GenericCallback()	16	static
 Callback.hpp:427:5:touchgfx::Callback<dest_type, void, void, void>::Callback() [with dest_type = FrontendApplicationBase]	16	static
 Callback.hpp:440:5:touchgfx::Callback<dest_type, void, void, void>::Callback(dest_type*, void (dest_type::*)()) [with dest_type = FrontendApplicationBase]	24	static
 NoTransition.hpp:31:7:touchgfx::NoTransition::NoTransition()	16	static
-MVPApplication.hpp:161:16:PresenterType* touchgfx::makeTransition(touchgfx::Screen**, touchgfx::Presenter**, touchgfx::MVPHeap&, touchgfx::Transition**, ModelType*) [with ScreenType = Screen2View; PresenterType = Screen2Presenter; TransType = touchgfx::NoTransition; ModelType = Model]	72	static
+MVPApplication.hpp:161:16:PresenterType* touchgfx::makeTransition(touchgfx::Screen**, touchgfx::Presenter**, touchgfx::MVPHeap&, touchgfx::Transition**, ModelType*) [with ScreenType = Screen1View; PresenterType = Screen1Presenter; TransType = touchgfx::NoTransition; ModelType = Model]	72	static
 AbstractPartition.hpp:135:8:T& touchgfx::AbstractPartition::at(uint16_t) [with T = touchgfx::NoTransition]	16	static
-AbstractPartition.hpp:135:8:T& touchgfx::AbstractPartition::at(uint16_t) [with T = Screen2View]	16	static
-AbstractPartition.hpp:135:8:T& touchgfx::AbstractPartition::at(uint16_t) [with T = Screen2Presenter]	16	static
-View.hpp:50:10:void touchgfx::View<T>::bind(T&) [with T = Screen2Presenter]	16	static
+AbstractPartition.hpp:135:8:T& touchgfx::AbstractPartition::at(uint16_t) [with T = Screen1View]	16	static
+AbstractPartition.hpp:135:8:T& touchgfx::AbstractPartition::at(uint16_t) [with T = Screen1Presenter]	16	static
+View.hpp:50:10:void touchgfx::View<T>::bind(T&) [with T = Screen1Presenter]	16	static
 NoTransition.hpp:31:7:touchgfx::NoTransition::~NoTransition()	16	static
 NoTransition.hpp:31:7:virtual touchgfx::NoTransition::~NoTransition()	16	static
 Callback.hpp:424:8:touchgfx::Callback<FrontendApplicationBase>::~Callback()	16	static

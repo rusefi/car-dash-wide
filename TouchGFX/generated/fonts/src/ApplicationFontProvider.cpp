@@ -9,18 +9,15 @@ touchgfx::Font* ApplicationFontProvider::getFont(touchgfx::FontId typography)
 {
     switch (typography)
     {
-    case Typography::HEMI_70:
-        // hemi_70_4bpp
+    case Typography::SENSOR_VALUES:
+        // bahnschrift_55_4bpp
         return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[0]);
-    case Typography::HEMI_20:
-        // hemi_20_4bpp
+    case Typography::SENSOR_LABEL:
+        // bahnschrift_20_4bpp
         return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[1]);
-    case Typography::HEMI_40:
-        // hemi_40_4bpp
-        return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[2]);
-    case Typography::HEMI_120:
-        // hemi_120_4bpp
-        return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[3]);
+    case Typography::SENSOR_UNIT:
+        // bahnschrift_20_4bpp
+        return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[1]);
     default:
         return 0;
     }

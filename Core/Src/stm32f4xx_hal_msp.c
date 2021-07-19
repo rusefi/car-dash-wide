@@ -849,6 +849,9 @@ static void HAL_FMC_MspInit(void){
   GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+  /* Peripheral interrupt init */
+  HAL_NVIC_SetPriority(FMC_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(FMC_IRQn);
   /* USER CODE BEGIN FMC_MspInit 1 */
 
   /* USER CODE END FMC_MspInit 1 */
@@ -936,6 +939,8 @@ static void HAL_FMC_MspDeInit(void){
   HAL_GPIO_DeInit(GPIOD, GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_14
                           |GPIO_PIN_15|GPIO_PIN_0|GPIO_PIN_1);
 
+  /* Peripheral interrupt DeInit */
+  HAL_NVIC_DisableIRQ(FMC_IRQn);
   /* USER CODE BEGIN FMC_MspDeInit 1 */
 
   /* USER CODE END FMC_MspDeInit 1 */

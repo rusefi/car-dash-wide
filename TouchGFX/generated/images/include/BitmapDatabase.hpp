@@ -6,7 +6,18 @@
 #include <touchgfx/hal/Types.hpp>
 #include <touchgfx/Bitmap.hpp>
 
-const uint16_t BITMAP_RACE1_ID = 0;
+const uint16_t BITMAP_INDBATT_ID = 0;
+const uint16_t BITMAP_INDDTC_ID = 1;
+const uint16_t BITMAP_INDECT_ID = 2;
+const uint16_t BITMAP_INDFUEL_ID = 3;
+const uint16_t BITMAP_INDHIGH_ID = 4;
+const uint16_t BITMAP_INDLEFT_ID = 5;
+const uint16_t BITMAP_INDLOW_ID = 6;
+const uint16_t BITMAP_INDOIL_ID = 7;
+const uint16_t BITMAP_INDPARK_ID = 8;
+const uint16_t BITMAP_INDRIGHT_ID = 9;
+const uint16_t BITMAP_NEEDEL_ID = 10;
+const uint16_t BITMAP_RACE_ID = 11;
 
 namespace BitmapDatabase
 {

@@ -54,6 +54,7 @@ void BusFault_Handler(void);
 void UsageFault_Handler(void);
 void DebugMon_Handler(void);
 void TIM8_TRG_COM_TIM14_IRQHandler(void);
+void FMC_IRQHandler(void);
 void SDIO_IRQHandler(void);
 void DMA2_Stream3_IRQHandler(void);
 void DMA2_Stream6_IRQHandler(void);

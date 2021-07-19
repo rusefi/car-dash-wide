@@ -26,6 +26,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <File_Handling.h>
+#include "Globals.h"
+#include "extern.h"
 
 extern Disk_drvTypeDef disk;
 /* USER CODE END Includes */
@@ -41,6 +43,7 @@ extern Disk_drvTypeDef disk;
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+#define LCD_ORIENTATION_LANDSCAPE 0x01
 
 /* USER CODE END PM */
 
@@ -81,6 +84,10 @@ const osThreadAttr_t TouchGFXTask_attributes = {
 };
 /* USER CODE BEGIN PV */
 FMC_SDRAM_CommandTypeDef command;
+
+Statuses Current_Status;
+
+FieldDef Fields[64];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -222,11 +229,17 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 336;
+  RCC_OscInitStruct.PLL.PLLM = 15;
+  RCC_OscInitStruct.PLL.PLLN = 216;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 7;
+  RCC_OscInitStruct.PLL.PLLQ = 8;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Activate the Over-Drive mode
+  */
+  if (HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     Error_Handler();
   }
@@ -244,9 +257,9 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
-  PeriphClkInitStruct.PLLSAI.PLLSAIN = 132;
+  PeriphClkInitStruct.PLLSAI.PLLSAIN = 120;
   PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
-  PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
+  PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_4;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -742,6 +755,16 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+float mapFloat(float x, float in_min, float in_max, float out_min,
+		float out_max) {
+	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+long mapInt(float x, float in_min, float in_max, int out_min, int out_max) {
+	return (int) ((x - in_min) * (out_max - out_min) / (in_max - in_min)
+			+ out_min);
+}
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -755,11 +778,43 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
 	/* Infinite loop */
+
+
 	for (;;) {
-		HAL_GPIO_TogglePin(LED_PI3_GPIO_Port, LED_PI3_Pin);
-		osDelay(100);
-		HAL_GPIO_TogglePin(LED_PD4_GPIO_Port, LED_PD4_Pin);
-		osDelay(100);
+
+//		HAL_GPIO_TogglePin(LED_PI3_GPIO_Port, LED_PI3_Pin);
+//		osDelay(100);
+//		HAL_GPIO_TogglePin(LED_PD4_GPIO_Port, LED_PD4_Pin);
+//		osDelay(100);
+
+
+		Current_Status.MAP = 10;
+		Current_Status.IAT = 10;
+		Current_Status.OILP = 10;
+		Current_Status.FUELP = 10;
+		Current_Status.BATT = 10;
+		Current_Status.BARO = 10;
+		Current_Status.TPS = 10;
+		Current_Status.LAMBDA1 = 10;
+		Current_Status.LAMBDA2 = 10;
+
+		Current_Status.RPM = Current_Status.RPM <= 8000 ? Current_Status.RPM + 25 : 0;
+
+
+		Current_Status.ECT = Current_Status.RPM;
+		Current_Status.IND_HIGH = !Current_Status.IND_HIGH;
+		Current_Status.IND_LOW = !Current_Status.IND_LOW;
+		Current_Status.IND_DTC = !Current_Status.IND_DTC;
+		Current_Status.IND_BATT = !Current_Status.IND_BATT;
+		Current_Status.IND_FUEL = !Current_Status.IND_FUEL;
+		Current_Status.IND_OIL = !Current_Status.IND_OIL;
+		Current_Status.IND_PARK = !Current_Status.IND_PARK;
+		Current_Status.IND_ECT = !Current_Status.IND_ECT;
+		Current_Status.IND_LEFT = !Current_Status.IND_LEFT;
+		Current_Status.IND_RIGHT = !Current_Status.IND_RIGHT;
+
+		osDelay(25);
+
 
 	}
   /* USER CODE END 5 */
