@@ -48872,11 +48872,11 @@ private:
  8012752:	2200      	movs	r2, #0
  8012754:	21ad      	movs	r1, #173	; 0xad
  8012756:	f7fc ff94 	bl	800f682 <_ZN8touchgfx8Drawable11setPositionEssss>
-    gauge1.setCenter(240, 240);
+    gauge1.setCenter(240, 236);
  801275a:	1d3b      	adds	r3, r7, #4
  801275c:	681b      	ldr	r3, [r3, #0]
  801275e:	f503 6305 	add.w	r3, r3, #2128	; 0x850
- 8012762:	22f0      	movs	r2, #240	; 0xf0
+ 8012762:	22ec      	movs	r2, #236	; 0xec
  8012764:	21f0      	movs	r1, #240	; 0xf0
  8012766:	4618      	mov	r0, r3
  8012768:	f006 fb0b 	bl	8018d82 <_ZN8touchgfx5Gauge9setCenterEii>

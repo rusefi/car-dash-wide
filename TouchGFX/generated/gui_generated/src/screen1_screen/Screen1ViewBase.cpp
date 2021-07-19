@@ -238,7 +238,7 @@ Screen1ViewBase::Screen1ViewBase()
     fuelp_units.setTypedText(touchgfx::TypedText(T_SINGLEUSEID11));
 
     gauge1.setPosition(173, 0, 480, 480);
-    gauge1.setCenter(240, 240);
+    gauge1.setCenter(240, 236);
     gauge1.setStartEndAngle(0, 240);
     gauge1.setRange(0, 8000);
     gauge1.setValue(0);
