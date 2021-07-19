@@ -1,0 +1,11 @@
+File_Handling.c:25:6:Mount_SD	16	static
+File_Handling.c:30:6:Unmount_SD	16	static
+File_Handling.c:36:9:Scan_SD	80	static
+File_Handling.c:76:9:Format_SD	64	static
+File_Handling.c:109:9:Write_File	40	static
+File_Handling.c:163:9:Read_File	40	static
+File_Handling.c:225:9:Create_File	40	static
+File_Handling.c:269:9:Update_File	40	static
+File_Handling.c:327:9:Remove_File	32	static
+File_Handling.c:359:9:Create_Dir	24	static
+File_Handling.c:377:6:Check_SD_Space	16	static

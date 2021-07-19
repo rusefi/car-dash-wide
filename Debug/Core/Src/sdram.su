@@ -1,0 +1,3 @@
+sdram.c:3:6:SDRAM_delay	24	static
+sdram.c:11:6:SDRAM_Initialization_Sequence	24	static
+sdram.c:57:9:SDRAM_Test	16	static
