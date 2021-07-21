@@ -1,2 +1,2 @@
-BitmapDatabase.cpp:49:37:const touchgfx::Bitmap::BitmapData* BitmapDatabase::getInstance()	4	static
-BitmapDatabase.cpp:54:10:uint16_t BitmapDatabase::getInstanceSize()	4	static
+BitmapDatabase.cpp:52:37:const touchgfx::Bitmap::BitmapData* BitmapDatabase::getInstance()	4	static
+BitmapDatabase.cpp:57:10:uint16_t BitmapDatabase::getInstanceSize()	4	static

@@ -29,7 +29,6 @@
 #include "Globals.h"
 #include "extern.h"
 
-extern Disk_drvTypeDef disk;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -82,12 +81,25 @@ const osThreadAttr_t TouchGFXTask_attributes = {
   .stack_size = 2048 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for SDIOTask */
+osThreadId_t SDIOTaskHandle;
+const osThreadAttr_t SDIOTask_attributes = {
+  .name = "SDIOTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
 FMC_SDRAM_CommandTypeDef command;
 
 Statuses Current_Status;
 
+
 FieldDef Fields[64];
+
+FILE* File;
+
+FILE *FileBuffer;
+uint8_t BufferIsSet;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,6 +117,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_SDIO_SD_Init(void);
 void StartDefaultTask(void *argument);
 void TouchGFX_Task(void *argument);
+void SDIO_Task(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -121,6 +134,7 @@ void TouchGFX_Task(void *argument);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	BufferIsSet = 0;
 
   /* USER CODE END 1 */
 
@@ -157,6 +171,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 	HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
+
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -184,6 +199,9 @@ int main(void)
 
   /* creation of TouchGFXTask */
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
+
+  /* creation of SDIOTask */
+  SDIOTaskHandle = osThreadNew(SDIO_Task, NULL, &SDIOTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
 	/* add threads, ... */
@@ -216,7 +234,6 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
   */
@@ -225,12 +242,13 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 15;
-  RCC_OscInitStruct.PLL.PLLN = 216;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLN = 180;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 8;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -253,14 +271,6 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
-  PeriphClkInitStruct.PLLSAI.PLLSAIN = 120;
-  PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
-  PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_4;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
@@ -469,8 +479,8 @@ static void MX_SDIO_SD_Init(void)
   hsd.Init.ClockDiv = 0;
   /* USER CODE BEGIN SDIO_Init 2 */
 
-	disk.is_initialized[0] =0;
-	hsd.Init.ClockDiv = 4;
+	//disk.is_initialized[0] =0;
+	//hsd.Init.BusWide = SDIO_BUS_WIDE_4B;
 	if (HAL_SD_Init(&hsd) != HAL_OK) {
 		Error_Handler();
 	}
@@ -478,13 +488,6 @@ static void MX_SDIO_SD_Init(void)
 	if (HAL_SD_ConfigWideBusOperation(&hsd, SDIO_BUS_WIDE_4B) != HAL_OK) {
 		Error_Handler();
 	}
-
-	Mount_SD("0:/");
-	Format_SD();
-	Create_File("FILE1.TXT");
-	Create_File("FILE2.TXT");
-	Unmount_SD("0:/");
-
 	//f_open(&fil, name, FA_CREATE_ALWAYS|FA_READ|FA_WRITE);
   /* USER CODE END SDIO_Init 2 */
 
@@ -708,12 +711,6 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_PD4_GPIO_Port, LED_PD4_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : SDIO_SD_Pin */
-  GPIO_InitStruct.Pin = SDIO_SD_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(SDIO_SD_GPIO_Port, &GPIO_InitStruct);
-
   /*Configure GPIO pins : PB12 PB13 */
   GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -837,7 +834,36 @@ __weak void TouchGFX_Task(void *argument)
   /* USER CODE END TouchGFX_Task */
 }
 
- /**
+/* USER CODE BEGIN Header_SDIO_Task */
+/**
+* @brief Function implementing the SDIOTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_SDIO_Task */
+void SDIO_Task(void *argument)
+{
+  /* USER CODE BEGIN SDIO_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+	  	//DSTATUS status = SD_status();
+		Mount_SD("0:/");
+		//Format_SD();
+		//Create_File("FILE1.TXT");
+		//Create_File("FILE2.TXT");
+
+
+		Read_File("ic5.bmp");
+		//BufferIsSet = 1;
+		Unmount_SD("0:/");
+
+    osDelay(5000);
+  }
+  /* USER CODE END SDIO_Task */
+}
+
+/**
   * @brief  Period elapsed callback in non blocking mode
   * @note   This function is called  when TIM14 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment

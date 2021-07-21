@@ -7,6 +7,8 @@
 
 #include <File_Handling.h>
 #include "stm32f4xx_hal.h"
+#include "extern.h"
+
 
 
 /* =============================>>>>>>>> NO CHANGES AFTER THIS LINE =====================================>>>>>>> */
@@ -17,10 +19,13 @@ FILINFO fno;
 FRESULT fresult;  // result
 UINT br, bw;  // File read/write count
 
+FILE *FileBuffer;
+
 /**** capacity related *****/
 FATFS *pfs;
 DWORD fre_clust;
 uint32_t total, free_space;
+
 
 void Mount_SD (const TCHAR* path)
 {
@@ -189,6 +194,7 @@ FRESULT Read_File (char *name)
 		* see the function details for the arguments */
 
 		char *buffer = malloc(sizeof(f_size(&fil)));
+
 		fresult = f_read (&fil, buffer, f_size(&fil), &br);
 		if (fresult != FR_OK)
 		{
@@ -200,7 +206,8 @@ FRESULT Read_File (char *name)
 
 		else
 		{
-			Send_Uart(buffer);
+			FileBuffer = (FILE *)&fil;
+			//memcpy( buffer , FileBuffer , sizeof(f_size(&fil)) );
 			free(buffer);
 
 			/* Close file */

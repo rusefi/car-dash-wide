@@ -246,6 +246,9 @@ Screen1ViewBase::Screen1ViewBase()
     gauge1.setMovingNeedleRenderingAlgorithm(touchgfx::TextureMapper::BILINEAR_INTERPOLATION);
     gauge1.setSteadyNeedleRenderingAlgorithm(touchgfx::TextureMapper::NEAREST_NEIGHBOR);
 
+    image2.setXY(523, 199);
+    image2.setBitmap(touchgfx::Bitmap(BITMAP_SPEEDUINO1_ID));
+
     add(__background);
     add(image1);
     add(indLeft);
@@ -283,6 +286,7 @@ Screen1ViewBase::Screen1ViewBase()
     add(fuelp_label);
     add(fuelp_units);
     add(gauge1);
+    add(image2);
 }
 
 void Screen1ViewBase::setupScreen()

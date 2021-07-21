@@ -37,10 +37,10 @@ Screen1ViewBase.hpp:19:13:Screen1ViewBase::~Screen1ViewBase()	16	static
 Screen1ViewBase.hpp:19:13:virtual Screen1ViewBase::~Screen1ViewBase()	16	static
 Screen1View.hpp:11:13:Screen1View::~Screen1View()	16	static
 Screen1View.hpp:11:13:virtual Screen1View::~Screen1View()	16	static
-Screen1View.cpp:6:1:Screen1View::Screen1View()	16	static
-Screen1View.cpp:10:6:virtual void Screen1View::setupScreen()	40	static
-Screen1View.cpp:101:6:virtual void Screen1View::tearDownScreen()	16	static
-Screen1View.cpp:105:6:virtual void Screen1View::handleTickEvent()	48	static
+Screen1View.cpp:7:1:Screen1View::Screen1View()	16	static
+Screen1View.cpp:11:6:virtual void Screen1View::setupScreen()	40	static
+Screen1View.cpp:102:6:virtual void Screen1View::tearDownScreen()	16	static
+Screen1View.cpp:106:6:virtual void Screen1View::handleTickEvent()	56	static
 Container.hpp:40:7:touchgfx::Container::~Container()	16	static
 Container.hpp:40:7:virtual touchgfx::Container::~Container()	16	static
 Box.hpp:29:7:touchgfx::Box::~Box()	16	static

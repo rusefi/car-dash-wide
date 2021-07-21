@@ -18,6 +18,7 @@ const uint16_t BITMAP_INDPARK_ID = 8;
 const uint16_t BITMAP_INDRIGHT_ID = 9;
 const uint16_t BITMAP_NEEDEL_ID = 10;
 const uint16_t BITMAP_RACE_ID = 11;
+const uint16_t BITMAP_SPEEDUINO1_ID = 12;
 
 namespace BitmapDatabase
 {

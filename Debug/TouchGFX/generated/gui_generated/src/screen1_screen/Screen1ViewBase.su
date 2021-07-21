@@ -49,8 +49,8 @@ View.hpp:36:7:touchgfx::View<Screen1Presenter>::~View()	16	static
 View.hpp:36:7:virtual touchgfx::View<Screen1Presenter>::~View()	16	static
 Screen1ViewBase.hpp:19:13:Screen1ViewBase::~Screen1ViewBase()	16	static
 Screen1ViewBase.hpp:19:13:virtual Screen1ViewBase::~Screen1ViewBase()	16	static
-Screen1ViewBase.cpp:9:1:Screen1ViewBase::Screen1ViewBase()	1184	static
-Screen1ViewBase.cpp:288:6:virtual void Screen1ViewBase::setupScreen()	16	static
+Screen1ViewBase.cpp:9:1:Screen1ViewBase::Screen1ViewBase()	1192	static
+Screen1ViewBase.cpp:292:6:virtual void Screen1ViewBase::setupScreen()	16	static
 View.hpp:39:5:touchgfx::View<T>::View() [with T = Screen1Presenter]	16	static
 Container.hpp:40:7:touchgfx::Container::~Container()	16	static
 Container.hpp:40:7:virtual touchgfx::Container::~Container()	16	static

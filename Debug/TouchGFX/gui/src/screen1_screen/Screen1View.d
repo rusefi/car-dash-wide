@@ -105,7 +105,7 @@ TouchGFX/gui/src/screen1_screen/Screen1View.o: \
  C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- ../Core/Inc/extern.h ../Core/Inc/Globals.h
+ ../Core/Inc/extern.h ../Core/Inc/Globals.h ../Core/Inc/BMPFileLoader.hpp
 
 ../TouchGFX/gui/include/gui/screen1_screen/Screen1View.hpp:
 
@@ -320,3 +320,5 @@ C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Drivers/STM32F4xx_HAL_
 ../Core/Inc/extern.h:
 
 ../Core/Inc/Globals.h:
+
+../Core/Inc/BMPFileLoader.hpp:

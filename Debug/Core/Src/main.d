@@ -53,13 +53,12 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FatFs/src/ff.h \
  C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FatFs/src/integer.h \
  ../FATFS/Target/ffconf.h ../FATFS/Target/bsp_driver_sd.h \
- ../FATFS/Target/fatfs_platform.h \
  C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
  C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FatFs/src/diskio.h \
  C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FatFs/src/ff.h \
- ../FATFS/Target/sd_diskio.h ../FATFS/Target/user_diskio.h \
- ../TouchGFX/App/app_touchgfx.h ../Core/Inc/File_Handling.h \
- ../Core/Inc/Globals.h ../Core/Inc/extern.h ../Core/Inc/Globals.h
+ ../FATFS/Target/sd_diskio.h ../TouchGFX/App/app_touchgfx.h \
+ ../Core/Inc/File_Handling.h ../Core/Inc/Globals.h ../Core/Inc/extern.h \
+ ../Core/Inc/Globals.h
 
 ../Core/Inc/main.h:
 
@@ -173,8 +172,6 @@ C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Part
 
 ../FATFS/Target/bsp_driver_sd.h:
 
-../FATFS/Target/fatfs_platform.h:
-
 C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FatFs/src/ff_gen_drv.h:
 
 C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FatFs/src/diskio.h:
@@ -182,8 +179,6 @@ C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Part
 C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FatFs/src/ff.h:
 
 ../FATFS/Target/sd_diskio.h:
-
-../FATFS/Target/user_diskio.h:
 
 ../TouchGFX/App/app_touchgfx.h:
 

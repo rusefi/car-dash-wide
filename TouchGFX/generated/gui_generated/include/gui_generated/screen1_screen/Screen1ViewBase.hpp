@@ -64,6 +64,7 @@ protected:
     touchgfx::TextAreaWithOneWildcard fuelp_label;
     touchgfx::TextAreaWithOneWildcard fuelp_units;
     touchgfx::Gauge gauge1;
+    touchgfx::Image image2;
 
     /*
      * Wildcard Buffers
