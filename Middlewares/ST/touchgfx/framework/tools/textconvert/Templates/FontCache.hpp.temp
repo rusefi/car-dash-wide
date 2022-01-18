@@ -71,19 +71,19 @@ private:
 
     struct
     {
-        uint8_t* first; //first glyphnode, glyph in cache;
-        uint8_t* last;  //last glyphnode, glyph in cache;
+        uint8_t* first; // First GlyphNode, glyph in cache;
+        uint8_t* last;  // Last GlyphNode, glyph in cache;
     } fontTable[MAX(TypographyFontIndex::NUMBER_OF_FONTS, 1)];
 
     uint32_t memorySize;
-    uint8_t* memory;    //start of memory
-    uint8_t* top;       //first unused byte
-    uint8_t* gsubStart; //first address of GSUB tables, allocated in the end of the cache
+    uint8_t* memory;    // Start of memory
+    uint8_t* top;       // First unused byte
+    uint8_t* gsubStart; // First address of GSUB tables, allocated in the end of the cache
 
     FontDataReader* reader;
 
     Unicode::UnicodeChar* sortedString;
-    //Must be bigger than BinaryFontData
+    // Must be bigger than BinaryFontData
     static const uint32_t MAX_BUFFER_SIZE = 64;
     char buffer[MAX_BUFFER_SIZE];
     uint32_t glyphDataOffset;

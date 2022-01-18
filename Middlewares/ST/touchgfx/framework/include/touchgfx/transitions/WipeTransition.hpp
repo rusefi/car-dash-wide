@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -82,7 +82,7 @@ public:
             break;
         }
 
-        //Ensure that the solid area covers the entire screen
+        // Ensure that the solid area covers the entire screen
         solid.setPosition(0, 0, HAL::DISPLAY_WIDTH, HAL::DISPLAY_HEIGHT);
     }
 
@@ -116,17 +116,17 @@ public:
             return;
         }
 
-        //calculatedValue is the width/height of the visible area
+        // calculatedValue is the width/height of the visible area
 
         switch (templateDirection)
         {
         case EAST:
             {
-                //cover must have width of remaining part
+                // Cover must have width of remaining part
                 const uint16_t prevSolidWidth = solid.getWidth();
                 solid.setWidth(HAL::DISPLAY_WIDTH - calculatedValue);
 
-                //invalidate the uncovered part
+                // Invalidate the uncovered part
                 const uint16_t delta = prevSolidWidth - solid.getWidth();
                 Rect r(solid.getWidth(), 0, delta, HAL::DISPLAY_HEIGHT);
                 screenContainer->invalidateRect(r);
@@ -134,12 +134,12 @@ public:
             }
         case WEST:
             {
-                //cover must have width of remaining part and start after uncovered
+                // Cover must have width of remaining part and start after uncovered
                 const uint16_t prevSolidPos = solid.getX();
                 solid.setWidth(HAL::DISPLAY_WIDTH - calculatedValue);
                 solid.setX(calculatedValue);
 
-                //invalidate the uncovered part
+                // Invalidate the uncovered part
                 const uint16_t delta = calculatedValue - prevSolidPos;
                 Rect r(prevSolidPos, 0, delta, HAL::DISPLAY_HEIGHT);
                 screenContainer->invalidateRect(r);
@@ -147,12 +147,12 @@ public:
             }
         case NORTH:
             {
-                //cover must have height of remaining part and start after uncovered
+                // Cover must have height of remaining part and start after uncovered
                 const uint16_t prevSolidPos = solid.getY();
                 solid.setHeight(HAL::DISPLAY_HEIGHT - calculatedValue);
                 solid.setY(calculatedValue);
 
-                //invalidate the uncovered part
+                // Invalidate the uncovered part
                 const uint16_t delta = calculatedValue - prevSolidPos;
                 Rect r(0, prevSolidPos, HAL::DISPLAY_WIDTH, delta);
                 screenContainer->invalidateRect(r);
@@ -160,11 +160,11 @@ public:
             }
         case SOUTH:
             {
-                //cover must have height of remaining part
+                // Cover must have height of remaining part
                 const uint16_t prevSolidHeight = solid.getHeight();
                 solid.setHeight(HAL::DISPLAY_HEIGHT - calculatedValue);
 
-                //invalidate the uncovered part
+                // Invalidate the uncovered part
                 const uint16_t delta = prevSolidHeight - solid.getHeight();
                 Rect r(0, solid.getHeight(), HAL::DISPLAY_WIDTH, delta);
                 screenContainer->invalidateRect(r);
@@ -184,10 +184,9 @@ public:
         // pixels vertically or horizontally depending on the speed of
         // the transition, so there's no need to transfer that. The
         // solid Widget covers the rest, so we copy those pixels.
-        //
         if (animationCounter == 1 && HAL::USE_DOUBLE_BUFFERING)
         {
-            Rect rect = solid.getRect(); //part to copy between buffers
+            Rect rect = solid.getRect(); // Part to copy between buffers
 
             // Get the currently displayed framebuffer
             uint16_t* tftFb = HAL::getInstance()->getTFTFrameBuffer();
@@ -198,7 +197,7 @@ public:
             source.width = HAL::DISPLAY_WIDTH;
             source.height = HAL::DISPLAY_HEIGHT;
 
-            //Copy rect from tft to client framebuffer
+            // Copy rect from tft to client framebuffer
             HAL::getInstance()->lcd().blitCopy((const uint16_t*)tftFb, source, rect, 255, false);
         }
     }
@@ -211,7 +210,7 @@ public:
     virtual void init()
     {
         Transition::init();
-        //add the solid (and not-drawing-anything) widget on top to cover the other widgets
+        // Add the solid (and not-drawing-anything) widget on top to cover the other widgets
         screenContainer->add(solid);
     }
 
@@ -221,7 +220,6 @@ public:
      */
     virtual void invalidate()
     {
-        //nop
     }
 
 private:

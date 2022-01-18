@@ -75,17 +75,17 @@ const touchgfx::TypedText::TypedTextData typedText_database_<%= layout %>[] TEXT
 TEXT_LOCATION_FLASH_PRAGMA
 const touchgfx::TypedText::TypedTextData* const typedTextDatabaseArray[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
 <% if generate_binary_files? %>
-<% text_entries.languages.each_with_index do |entry,index| %>
-<% if (index==text_entries.languages.length-1) %>
+<%   text_entries.languages.each_with_index do |entry,index| %>
+<%     if index==text_entries.languages.length-1 %>
     typedText_database_EMPTY
-<% else %>
+<%     else %>
     typedText_database_EMPTY,
-<% end %>
-<% end %>
+<%     end %>
+<%   end %>
 <% else %>
-<% if text_entries.languages.empty? %>
+<%   if text_entries.languages.empty? %>
     typedText_database_DEFAULT
-<% end %>
+<%   end %>
 <%= text_entries.languages.map { |language|
       "    typedText_database_#{layouts.find { |l| l == language } || 'DEFAULT'}"
     } * ",\n"

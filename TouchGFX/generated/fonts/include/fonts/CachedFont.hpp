@@ -13,7 +13,7 @@ class CachedFont : public GeneratedFont
 {
 public:
     CachedFont(const struct touchgfx::BinaryFontData* data, FontId id, FontCache* _cache, const GeneratedFont* _flashFont)
-        : GeneratedFont(0, //GlyphNode*
+        : GeneratedFont(0, // GlyphNode*
                         data->numberOfGlyphs,
                         data->height,
                         data->pixBelowBase,
@@ -21,12 +21,12 @@ public:
                         data->byteAlignRow,
                         data->maxLeft,
                         data->maxRight,
-                        0, //glyphDataPointer
-                        0, //Kerning table not used for cached font
+                        0, // glyphDataPointer
+                        0, // Kerning table not used for cached font
                         data->fallbackChar,
                         data->ellipsisChar,
-                        0,  //gsubTablePointer
-                        0), //contextualFormsPointer
+                        0,  // lsubTablePointer
+                        0), // contextualFormsPointer
           fontId(id),
           cache(_cache),
           flashFont(_flashFont)

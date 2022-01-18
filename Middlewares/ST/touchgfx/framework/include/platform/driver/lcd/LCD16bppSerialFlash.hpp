@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -109,7 +109,7 @@ public:
      */
     FORCE_INLINE_FUNCTION static uint16_t getNativeColor(colortype color)
     {
-        return getNativeColorFromRGB(Color::getRed(color), Color::getGreen(color), Color::getBlue(color));
+        return ((color >> 8) & 0xF800) | ((color >> 5) & 0x07E0) | ((color >> 3) & 0x001F);
     }
 
     /**
@@ -315,7 +315,6 @@ protected:
 
     /**
      * Blits a 2D source-array to the framebuffer performing alpha-blending per pixel as specified.
-     * If ARGB8888 is not supported by the DMA a software blend is performed.
      *
      * @param   sourceData  The source-array pointer (points to the beginning of the data). The
      *                      sourceData must be stored as 32 bits ARGB8888 values.
@@ -325,6 +324,18 @@ protected:
      *                      solid, no blending)
      */
     void blitCopyARGB8888(const uint32_t* sourceData, const Rect& source, const Rect& blitRect, uint8_t alpha);
+
+    /**
+     * Blits a 2D source-array to the framebuffer never performing alpha-blending per pixel as
+     * because it is assumed that all pixels in the bitmap are solid (i.e. alpha for each pixel is
+     * 255).
+     *
+     * @param   sourceData  The source-array pointer (points to the beginning of the data). The
+     *                      sourceData must be stored as 32 bits ARGB8888 values.
+     * @param   source      The location and dimensions of the source.
+     * @param   blitRect    A rectangle describing what region is to be drawn.
+     */
+    void blitCopyARGB8888Solid(const uint32_t* sourceData, const Rect& source, const Rect& blitRect);
 
     /**
      * Blits a 2D source-array to the framebuffer performing alpha-blending per pixel as specified.

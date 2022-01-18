@@ -162,7 +162,7 @@ private:
     void setupContextualTable(const struct touchgfx::BinaryFontData* data)
     {
         const uint16_t* const base = (const uint16_t*)(((const uint8_t*)data) + data->offsetToArabicTable);
-        //first elements in binary font are offsets to arrays in 16bit words
+        // First elements in binary font are offsets to arrays in 16bit words
         contextualForms.contextualForms4Long = (array5ptr)(base + base[0]);
         contextualForms.contextualForms3Long = (array5ptr)(base + base[1]);
         contextualForms.contextualForms2Long = (array5ptr)(base + base[2]);

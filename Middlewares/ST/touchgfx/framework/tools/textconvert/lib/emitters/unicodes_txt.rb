@@ -1,7 +1,7 @@
 # Copyright (c) 2018(-2021) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.17.0 distribution.
+# This file is part of the TouchGFX 4.18.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -372,8 +372,8 @@ class UnicodeForTypographyTxt
     [['<','>'],['(',')'],['[',']'],['{','}']].each do |l,r|
       has_l = unicodes.include?(l.ord)
       has_r = unicodes.include?(r.ord)
-      unicodes.push(r.ord) if has_l and !has_r
-      unicodes.push(l.ord) if has_r and !has_l
+      unicodes.push(r.ord) if has_l && !has_r
+      unicodes.push(l.ord) if has_r && !has_l
     end
     unicodes
   end
@@ -383,7 +383,7 @@ class UnicodeForTypographyTxt
     [[0x0E09, 0x0E08],[0x0E13,0x0E0C],[0x0E19,0x0E18],[0x0E1B, 0x0E1A],[0x0E1D,0x0E1C],[0x0E1F,0x0E1E],[0x0E33,0x0E32],[0x0E33,0x0E4D]].each do |has,need|
       has_unicode = unicodes.include?(has)
       has_needed = unicodes.include?(need)
-      unicodes.push(need) if has_unicode and !has_needed
+      unicodes.push(need) if has_unicode && !has_needed
     end
     unicodes
   end
@@ -438,8 +438,8 @@ class UnicodeForTypographyTxt
 
   def run
     typographies_identical = @typographies.select{ |t| t.font_file == @unique_typography.font_file &&
-                                                       t.font_size == @unique_typography.font_size &&
-                                                       t.bpp == @unique_typography.bpp }
+                                                   t.font_size == @unique_typography.font_size &&
+                                                   t.bpp == @unique_typography.bpp }
     typography_names = typographies_identical.map{ |t| t.name }.uniq
 
     # Find a typography with a fallback character
@@ -486,7 +486,7 @@ class UnicodeForTypographyTxt
           begin
             fbcUnicode = Integer(fbc.gsub(/\.0*$/,''))
           rescue
-            fail "Please only specify one character or ('skip') as Fallback Character, typography \"#{typography_with_fallback_character.name}\" has Fallback Character \"#{typography_with_fallback_character.fallback_character}\""
+            fail "ERROR: Please only specify one character or ('skip') as Fallback Character, typography \"#{typography_with_fallback_character.name}\" has Fallback Character \"#{typography_with_fallback_character.fallback_character}\""
           end
         end
         unicodes += [ fbcUnicode ]
@@ -502,7 +502,7 @@ class UnicodeForTypographyTxt
           begin
             tecUnicode = Integer(tec.gsub(/\.0*$/,''))
           rescue
-            fail "Please only specify one character as Ellipsis Character for typography \"#{typography_with_fallback_character.name}\""
+            fail "ERROR: Please only specify one character as Ellipsis Character for typography \"#{typography_with_fallback_character.name}\""
           end
         end
         unicodes += [ tecUnicode ]
@@ -515,17 +515,21 @@ class UnicodeForTypographyTxt
           unicodes += [ c[0].ord ]
         }
       end
+      if t.widget_wildcard_characters
+        t.widget_wildcard_characters.to_s.split('').each { |c|
+          unicodes += [ c[0].ord ]
+        }
+      end
       if t.wildcard_ranges
         unicodes += decode_ranges(t.wildcard_ranges)
       end
     }
-    
+
     unicodes = convert_to_contextual_forms(unicodes)
-
     unicodes = mirror_brackes(unicodes)
-
     unicodes = add_thai(unicodes)
 
+    unicodes.delete(0x0000) # Zero termination of strings
     unicodes.delete(0x0002) # TouchGFX wildcard character
     unicodes.delete(0x200B) # ZERO WIDTH SPACE
     unicodes.delete(0xFEFF) # ZERO WIDTH NO-BREAK SPACE

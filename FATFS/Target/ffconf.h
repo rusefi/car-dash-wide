@@ -5,13 +5,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -83,7 +82,7 @@
 / Locale and Namespace Configurations
 /-----------------------------------------------------------------------------*/
 
-#define _CODE_PAGE         1
+#define _CODE_PAGE         850
 /* This option specifies the OEM code page to be used on the target system.
 /  Incorrect setting of the code page can cause a file open failure.
 /
@@ -177,7 +176,7 @@
 /  arbitrary physical drive and partition listed in the VolToPart[]. Also f_fdisk()
 /  function will be available. */
 #define _MIN_SS    512  /* 512, 1024, 2048 or 4096 */
-#define _MAX_SS    4096  /* 512, 1024, 2048 or 4096 */
+#define _MAX_SS    512  /* 512, 1024, 2048 or 4096 */
 /* These options configure the range of sector size to be supported. (512, 1024,
 /  2048 or 4096) Always set both 512 for most systems, all type of memory cards and
 /  harddisk. But a larger value may be required for on-board flash memory and some
@@ -190,7 +189,7 @@
 /  To enable Trim function, also CTRL_TRIM command should be implemented to the
 /  disk_ioctl() function. */
 
-#define _FS_NOFSINFO    1 /* 0,1,2 or 3 */
+#define _FS_NOFSINFO    0 /* 0,1,2 or 3 */
 /* If you need to know correct free space on the FAT32 volume, set bit 0 of this
 /  option, and f_getfree() function at first time after volume mount will force
 /  a full FAT scan. Bit 1 controls the use of last allocated cluster number.
@@ -205,7 +204,7 @@
 / System Configurations
 /----------------------------------------------------------------------------*/
 
-#define _FS_TINY    1      /* 0:Normal or 1:Tiny */
+#define _FS_TINY    0      /* 0:Normal or 1:Tiny */
 /* This option switches tiny buffer configuration. (0:Normal or 1:Tiny)
 /  At the tiny configuration, size of file object (FIL) is reduced _MAX_SS bytes.
 /  Instead of private sector buffer eliminated from the file object, common sector

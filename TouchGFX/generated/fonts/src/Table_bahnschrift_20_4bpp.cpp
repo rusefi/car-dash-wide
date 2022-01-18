@@ -77,13 +77,16 @@ KEEP extern const touchgfx::GlyphNode glyphs_bahnschrift_20_4bpp[] FONT_TABLE_LO
 };
 
 // bahnschrift_20_4bpp
-extern const touchgfx::GlyphNode glyphs_bahnschrift_20_4bpp[];
-extern const uint8_t unicodes_bahnschrift_20_4bpp_0[];
-extern const uint8_t* const unicodes_bahnschrift_20_4bpp[] = {
+FONT_TABLE_LOCATION_FLASH_PRAGMA
+KEEP extern const touchgfx::GlyphNode glyphs_bahnschrift_20_4bpp[] FONT_TABLE_LOCATION_FLASH_ATTRIBUTE;
+FONT_GLYPH_LOCATION_FLASH_PRAGMA
+KEEP extern const uint8_t unicodes_bahnschrift_20_4bpp_0[] FONT_GLYPH_LOCATION_FLASH_ATTRIBUTE;
+FONT_SEARCHTABLE_LOCATION_FLASH_PRAGMA
+KEEP extern const uint8_t* const unicodes_bahnschrift_20_4bpp[] FONT_SEARCHTABLE_LOCATION_FLASH_ATTRIBUTE = {
     unicodes_bahnschrift_20_4bpp_0
 };
-extern const touchgfx::KerningNode kerning_bahnschrift_20_4bpp[];
-
+FONT_KERNING_LOCATION_FLASH_PRAGMA
+KEEP extern const touchgfx::KerningNode kerning_bahnschrift_20_4bpp[] FONT_KERNING_LOCATION_FLASH_ATTRIBUTE;
 touchgfx::GeneratedFont& getFont_bahnschrift_20_4bpp();
 
 touchgfx::GeneratedFont& getFont_bahnschrift_20_4bpp()

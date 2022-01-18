@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -41,7 +41,7 @@ public:
         : Transition(),
           animationCounter(0)
     {
-        //8x6 blocks, with 8 blocks on the longest edge
+        // 8x6 blocks, with 8 blocks on the longest edge
         if (HAL::DISPLAY_WIDTH > HAL::DISPLAY_HEIGHT)
         {
             blockWidth = (HAL::DISPLAY_WIDTH + 7) / 8;
@@ -64,7 +64,7 @@ public:
     virtual void handleTickEvent()
     {
         const int blocks = 48;
-        //"random" sequence of blocks to invalidate
+        // "Random" sequence of blocks to invalidate
         const int indeces[blocks] = { 20, 11, 47, 14, 10, 0, 18, 28, 13, 6, 2, 41,
                                       44, 5, 3, 17, 36, 46, 26, 15, 29, 39, 25, 12,
                                       19, 24, 7, 38, 37, 30, 9, 43, 4, 31, 22, 23,
@@ -82,7 +82,7 @@ public:
             int blocks_per_tick = 2;
             while (blocks_per_tick-- > 0 && animationCounter < blocks)
             {
-                //Invalidate next block in sequence
+                // Invalidate next block in sequence
                 const int index = indeces[animationCounter];
 
                 const int16_t x = (index % blocksHorizontal) * blockWidth;
@@ -114,7 +114,6 @@ public:
      */
     virtual void invalidate()
     {
-        //nop
     }
 
 private:

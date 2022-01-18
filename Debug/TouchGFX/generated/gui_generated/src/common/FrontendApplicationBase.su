@@ -11,6 +11,8 @@ Application.hpp:74:18:virtual void touchgfx::Application::appSwitchScreen(uint8_
 Application.hpp:86:18:virtual void touchgfx::Application::requestRedraw(touchgfx::Rect&)	16	static
 Callback.hpp:179:13:touchgfx::GenericCallback<void>::~GenericCallback()	16	static
 Callback.hpp:179:13:virtual touchgfx::GenericCallback<void>::~GenericCallback()	16	static
+HAL.hpp:110:17:static touchgfx::HAL* touchgfx::HAL::getInstance()	4	static
+HAL.hpp:246:17:static touchgfx::LCD& touchgfx::HAL::lcd()	4	static
 Transition.hpp:40:5:touchgfx::Transition::Transition()	16	static
 Transition.hpp:46:13:touchgfx::Transition::~Transition()	16	static
 Transition.hpp:46:13:virtual touchgfx::Transition::~Transition()	16	static
@@ -31,8 +33,6 @@ FrontendApplicationBase.hpp:16:13:FrontendApplicationBase::~FrontendApplicationB
 FrontendApplicationBase.hpp:16:13:virtual FrontendApplicationBase::~FrontendApplicationBase()	16	static
 NoTransition.hpp:35:18:virtual void touchgfx::NoTransition::handleTickEvent()	16	static
 ModelListener.hpp:13:10:void ModelListener::bind(Model*)	16	static
-HAL.hpp:112:17:static touchgfx::HAL* touchgfx::HAL::getInstance()	4	static
-HAL.hpp:233:17:static touchgfx::LCD& touchgfx::HAL::lcd()	4	static
 FrontendApplicationBase.cpp:17:1:FrontendApplicationBase::FrontendApplicationBase(Model&, FrontendHeap&)	24	static
 Callback.hpp:175:7:constexpr touchgfx::GenericCallback<void>& touchgfx::GenericCallback<void>::operator=(const touchgfx::GenericCallback<void>&)	16	static
 Callback.hpp:424:8:constexpr touchgfx::Callback<FrontendApplicationBase>& touchgfx::Callback<FrontendApplicationBase>::operator=(touchgfx::Callback<FrontendApplicationBase>&&)	16	static

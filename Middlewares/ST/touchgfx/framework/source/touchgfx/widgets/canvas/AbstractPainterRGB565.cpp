@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -45,9 +45,9 @@ void AbstractPainterRGB565::render(uint8_t* ptr,
                 else
                 {
                     const uint8_t ialpha = 0xFF - combinedAlpha;
-                    const uint8_t p_red = (*p & RMASK) >> 8;
-                    const uint8_t p_green = (*p & GMASK) >> 3;
-                    const uint8_t p_blue = (*p & BMASK) << 3;
+                    const uint8_t p_red = (*p >> 8) & 0xF8;
+                    const uint8_t p_green = (*p >> 3) & 0xFC;
+                    const uint8_t p_blue = *p << 3;
                     renderPixel(p,
                                 LCD::div255(red * combinedAlpha + p_red * ialpha),
                                 LCD::div255(green * combinedAlpha + p_green * ialpha),

@@ -1,7 +1,7 @@
 # Copyright (c) 2018(-2021) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.17.0 distribution.
+# This file is part of the TouchGFX 4.18.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -34,8 +34,7 @@ class TypographiesExcelReader
         wildcard_characters = row[:'Wildcard Characters']
       end
       if row.exists?(:'Widget Wildcard Characters')
-        wildcard_characters ||= '' # Make sure wc_chars is defined
-        wildcard_characters += (row[:'Widget Wildcard Characters'] || '')
+        widget_wildcard_characters = row[:'Widget Wildcard Characters']
       end
       if row.exists?(:'Character Ranges') # New name
         wildcard_ranges = row[:'Character Ranges']
@@ -49,7 +48,7 @@ class TypographiesExcelReader
       if name
         name = name.strip
         unless name.match(/^([0-9a-zA-Z_])*$/)
-          fail "Illegal characters found in Text ID '#{name}'"
+          fail "ERROR: Illegal characters found in Text ID '#{name}'"
         end
       end
       font = font.strip if font
@@ -57,11 +56,12 @@ class TypographiesExcelReader
       bpp = bpp.strip if bpp
       fallback_character = fallback_character.strip if fallback_character
       wildcard_characters = wildcard_characters.strip if wildcard_characters
+      widget_wildcard_characters = widget_wildcard_characters.strip if widget_wildcard_characters
       wildcard_ranges = wildcard_ranges.strip if wildcard_ranges
       ellipsis_character = ellipsis_character.strip if ellipsis_character
 
       if name && font && size && bpp
-        @typographies.push Typography.new(name, font, size.to_i, bpp.to_i, fallback_character, ellipsis_character, wildcard_characters, wildcard_ranges)
+        @typographies.push Typography.new(name, font, size.to_i, bpp.to_i, fallback_character, ellipsis_character, wildcard_characters, widget_wildcard_characters, wildcard_ranges)
       end
     end
     @typographies

@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -187,7 +187,7 @@ int16_t TextArea::calculateTextHeight(const Unicode::UnicodeChar* format, ...) c
     TextProvider textProvider;
     textProvider.initialize(format, pArg, fontToDraw->getGSUBTable(), fontToDraw->getContextualFormsTable());
 
-    int16_t numLines = LCD::getNumLines(textProvider, wideTextAction, typedText.getTextDirection(), typedText.getFont(), getWidth());
+    int16_t numLines = LCD::getNumLines(textProvider, wideTextAction, typedText.getTextDirection(), typedText.getFont(), getWidth() - indentation);
 
     va_end(pArg);
     return (textHeight + linespace > 0) ? (numLines * textHeight + (numLines - 1) * linespace) : (numLines > 0) ? (textHeight)

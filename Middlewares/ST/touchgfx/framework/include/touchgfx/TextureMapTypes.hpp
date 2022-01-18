@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -227,7 +227,7 @@ inline int32_t ceil28_4(fixed28_4 value)
     }
     else
     {
-        // deal with negative numerators correctly
+        // Deal with negative numerators correctly
         returnValue = -((-numerator) / 16);
         returnValue -= ((-numerator) % 16) ? 1 : 0;
     }
@@ -244,10 +244,10 @@ inline int32_t ceil28_4(fixed28_4 value)
  */
 inline void floorDivMod(int32_t numerator, int32_t denominator, int32_t& floor, int32_t& mod)
 {
-    assert(denominator > 0); // we assume it's positive
+    assert(denominator > 0); // We assume it's positive
     if (numerator >= 0)
     {
-        // positive case, C is okay
+        // Positive case, C is okay
         floor = numerator / denominator;
         mod = numerator % denominator;
     }
@@ -258,12 +258,12 @@ inline void floorDivMod(int32_t numerator, int32_t denominator, int32_t& floor, 
         mod = (-numerator) % denominator;
         if (mod)
         {
-            // there is a remainder
+            // There is a remainder
             floor--;
             mod = denominator - mod;
         }
     }
 }
-} //namespace touchgfx
+} // namespace touchgfx
 
 #endif // TOUCHGFX_TEXTUREMAPTYPES_HPP

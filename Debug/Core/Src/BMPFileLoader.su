@@ -1,7 +1,0 @@
-Types.hpp:91:5:touchgfx::colortype::colortype(uint32_t)	16	static
-Types.hpp:114:5:touchgfx::colortype::operator uint32_t() const	16	static
-Bitmap.hpp:133:14:touchgfx::BitmapId touchgfx::Bitmap::getId() const	16	static
-BMPFileLoader.cpp:6:5:static int BMPFileLoader::readFile(BMPFileLoader::FileHdl, uint8_t*, uint32_t)	32	static
-BMPFileLoader.cpp:16:6:static void BMPFileLoader::seekFile(BMPFileLoader::FileHdl, uint32_t)	16	static
-BMPFileLoader.cpp:21:6:static void BMPFileLoader::getBMP24Dimensions(BMPFileLoader::FileHdl, uint16_t&, uint16_t&)	80	static
-BMPFileLoader.cpp:31:6:static void BMPFileLoader::readBMP24File(touchgfx::Bitmap, BMPFileLoader::FileHdl)	144	static

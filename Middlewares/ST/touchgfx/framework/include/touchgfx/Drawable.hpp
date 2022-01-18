@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -217,6 +217,35 @@ public:
     {
         setXY(x, y);
         setWidthHeight(width, height);
+    }
+
+    /**
+     * Expands the Drawable to have the same size as its parent with a given margin around
+     * the edge. If there is no parent, the position is set to the size of the entire display.
+     *
+     * @param  margin (Optional) The margin.
+     */
+    void expand(int margin = 0);
+
+    /** Centers the Drawable inside its parent. */
+    void center()
+    {
+        centerX();
+        centerY();
+    }
+
+    /** Center the Drawable horizontally inside its parent. */
+    void centerX()
+    {
+        assert(parent && "Cannot center a Drawable with no parent");
+        setX((parent->getWidth() - getWidth()) / 2);
+    }
+
+    /** Center the Drawable vertically inside its parent. */
+    void centerY()
+    {
+        assert(parent && "Cannot center a Drawable with no parent");
+        setY((parent->getHeight() - getHeight()) / 2);
     }
 
     /**

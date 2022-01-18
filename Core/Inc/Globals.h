@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdio.h>
 
-#define BH1750_ENABLED			1
+#define BH1750_ENABLED			0
 #define GPS_ENABLED				1
 #define CAN_ENABLED				1
 #define RGB_ENABLED				1
@@ -15,15 +15,17 @@ extern "C" {
 #define IND_ENABLED 			1
 #define ALERT_ENABLED  			1
 
-#define LED_NUMBER				16
-#define DEFAULT_BRIGHTNESS		100
+#define LED_NUMBER				46
+#define LED_DEFAULT_BRIGHTNESS		5
+
+#define LCD_DEFAULT_BRIGHTNESS	200
 
 #define LCD_RPM_HIGH 			8000
 
-#define PROTECTION_RPM_LOW 		6000
-#define PROTECTION_RPM_HIGH 	6800
+#define PROTECTION_RPM_LOW 		6500
+#define PROTECTION_RPM_HIGH 	7800
 
-#define PROTECTION_RPM_LED 		4
+#define PROTECTION_RPM_LED 		6
 
 #define PROTECTION_OIL_LOW 		40
 #define PROTECTION_FUEL_LOW 	40
@@ -309,6 +311,12 @@ typedef struct {
 	uint16_t LCD_BRIGHTNESS;
 	uint8_t LCD_BRIGHTNESS_CHANGED;
 	uint8_t CAN_PROTOCOL;
+
+	//BTN
+	uint8_t BTN_TOP_RIGHT;
+	uint8_t BTN_TOP_LEFT;
+	uint8_t BTN_BOTTOM_RIGHT;
+	uint8_t BTN_BOTTOM_LEFT;
 
 } Statuses;
 

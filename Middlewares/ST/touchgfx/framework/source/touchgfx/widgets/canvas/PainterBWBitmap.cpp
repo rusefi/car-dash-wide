@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -26,132 +26,176 @@ void PainterBWBitmap::setBitmap(const Bitmap& bmp)
     DisplayTransformation::transformDisplayToFrameBuffer(bitmapRectToFrameBuffer);
 }
 
+void PainterBWBitmap::setOffset(int16_t x, int16_t y)
+{
+    xOffset = x;
+    yOffset = y;
+}
+
+void PainterBWBitmap::setTiled(bool tiled)
+{
+    isTiled = tiled;
+}
+
 // Found in LCD1bpp
 void fillBits(uint8_t* fb, uint16_t startX, uint16_t startY, uint16_t stride, uint32_t count, uint8_t color);
 
 void PainterBWBitmap::render(uint8_t* ptr, int x, int xAdjust, int y, unsigned count, const uint8_t* /*covers*/)
 {
-    currentX = x + areaOffsetX;
-    currentY = y + areaOffsetY;
+    currentX = x + areaOffsetX + xOffset;
+    currentY = y + areaOffsetY + yOffset;
+
     x += xAdjust;
+
+    if (!isTiled && currentX < 0)
+    {
+        if (count < (unsigned int)-currentX)
+        {
+            return;
+        }
+        count += currentX;
+        //covers -= currentX;
+        x -= currentX;
+        currentX = 0;
+    }
 
     if (!renderInit())
     {
         return;
     }
 
-    if (currentX + (int)count > bitmapRectToFrameBuffer.width)
+    if (!isTiled && currentX + (int)count > bitmapRectToFrameBuffer.width)
     {
         count = bitmapRectToFrameBuffer.width - currentX;
     }
 
+    // Max number of pixels before we reach end of bitmap row
+    unsigned int available = bitmapRectToFrameBuffer.width - currentX;
     if (bitmap.getFormat() == Bitmap::BW_RLE)
     {
-        while (count)
+        const uint32_t skip = currentY * bitmapRectToFrameBuffer.width;
+        do
         {
-            uint32_t length = bw_rle.getLength();
-            uint32_t bitsToDraw = MIN(length, (uint32_t)count);
+            unsigned length = MIN(available, count);
+            count -= length;
+            do
+            {
+                uint32_t bw_length = bw_rle.getLength();
+                uint32_t bitsToDraw = MIN(bw_length, length);
 
-            fillBits(ptr, x, 0, 0 /* not used */, bitsToDraw, bw_rle.getColor());
-            x += bitsToDraw;
-            count -= bitsToDraw;
-            bw_rle.skipNext(bitsToDraw);
-        }
+                fillBits(ptr, x, 0, 0 /* not used */, bitsToDraw, bw_rle.getColor());
+                x += bitsToDraw;
+                length -= bitsToDraw;
+                bw_rle.skipNext(bitsToDraw);
+            } while (length);
+            bw_rle.init(bitmapBWPointer);
+            bw_rle.skipNext(skip);
+            available = bitmapRectToFrameBuffer.width;
+        } while (count);
     }
     else
     {
-        unsigned char* p = ptr + (x / 8);
-        const uint8_t* src = bitmapBWPointer + currentX / 8;
-        uint8_t* RESTRICT dst = p;
-        uint16_t srcBitX = currentX % 8; // & 7
-        uint16_t dstBitX = x % 8;        // & 7
-
-        uint16_t remainingBits = count;
-
-        if (dstBitX > 0)
+        do
         {
-            // Start by getting (dst-)aligned for faster transfer
-            uint16_t neededBits = 8 - dstBitX;
-            if (neededBits > remainingBits)
+            const unsigned length = MIN(available, count);
+
+            unsigned char* p = ptr + (x / 8);
+            const uint8_t* src = bitmapBWPointer + currentX / 8;
+            uint8_t* RESTRICT dst = p;
+            uint16_t srcBitX = currentX % 8; // & 7
+            uint16_t dstBitX = x % 8;        // & 7
+
+            uint16_t remainingBits = length;
+
+            if (dstBitX > 0)
             {
-                neededBits = remainingBits; // Very narrow src inside same word
-            }
-            const uint16_t availableBits = 8 - srcBitX;
-            uint8_t mask = (1u << neededBits) - 1u;
-            const uint8_t dstShift = static_cast<uint8_t>(8u - (dstBitX + neededBits));
-            mask <<= dstShift;
-
-            uint8_t word = *src;
-
-            if (availableBits > neededBits)
-            {
-                word >>= availableBits - neededBits;
-            }
-            else if (availableBits < neededBits)
-            {
-                // Get the last required bits from src[1]
-                word <<= neededBits - availableBits;
-                word |= src[1] >> (8u - (neededBits - availableBits));
-            }
-
-            word <<= dstShift;
-            *dst = (*dst & ~mask) | (word & mask);
-
-            srcBitX = (srcBitX + neededBits) % 8; // & 7
-
-            if (availableBits <= neededBits)
-            {
-                src++;
-            }
-            dst++;
-            remainingBits -= neededBits;
-        }
-
-        // dstX is now word aligned (or we have transferred everything of a narrow image and remainingBits==0)
-        if (remainingBits >= 8)
-        {
-            uint16_t bytesPerLine = remainingBits / 8;
-            if (srcBitX == 0)
-            {
-                HAL::getInstance()->blockCopy(dst, src, bytesPerLine);
-                src += bytesPerLine;
-                dst += bytesPerLine;
-            }
-            else
-            {
-                uint16_t _remainingBits = remainingBits;
-
-                remainingBits = _remainingBits;
-                while (remainingBits >= 8)
+                // Start by getting (dst-)aligned for faster transfer
+                uint16_t neededBits = 8 - dstBitX;
+                if (neededBits > remainingBits)
                 {
-                    uint8_t word = *src++;
-                    word <<= srcBitX;
-                    word |= (*src) >> (8 - srcBitX);
-                    *dst++ = word;
-                    remainingBits -= 8;
+                    neededBits = remainingBits; // Very narrow src inside same word
                 }
-            }
-            remainingBits %= 8; // &= 7
-        }
+                const uint16_t availableBits = 8 - srcBitX;
+                uint8_t mask = (1u << neededBits) - 1u;
+                const uint8_t dstShift = static_cast<uint8_t>(8u - (dstBitX + neededBits));
+                mask <<= dstShift;
 
-        // Take the last bits, again we need to mask dst
-        if (remainingBits > 0)
-        {
-            uint8_t word = *src;
-            if (srcBitX != 0)
-            {
-                word <<= srcBitX;
-                word |= src[1] >> (8u - srcBitX);
+                uint8_t word = *src;
+
+                if (availableBits > neededBits)
+                {
+                    word >>= availableBits - neededBits;
+                }
+                else if (availableBits < neededBits)
+                {
+                    // Get the last required bits from src[1]
+                    word <<= neededBits - availableBits;
+                    word |= src[1] >> (8u - (neededBits - availableBits));
+                }
+
+                word <<= dstShift;
+                *dst = (*dst & ~mask) | (word & mask);
+
+                srcBitX = (srcBitX + neededBits) % 8; // & 7
+
+                if (availableBits <= neededBits)
+                {
+                    src++;
+                }
+                dst++;
+                remainingBits -= neededBits;
             }
-            const uint8_t mask = ((1u << remainingBits) - 1u) << (8u - remainingBits);
-            *dst = (*dst & ~mask) | (word & mask);
-        }
+
+            // dstX is now word aligned (or we have transferred everything of a narrow image and remainingBits==0)
+            if (remainingBits >= 8)
+            {
+                uint16_t bytesPerLine = remainingBits / 8;
+                if (srcBitX == 0)
+                {
+                    HAL::getInstance()->blockCopy(dst, src, bytesPerLine);
+                    src += bytesPerLine;
+                    dst += bytesPerLine;
+                }
+                else
+                {
+                    uint16_t _remainingBits = remainingBits;
+
+                    remainingBits = _remainingBits;
+                    while (remainingBits >= 8)
+                    {
+                        uint8_t word = *src++;
+                        word <<= srcBitX;
+                        word |= (*src) >> (8 - srcBitX);
+                        *dst++ = word;
+                        remainingBits -= 8;
+                    }
+                }
+                remainingBits %= 8; // &= 7
+            }
+
+            // Take the last bits, again we need to mask dst
+            if (remainingBits > 0)
+            {
+                uint8_t word = *src;
+                if (srcBitX != 0)
+                {
+                    word <<= srcBitX;
+                    word |= src[1] >> (8u - srcBitX);
+                }
+                const uint8_t mask = ((1u << remainingBits) - 1u) << (8u - remainingBits);
+                *dst = (*dst & ~mask) | (word & mask);
+            }
+
+            x += length;
+            count -= length;
+            currentX = 0;
+            available = bitmapRectToFrameBuffer.width;
+        } while (count);
     }
 }
 
 bool PainterBWBitmap::renderInit()
 {
-    bw_rle = 0; // Used to remember if format is BW or BW_RLE
     bitmapBWPointer = 0;
 
     if (bitmap.getId() == BITMAP_INVALID)
@@ -159,9 +203,14 @@ bool PainterBWBitmap::renderInit()
         return false;
     }
 
-    if (currentX >= bitmapRectToFrameBuffer.width || currentY >= bitmapRectToFrameBuffer.height)
+    if (isTiled)
     {
-        // Outside bitmap area, do not draw anything
+        // Modulus, also handling negative values
+        currentX = ((currentX % bitmapRectToFrameBuffer.width) + bitmapRectToFrameBuffer.width) % bitmapRectToFrameBuffer.width;
+        currentY = ((currentY % bitmapRectToFrameBuffer.height) + bitmapRectToFrameBuffer.height) % bitmapRectToFrameBuffer.height;
+    }
+    else if ((currentX >= bitmapRectToFrameBuffer.width) || (currentY < 0) || (currentY >= bitmapRectToFrameBuffer.height))
+    {
         return false;
     }
 
@@ -189,23 +238,4 @@ bool PainterBWBitmap::renderInit()
     return false;
 }
 
-bool PainterBWBitmap::renderNext(uint8_t& color)
-{
-    if (currentX >= bitmapRectToFrameBuffer.width || bitmapBWPointer == 0)
-    {
-        return false;
-    }
-
-    if (bitmap.getFormat() == Bitmap::BW_RLE)
-    {
-        color = bw_rle.getColor();
-        bw_rle.skipNext(1);
-    }
-    else
-    {
-        const uint8_t* src = bitmapBWPointer + currentX / 8;
-        color = ((*src) >> (7 - (currentX % 8))) & 1;
-    }
-    return true;
-}
 } // namespace touchgfx

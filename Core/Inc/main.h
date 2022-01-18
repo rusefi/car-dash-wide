@@ -37,7 +37,6 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -57,17 +56,34 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
+void Neopixel_setup(void);
+void show_neopixels();
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define SPI1_CS_Pin GPIO_PIN_3
-#define SPI1_CS_GPIO_Port GPIOG
+#define BTN_1_Pin GPIO_PIN_2
+#define BTN_1_GPIO_Port GPIOE
+#define BTN_2_Pin GPIO_PIN_3
+#define BTN_2_GPIO_Port GPIOE
+#define BTN_3_Pin GPIO_PIN_6
+#define BTN_3_GPIO_Port GPIOJ
+#define BTN_4_Pin GPIO_PIN_7
+#define BTN_4_GPIO_Port GPIOJ
+#define SDIO_ENT_Pin GPIO_PIN_3
+#define SDIO_ENT_GPIO_Port GPIOG
 #define LED_PI3_Pin GPIO_PIN_3
 #define LED_PI3_GPIO_Port GPIOI
 #define LED_PD4_Pin GPIO_PIN_4
 #define LED_PD4_GPIO_Port GPIOD
+#define LED_PJ12_Pin GPIO_PIN_12
+#define LED_PJ12_GPIO_Port GPIOJ
+#define LED_PJ13_Pin GPIO_PIN_13
+#define LED_PJ13_GPIO_Port GPIOJ
+#define LED_PJ14_Pin GPIO_PIN_14
+#define LED_PJ14_GPIO_Port GPIOJ
+#define LED_PJ15_Pin GPIO_PIN_15
+#define LED_PJ15_GPIO_Port GPIOJ
 /* USER CODE BEGIN Private defines */
-
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
@@ -75,5 +91,3 @@ void Error_Handler(void);
 #endif
 
 #endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

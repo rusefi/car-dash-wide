@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -80,7 +80,10 @@ protected:
     /**
      * @copydoc AbstractPainterABGR2222::renderNext(uint8_t&,uint8_t&,uint8_t&,uint8_t&)
      */
-    virtual bool renderNext(uint8_t& red, uint8_t& green, uint8_t& blue, uint8_t& alpha) = 0;
+    virtual bool renderNext(uint8_t& red, uint8_t& green, uint8_t& blue, uint8_t& alpha)
+    {
+        return false;
+    }
 
     /**
      * @copydoc AbstractPainterABGR2222::renderPixel(uint8_t*,uint8_t,uint8_t,uint8_t)

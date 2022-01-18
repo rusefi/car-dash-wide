@@ -14,28 +14,37 @@ RM := rm -rf
 -include TouchGFX/gui/src/screen1_screen/subdir.mk
 -include TouchGFX/gui/src/model/subdir.mk
 -include TouchGFX/gui/src/common/subdir.mk
+-include TouchGFX/generated/videos/src/keil/subdir.mk
 -include TouchGFX/generated/texts/src/subdir.mk
 -include TouchGFX/generated/images/src/subdir.mk
 -include TouchGFX/generated/gui_generated/src/screen1_screen/subdir.mk
 -include TouchGFX/generated/gui_generated/src/common/subdir.mk
 -include TouchGFX/generated/fonts/src/subdir.mk
+-include TouchGFX/build/MINGW32_NT-6.2/touchgfx/framework/source/platform/hal/simulator/sdl2/subdir.mk
+-include TouchGFX/build/MINGW32_NT-6.2/touchgfx/framework/source/platform/driver/touch/subdir.mk
+-include TouchGFX/build/MINGW32_NT-6.2/simulator/subdir.mk
 -include TouchGFX/build/MINGW32_NT-6.2/gui/src/screen1_screen/subdir.mk
 -include TouchGFX/build/MINGW32_NT-6.2/gui/src/model/subdir.mk
 -include TouchGFX/build/MINGW32_NT-6.2/gui/src/common/subdir.mk
+-include TouchGFX/build/MINGW32_NT-6.2/generated/texts/src/subdir.mk
+-include TouchGFX/build/MINGW32_NT-6.2/generated/simulator/src/video/subdir.mk
 -include TouchGFX/build/MINGW32_NT-6.2/generated/simulator/src/subdir.mk
 -include TouchGFX/build/MINGW32_NT-6.2/generated/images/src/subdir.mk
 -include TouchGFX/build/MINGW32_NT-6.2/generated/gui_generated/src/screen1_screen/subdir.mk
 -include TouchGFX/build/MINGW32_NT-6.2/generated/gui_generated/src/common/subdir.mk
 -include TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/subdir.mk
 -include TouchGFX/App/subdir.mk
--include Middlewares/FreeRTOS/subdir.mk
--include Middlewares/FatFs/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
+-include Middlewares/Third_Party/FatFs/src/option/subdir.mk
+-include Middlewares/Third_Party/FatFs/src/subdir.mk
 -include FATFS/Target/subdir.mk
 -include FATFS/App/subdir.mk
--include Drivers/STM32F4xx_HAL_Driver/subdir.mk
+-include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
--include subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -99,8 +108,8 @@ all: main-build
 main-build: 429IG_LCD.elf secondary-outputs
 
 # Tool invocations
-429IG_LCD.elf: $(OBJS) $(USER_OBJS) E:\Code\Personal\STM32\429IG_LCD\STM32F429IGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "429IG_LCD.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\Code\Personal\STM32\429IG_LCD\STM32F429IGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="429IG_LCD.map" -Wl,--gc-sections -static -L"E:\Code\Personal\STM32\429IG_LCD\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+429IG_LCD.elf: $(OBJS) $(USER_OBJS) C:\Users\Ben\STM32CubeIDE\workspace_1.8.0\429IG_LCD\STM32F429BITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "429IG_LCD.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Ben\STM32CubeIDE\workspace_1.8.0\429IG_LCD\STM32F429BITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="429IG_LCD.map" -Wl,--gc-sections -static -L"C:\Users\Ben\STM32CubeIDE\workspace_1.8.0\429IG_LCD\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -121,7 +130,7 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 
 # Other Targets
 clean:
-	-$(RM) $(OBJDUMP_LIST)$(C_UPPER_DEPS)$(S_DEPS)$(C_DEPS)$(OBJCOPY_BIN)$(CC_DEPS)$(SIZE_OUTPUT)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(CXX_DEPS)$(S_UPPER_DEPS)$(CPP_DEPS) 429IG_LCD.elf
+	-$(RM) 429IG_LCD.bin 429IG_LCD.elf 429IG_LCD.list default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
@@ -133,6 +142,6 @@ fail-specified-linker-script-missing:
 warn-no-linker-script-specified:
 	@echo 'Warning: No linker script specified. Check the linker settings in the build configuration.'
 
-.PHONY: all clean dependents fail-specified-linker-script-missing warn-no-linker-script-specified
+.PHONY: all clean dependents main-build fail-specified-linker-script-missing warn-no-linker-script-specified
 
 -include ../makefile.targets

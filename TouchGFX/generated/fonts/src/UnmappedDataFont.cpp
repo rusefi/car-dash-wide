@@ -27,7 +27,7 @@ const GlyphNode* UnmappedDataFont::getGlyph(Unicode::UnicodeChar unicode, const 
 
     if (index != -1)
     {
-        //Read glyphNode from unmapped flash
+        // Read glyphNode from unmapped flash
         touchgfx::FlashDataReader* const flashReader = ApplicationFontProvider::getFlashReader();
         flashReader->copyData(glyphList + index, &glyphNodeBuffer, sizeof(GlyphNode));
 

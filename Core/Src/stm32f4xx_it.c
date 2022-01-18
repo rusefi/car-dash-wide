@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -59,10 +58,8 @@
 extern DMA2D_HandleTypeDef hdma2d;
 extern SDRAM_HandleTypeDef hsdram1;
 extern LTDC_HandleTypeDef hltdc;
-extern DMA_HandleTypeDef hdma_sdio_rx;
-extern DMA_HandleTypeDef hdma_sdio_tx;
-extern SD_HandleTypeDef hsd;
-extern TIM_HandleTypeDef htim14;
+extern DMA_HandleTypeDef hdma_tim1_ch1;
+extern TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN EV */
 
@@ -79,6 +76,7 @@ void NMI_Handler(void)
   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
 
   /* USER CODE END NonMaskableInt_IRQn 0 */
+  HAL_RCC_NMI_IRQHandler();
   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
   while (1)
   {
@@ -167,20 +165,6 @@ void DebugMon_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles TIM8 trigger and commutation interrupts and TIM14 global interrupt.
-  */
-void TIM8_TRG_COM_TIM14_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 0 */
-
-  /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim14);
-  /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */
-
-  /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 1 */
-}
-
-/**
   * @brief This function handles FMC global interrupt.
   */
 void FMC_IRQHandler(void)
@@ -195,45 +179,32 @@ void FMC_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles SDIO global interrupt.
+  * @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
   */
-void SDIO_IRQHandler(void)
+void TIM6_DAC_IRQHandler(void)
 {
-  /* USER CODE BEGIN SDIO_IRQn 0 */
+  /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
 
-  /* USER CODE END SDIO_IRQn 0 */
-  HAL_SD_IRQHandler(&hsd);
-  /* USER CODE BEGIN SDIO_IRQn 1 */
+  /* USER CODE END TIM6_DAC_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim6);
+  /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
 
-  /* USER CODE END SDIO_IRQn 1 */
+  /* USER CODE END TIM6_DAC_IRQn 1 */
 }
 
 /**
-  * @brief This function handles DMA2 stream3 global interrupt.
+  * @brief This function handles DMA2 stream1 global interrupt.
   */
-void DMA2_Stream3_IRQHandler(void)
+void DMA2_Stream1_IRQHandler(void)
 {
-  /* USER CODE BEGIN DMA2_Stream3_IRQn 0 */
+  /* USER CODE BEGIN DMA2_Stream1_IRQn 0 */
 
-  /* USER CODE END DMA2_Stream3_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_sdio_rx);
-  /* USER CODE BEGIN DMA2_Stream3_IRQn 1 */
+	DMA_Callback();
+  /* USER CODE END DMA2_Stream1_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_tim1_ch1);
+  /* USER CODE BEGIN DMA2_Stream1_IRQn 1 */
 
-  /* USER CODE END DMA2_Stream3_IRQn 1 */
-}
-
-/**
-  * @brief This function handles DMA2 stream6 global interrupt.
-  */
-void DMA2_Stream6_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA2_Stream6_IRQn 0 */
-
-  /* USER CODE END DMA2_Stream6_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_sdio_tx);
-  /* USER CODE BEGIN DMA2_Stream6_IRQn 1 */
-
-  /* USER CODE END DMA2_Stream6_IRQn 1 */
+  /* USER CODE END DMA2_Stream1_IRQn 1 */
 }
 
 /**
@@ -267,4 +238,4 @@ void DMA2D_IRQHandler(void)
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

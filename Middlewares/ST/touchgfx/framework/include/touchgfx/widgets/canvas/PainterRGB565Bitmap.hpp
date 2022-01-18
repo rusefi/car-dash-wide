@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -41,7 +41,10 @@ public:
      * @param  bmp   (Optional) The bitmap, default is #BITMAP_INVALID.
      */
     PainterRGB565Bitmap(const Bitmap& bmp = Bitmap(BITMAP_INVALID))
-        : AbstractPainterRGB565(), bitmapARGB8888Pointer(0), bitmapRGB565Pointer(0), bitmapAlphaPointer(0), bitmap(), bitmapRectToFrameBuffer()
+        : AbstractPainterRGB565(),
+          bitmapARGB8888Pointer(0), bitmapRGB565Pointer(0), bitmapAlphaPointer(0),
+          bitmap(), bitmapRectToFrameBuffer(),
+          xOffset(0), yOffset(0), isTiled(false)
     {
         setBitmap(bmp);
     }
@@ -53,12 +56,31 @@ public:
      */
     void setBitmap(const Bitmap& bmp);
 
+    /**
+     * Instruct the painter to tile the bitmap specified. The bitmap will be tiled both horizontally
+     * and vertically.
+     *
+     * @param   tiled   True if tiled.
+     *
+     * @see setOffset
+     */
+    virtual void setTiled(bool tiled);
+
+    /**
+     * Sets an offset for the bitmap used. The x and y coordinates specifies how far the bitmap
+     * should be moved to the right and down. This works for tiled bitmaps and non-tiled bitmaps.
+     *
+     * @param   x   The x coordinate.
+     * @param   y   The y coordinate.
+     *
+     * @see setTiled
+     */
+    virtual void setOffset(int16_t x, int16_t y);
+
     virtual void render(uint8_t* ptr, int x, int xAdjust, int y, unsigned count, const uint8_t* covers);
 
 protected:
     virtual bool renderInit();
-
-    virtual bool renderNext(uint8_t& red, uint8_t& green, uint8_t& blue, uint8_t& alpha);
 
     const uint32_t* bitmapARGB8888Pointer; ///< Pointer to the bitmap (ARGB8888)
     const uint16_t* bitmapRGB565Pointer;   ///< Pointer to the bitmap (RGB565)
@@ -66,6 +88,10 @@ protected:
 
     Bitmap bitmap;                ///< The bitmap to be used when painting
     Rect bitmapRectToFrameBuffer; ///< Bitmap rectangle translated to framebuffer coordinates
+
+    int16_t xOffset; ///< The x offset of the bitmap
+    int16_t yOffset; ///< The y offset of the bitmap
+    bool isTiled;    ///< True if bitmap should be tiled, false if not
 };
 
 } // namespace touchgfx

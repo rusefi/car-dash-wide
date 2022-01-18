@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -284,6 +284,19 @@ public:
      * @return The number of bytes in one framebuffer row.
      */
     virtual uint16_t framebufferStride() const = 0;
+
+    /**
+     * Check if LCD support dynamic bitmap drawing.
+     *
+     * @param  format The dynamic bitmap format.
+     *
+     * @return true if dynamic bitmap drawing is supported, false otherwise.
+     */
+    virtual bool supportDynamicBitmapDrawing(const Bitmap::BitmapFormat format)
+    {
+        // return true if bitmap format matches framebuffer format
+        return (format == framebufferFormat());
+    }
 
     /**
      * Sets default color as used by alpha level only bitmap formats, e.g. A4. The default

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    stm32f4xx_hal_conf_template.h
@@ -8,16 +9,16 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4xx_HAL_CONF_H
@@ -38,7 +39,7 @@
 
   /* #define HAL_ADC_MODULE_ENABLED   */
 /* #define HAL_CRYP_MODULE_ENABLED   */
-/* #define HAL_CAN_MODULE_ENABLED   */
+#define HAL_CAN_MODULE_ENABLED
 #define HAL_CRC_MODULE_ENABLED
 /* #define HAL_CAN_LEGACY_MODULE_ENABLED   */
 /* #define HAL_CRYP_MODULE_ENABLED   */
@@ -61,9 +62,9 @@
 /* #define HAL_SAI_MODULE_ENABLED   */
 #define HAL_SD_MODULE_ENABLED
 /* #define HAL_MMC_MODULE_ENABLED   */
-#define HAL_SPI_MODULE_ENABLED
+/* #define HAL_SPI_MODULE_ENABLED   */
 #define HAL_TIM_MODULE_ENABLED
-#define HAL_UART_MODULE_ENABLED
+/* #define HAL_UART_MODULE_ENABLED   */
 /* #define HAL_USART_MODULE_ENABLED   */
 /* #define HAL_IRDA_MODULE_ENABLED   */
 /* #define HAL_SMARTCARD_MODULE_ENABLED   */
@@ -95,7 +96,7 @@
   *        (when HSE is used as system clock source, directly or through the PLL).
   */
 #if !defined  (HSE_VALUE)
-  #define HSE_VALUE    25000000U /*!< Value of the External oscillator in Hz */
+  #define HSE_VALUE    8000000U /*!< Value of the External oscillator in Hz */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSE_STARTUP_TIMEOUT)
@@ -147,7 +148,7 @@
   * @brief This is the HAL system configuration section
   */
 #define  VDD_VALUE		      3300U /*!< Value of VDD in mv */
-#define  TICK_INT_PRIORITY            0U   /*!< tick interrupt priority */
+#define  TICK_INT_PRIORITY            15U   /*!< tick interrupt priority */
 #define  USE_RTOS                     0U
 #define  PREFETCH_ENABLE              1U
 #define  INSTRUCTION_CACHE_ENABLE     1U
@@ -488,5 +489,3 @@
 #endif
 
 #endif /* __STM32F4xx_HAL_CONF_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

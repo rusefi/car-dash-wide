@@ -1,7 +1,7 @@
 # Copyright (c) 2018(-2021) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.17.0 distribution.
+# This file is part of the TouchGFX 4.18.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -90,12 +90,12 @@ class FontsCpp
 -ff #{@generate_font_format} \
 #{byte_align}"
       #puts "Command: #{cmd}"
-      output = `#{cmd}`
+      output = `#{cmd}`.force_encoding('iso-8859-1')
       #puts "FontConverter: #{output}\n"
       if !$?.success?
         puts cmd
         puts output
-        raise "Error generating font from #{font_file}"
+        fail "ERROR: While generating font from #{font_file}"
       elsif output.match(/WARNING/i)
         puts output
       end

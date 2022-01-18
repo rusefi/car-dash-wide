@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -148,9 +148,10 @@ public:
     int16_t height; ///< The height
 
     /**
-     * Gets the x coordinate of the right edge of the Rect.
+     * Gets the x coordinate of the right edge of the Rect, i.e. the number
+     * of the first column just to the right of the Rect.
      *
-     * @return x coordinate of the right edge.
+     * @return x coordinate of the right edge (calculated as "x + width").
      */
     FORCE_INLINE_FUNCTION int16_t right() const
     {
@@ -158,9 +159,10 @@ public:
     }
 
     /**
-     * Gets the y coordinate of the bottom edge of the Rect.
+     * Gets the y coordinate of the bottom edge of the Rect, i.e. the number
+     * of the first row just below the Rect.
      *
-     * @return y coordinate of the buttom edge.
+     * @return y coordinate of the bottom edge (calculated as "y + height").
      */
     FORCE_INLINE_FUNCTION int16_t bottom() const
     {
@@ -420,17 +422,14 @@ public:
      */
     T removeAt(uint16_t index)
     {
-        T tmp;
+        assert(index < _size);
 
-        if (index < _size)
+        T tmp = _elem[index];
+        for (int i = index; i < _size; i++)
         {
-            tmp = _elem[index];
-            for (int i = index; i < _size; i++)
-            {
-                _elem[i] = _elem[i + 1];
-            }
-            _size--;
+            _elem[i] = _elem[i + 1];
         }
+        _size--;
         return tmp;
     }
 
@@ -442,14 +441,13 @@ public:
      */
     void quickRemoveAt(uint16_t index)
     {
+        assert(index < _size);
+
+        _size--;
+        // No need to copy element when removing the last element in the vector
         if (index < _size)
         {
-            _size--;
-            if (index < _size)
-            {
-                // No need to copy element when removing the last element in the vector
-                _elem[index] = _elem[_size];
-            }
+            _elem[index] = _elem[_size];
         }
     }
 

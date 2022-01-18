@@ -25,7 +25,7 @@ TouchGFX/target/generated/OSWrappers.o: \
  ../Middlewares/ST/touchgfx/framework/include/platform/driver/button/ButtonController.hpp \
  ../Middlewares/ST/touchgfx/framework/include/platform/driver/touch/TouchController.hpp \
  ../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/OSWrappers.hpp \
- C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
+ ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
 
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:
 
@@ -77,4 +77,4 @@ TouchGFX/target/generated/OSWrappers.o: \
 
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/OSWrappers.hpp:
 
-C:/Users/Ben/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.1/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:

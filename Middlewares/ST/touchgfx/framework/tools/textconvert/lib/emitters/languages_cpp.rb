@@ -1,7 +1,7 @@
 # Copyright (c) 2018(-2021) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.17.0 distribution.
+# This file is part of the TouchGFX 4.18.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -19,18 +19,20 @@ class LanguagesCpp
     @generate_binary_translations = generate_binary_translations
   end
   def run
-    @text_entries.languages.each do |language|
-      LanguageXxCpp.new(@string_indices, @text_entries, @output_directory, @remap_identical_texts, @generate_binary_translations, language).run
-    end
-
-    #remove any unused LanguageXX.cpp files
+    # First remove any unused LanguageXX.cpp files (ie. remove
+    # LanguageGB.cpp before creating LanguageGb.cpp on windows which
+    # ignores case on filenames)
     Dir.glob("#{@output_directory}/src/Language*.cpp").each do |file|
       m = /Language(.*).cpp/.match(file)
-      if !@text_entries.languages.include?(m[1])
+      xx = m[1]
+      if !@text_entries.languages.any? { |l| l.capitalize == xx }
         File.delete(file) if File.exist?(file)
       end
     end
 
+    @text_entries.languages.each do |language|
+      LanguageXxCpp.new(@string_indices, @text_entries, @output_directory, @remap_identical_texts, @generate_binary_translations, language).run
+    end
   end
 end
 
@@ -47,7 +49,7 @@ class LanguageXxCpp < Template
   end
 
   def cache_file
-    File.join(@output_directory, "cache/LanguageCpp_#{@language}.cache")
+    File.join(@output_directory, "cache/LanguageCpp_#{@language.capitalize}.cache")
   end
   def output_filename
     File.join(@output_directory, output_path)
@@ -80,9 +82,9 @@ class LanguageXxCpp < Template
     if not File::exists?(cache_file)
       new_cache_file = true
     else
-        #cache file exists, compare data with cache file
-        old_cache = JSON.parse(File.read(cache_file))
-        new_cache_file = (old_cache != @cache)
+      #cache file exists, compare data with cache file
+      old_cache = JSON.parse(File.read(cache_file))
+      new_cache_file = (old_cache != @cache)
     end
 
     if new_cache_file
@@ -90,7 +92,7 @@ class LanguageXxCpp < Template
       FileIO.write_file_silent(cache_file, @cache.to_json)
     end
 
-    if (!File::exists?(output_filename)) || new_cache_file
+    if !File::exists?(output_filename) || new_cache_file
       #generate LanguageXX.cpp
       super
     end
@@ -119,7 +121,7 @@ class LanguageXxCpp < Template
   end
 
   def entries_texts_const_initialization
-    entries.map { |entry| "    #{entry.text_id}_#{language}" }.join(",\n")
+    entries.map { |entry| "    #{entry.text_id}_#{language.capitalize}" }.join(",\n")
   end
 
   def string_index(entry)
@@ -127,41 +129,21 @@ class LanguageXxCpp < Template
     index.to_s
   end
 
-#  def entries_s
-#    entries = text_entries.entries_with_1_substitution
-#    entries = handle_no_entries(entries, "DO_NOT_USE_S")
-#    present(entries)
-#  end
-
-# def entries_s_texts_const_initialization
-#   entries_s.map { |entry| "#{entry.text_id}_#{language}" }.join(",\n")
-# end
-
-# def entries_ss
-#   entries = text_entries.entries_with_2_substitutions
-#   entries = handle_no_entries(entries, "DO_NOT_USE_SS")
-#   present(entries)
-# end
-
-# def entries_ss_texts_const_initialization
-#   entries_ss.map { |entry| "#{entry.text_id}_#{language}" }.join(",\n")
-# end
-
   def input_path
     File.join(root_dir,'Templates','LanguageXX.cpp.temp')
   end
 
   def output_path
-    "src/Language#{language}.cpp"
+    "src/Language#{language.capitalize}.cpp"
   end
 
   private
 
   def handle_no_entries(entries, text)
     if entries.empty?
-       empty_entry = TextEntry.new(text, "typography")
-       empty_entry.add_translation(language, "")
-       [empty_entry]
+      empty_entry = TextEntry.new(text, "typography")
+      empty_entry.add_translation(language, "")
+      [empty_entry]
     else
       entries
     end
@@ -169,7 +151,7 @@ class LanguageXxCpp < Template
 
   def present(entries)
     entries.map do |entry|
-      Presenter.new(entry.cpp_text_id, entry.translation_in(language).unicodes) 
+      Presenter.new(entry.cpp_text_id, entry.translation_in(language).unicodes)
     end
   end
 

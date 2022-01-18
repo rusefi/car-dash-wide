@@ -2,7 +2,6 @@
 
 #include "main.h"
 #include "extern.h"
-#include "BMPFileLoader.hpp"
 
 Screen1View::Screen1View() {
 
@@ -105,24 +104,6 @@ void Screen1View::tearDownScreen() {
 
 void Screen1View::handleTickEvent() {
 	Unicode::UnicodeChar buffer[16];
-
-	if (BufferIsSet == 1) {
-		uint16_t width, height;
-
-		//Get the image dimensions from the BMP file
-		BMPFileLoader::getBMP24Dimensions(FileBuffer, width, height);
-		//BitmapId bmpId;
-
-		//Create (16bit) dynamic bitmap of same dimension
-		//bmpId = Bitmap::dynamicBitmapCreate(width, height, Bitmap::RGB565);
-
-		//Load pixels from BMP file to dynamic bitmap
-		//BMPFileLoader::readBMP24File(Bitmap(bmpId), File);
-
-		//Make Image show the loaded bitmap
-		//image1.setBitmap(Bitmap(bmpId));
-
-	}
 
 	map_value.invalidate();
 	Unicode::snprintfFloat(buffer, 16, "%.1f",

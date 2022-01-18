@@ -1,14 +1,25 @@
+#!env ruby
 # Copyright (c) 2018(-2021) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.17.0 distribution.
+# This file is part of the TouchGFX 4.18.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
 # If no LICENSE file comes with this software, it is provided AS-IS.
 #
 ###############################################################################/
+
 $:.unshift File.dirname(__FILE__)
+
+require 'fileutils'
+require 'json'
+require 'rubygems'
+require 'lib/converter'
+require 'lib/emitters/fonts_cpp'
+require 'lib/file_io'
+require 'lib/generator'
+require 'lib/version'
 
 WINDOWS_LINE_ENDINGS = "\r\n"
 UNIX_LINE_ENDINGS = "\n"
@@ -20,19 +31,41 @@ def root_dir
   @root_dir ||= File.dirname(__FILE__)
 end
 
+def convert_to_xml(xlsx_file_name, xml_file_name, xml_file_version, framebuffer_bpp)
+  Converter.new.run(xlsx_file_name, xml_file_name, xml_file_version, framebuffer_bpp)
+end
+
 class Main
+
   def self.banner
     <<-BANNER
-Create binary and cpp text files from excel translations
+Create binary and cpp text files from Text Database
 
-Usage: #{File.basename($0)} file.xlsx path/to/fontconvert.out path/to/fonts_output_dir path/to/localization_output_dir path/to/font/asset calling_path {remap|yes|no} {A1|A2|A4|A8} {binary_translations} {binary_fonts} {RGB565|RGB888|BW|GRAY2|GRAY4|ARGB2222|ABGR2222|RGBA2222|BGRA2222}
+Usage: #{File.basename($0)} file.xml path/to/fontconvert.out path/to/fonts_output_dir path/to/localization_output_dir path/to/font/asset calling_path {remap|yes|no} {A1|A2|A4|A8} {binary_translations} {binary_fonts} {RGB565|RGB888|BW|GRAY2|GRAY4|ARGB2222|ABGR2222|RGBA2222|BGRA2222}
+
 Where 'remap'/'yes' will map identical texts to the same memory area to save space
       'A1'/'A2'/'A4'/'A8' will generate fonts in the given format
       'binary_translations' will generate binary translations instead of cpp files
       'binary_fonts' will generate binary font files instead of cpp files
       last argument is the framebuffer format (used to limit the bit depth of the generated fonts)
       Configuration specified in the application.config file take precedence over the commandline arguments
+
+Note: old .xlsx files are automatically converted to .xml format
+
+Also note: If the only argument passed is an .xlsx file, it will be converted to .xml
 BANNER
+  end
+
+  def self.upgrade
+    <<-UPGRADE
+
+---------------------------------------------------------------------------
+Your TouchGFX Environment is using an old Ruby version (#{RUBY_VERSION}).
+TouchGFX #{TOUCHGFX_VERSION} uses Ruby version 3.
+Please use the new TouchGFX Environment.
+---------------------------------------------------------------------------
+
+UPGRADE
   end
 
   def self.missing_files
@@ -40,7 +73,37 @@ BANNER
            !File.exists?("#{@localization_output_path}/include/texts/TextKeysAndLanguages.hpp")
   end
 
+  if Integer(RUBY_VERSION.match(/\d+/)[0]) < 3
+    puts self.upgrade
+  end
+
   if __FILE__ == $0
+
+    if ARGV.count==0 && false
+      Dir["**/assets/texts/texts.xlsx"].each do |file_name|
+        xml_file_name = file_name.gsub(/\.xlsx$/, '.xml')
+        if File.exists?(xml_file_name)
+          puts "WARNING: Removing existing \"#{xml_file_name}\""
+          File.delete(xml_file_name)
+        end
+        puts "Converting \"#{file_name}\" to \"#{xml_file_name}\""
+        convert_to_xml(file_name, xml_file_name, TOUCHGFX_VERSION, '8')
+      end
+      exit
+    end
+
+    if ARGV.count==1 && ARGV[0].match(/\.xlsx$/)
+      # Only one argument, and it is an Excel sheet
+      file_name = ARGV.shift
+      xml_file_name = file_name.gsub(/\.xlsx$/, '.xml')
+      if File.exists?(xml_file_name)
+        puts "WARNING: File \"#{xml_file_name}\" already exists, please remove first"
+      else
+        puts "Converting \"#{file_name}\" to \"#{xml_file_name}\""
+        convert_to_xml(file_name, xml_file_name, TOUCHGFX_VERSION, '8')
+      end
+      exit
+    end
 
     if ARGV.count < 6
       abort self.banner
@@ -70,10 +133,6 @@ BANNER
         framebuffer_bpp = format
       end
     end
-
-    require 'fileutils'
-    require 'json'
-    require 'lib/file_io'
 
     generate_font_format = "0" # 0 = normal font format, 1 = unmapped_flash_font_format
 
@@ -136,12 +195,39 @@ BANNER
     end
 
     begin
+      # 0. possibly convert .xlsx to .xml
       # 1. if text_converter is newer than compile_time.cache, remove all files under generated/texts and generated/fonts
       # 1b if generated/fonts/include/fonts/ApplicationFontProvider.hpp is missing, force generation of TextKeysAndLanguages.hpp
       # 1c if generated/texts/cache/options.cache contents differ from supplies arguments, force run
-      # 2. if generated/texts/cache/compile_time.cache is newer than excel sheet and fonts/ApplicationFontProvider.hpp exists then stop now
+      # 2. if generated/texts/cache/compile_time.cache is newer than xml file and fonts/ApplicationFontProvider.hpp exists then stop now
       # 3. remove UnicodeList*.txt and CharSizes*.csv
       # 4. create #{@localization_output_path}/include/texts/ and #{@fonts_output_path}/include/fonts/
+
+      # 0:
+      if file_name.match(/\.xlsx$/)
+        xml_file_name = file_name.gsub(/\.xlsx$/, '.xml')
+        if File.exists?(xml_file_name)
+          if File.exists?(file_name)
+            puts "WARNING: Using \"#{xml_file_name}\" instead of \"#{file_name}\""
+          end
+        else
+          if File.exists?(file_name)
+            puts "WARNING: Excel file not supported. Converting \"#{file_name}\" to \"#{xml_file_name}\""
+            convert_to_xml(file_name, xml_file_name, TOUCHGFX_VERSION, framebuffer_bpp)
+          else
+            fail "ERROR: #{file_name} not found"
+          end
+        end
+        file_name = xml_file_name
+      elsif file_name.match(/\.xml$/) && !File.exists?(file_name)
+        xlsx_file_name = file_name.gsub(/\.xml$/, '.xlsx')
+        if File.exists?(xlsx_file_name)
+          puts "WARNING: XML file not found. Converting \"#{xlsx_file_name}\" to \"#{file_name}\""
+          convert_to_xml(xlsx_file_name, file_name, TOUCHGFX_VERSION, framebuffer_bpp)
+        else
+          fail "ERROR: #{file_name} not found"
+        end
+      end
 
       # 1:
       text_converter_time = [File.mtime( __FILE__), File.ctime( __FILE__ )].max;
@@ -181,8 +267,8 @@ BANNER
 
       # 2:
       if File.exists?("#{@localization_output_path}/cache/compile_time.cache") && !self.missing_files && !force_run
-        excel_mod_time = [File.mtime(file_name), File.ctime(file_name)].max
-        if excel_mod_time < File.mtime("#{@localization_output_path}/cache/compile_time.cache")
+        mod_time = [File.mtime(file_name), File.ctime(file_name)].max
+        if mod_time < File.mtime("#{@localization_output_path}/cache/compile_time.cache")
           exit
         end
       end
@@ -199,9 +285,6 @@ BANNER
       FileUtils.mkdir_p("#{@localization_output_path}/include/texts/")
       FileUtils.mkdir_p("#{@fonts_output_path}/include/fonts")
 
-      require 'rubygems'
-      require 'lib/generator'
-      require 'lib/emitters/fonts_cpp'
       FontsCpp.font_convert = font_convert_path
       Generator.new.run(file_name, @fonts_output_path, @localization_output_path, font_asset_path, data_format, remap_identical_texts, generate_binary_translations, generate_binary_fonts, framebuffer_bpp, generate_font_format)
       #touch the cache compile time that we rely on in the makefile
@@ -211,7 +294,7 @@ BANNER
 
     rescue Exception => e
       STDERR.puts e
-      abort "an error occurred in converting texts:\r\n#{e}"
+      abort "An error occurred during text convertion"
     end
   end
 end

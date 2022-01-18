@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -12,6 +12,7 @@
 
 #include <touchgfx/hal/Types.hpp>
 #include <touchgfx/Bitmap.hpp>
+#include <touchgfx/Utils.hpp>
 #include <touchgfx/lcd/LCD.hpp>
 #include <touchgfx/transforms/DisplayTransformation.hpp>
 #include <touchgfx/widgets/canvas/PainterRGB888Bitmap.hpp>
@@ -26,125 +27,181 @@ void PainterRGB888Bitmap::setBitmap(const Bitmap& bmp)
     DisplayTransformation::transformDisplayToFrameBuffer(bitmapRectToFrameBuffer);
 }
 
+void PainterRGB888Bitmap::setOffset(int16_t x, int16_t y)
+{
+    xOffset = x;
+    yOffset = y;
+}
+
+void PainterRGB888Bitmap::setTiled(bool tiled)
+{
+    isTiled = tiled;
+}
+
 void PainterRGB888Bitmap::render(uint8_t* ptr, int x, int xAdjust, int y, unsigned count, const uint8_t* covers)
 {
     uint8_t* p = ptr + (x + xAdjust) * 3;
 
-    currentX = x + areaOffsetX;
-    currentY = y + areaOffsetY;
+    currentX = x + areaOffsetX + xOffset;
+    currentY = y + areaOffsetY + yOffset;
+
+    if (!isTiled && currentX < 0)
+    {
+        if (count < (unsigned int)-currentX)
+        {
+            return;
+        }
+        count += currentX;
+        covers -= currentX;
+        p -= currentX * 3;
+        currentX = 0;
+    }
 
     if (!renderInit())
     {
         return;
     }
 
-    if (currentX + (int)count > bitmapRectToFrameBuffer.width)
+    if (!isTiled && currentX + (int)count > bitmapRectToFrameBuffer.width)
     {
         count = bitmapRectToFrameBuffer.width - currentX;
     }
 
     const uint8_t* const p_lineend = p + 3 * count;
+    // Max number of pixels before we reach end of bitmap row
+    unsigned int available = bitmapRectToFrameBuffer.width - currentX;
     if (bitmapRGB888Pointer)
     {
-        const uint8_t* src = bitmapRGB888Pointer;
-        uint8_t pByte;
+        const uint8_t* const rgb888_linestart = ((const uint8_t*)bitmap.getData()) + (currentY * bitmapRectToFrameBuffer.width) * 3;
         if (widgetAlpha == 0xFF)
         {
             do
             {
-                // Use alpha from covers directly
-                const uint8_t alpha = *covers++;
-                if (alpha == 0xFF)
+                const unsigned length = MIN(available, count);
+                const uint8_t* const p_chunkend = p + length * 3;
+                count -= length;
+                do
                 {
-                    // Solid pixel
-                    *p++ = *src++;
-                    *p++ = *src++;
-                    *p++ = *src++;
-                }
-                else
-                {
-                    const uint8_t ialpha = 0xFF - alpha;
-                    pByte = *p;
-                    *p++ = LCD::div255(*src++ * alpha + pByte * ialpha);
-                    pByte = *p;
-                    *p++ = LCD::div255(*src++ * alpha + pByte * ialpha);
-                    pByte = *p;
-                    *p++ = LCD::div255(*src++ * alpha + pByte * ialpha);
-                }
+                    // Use alpha from covers directly
+                    const uint8_t alpha = *covers++;
+                    if (alpha == 0xFF)
+                    {
+                        // Solid pixel
+                        *p++ = *bitmapRGB888Pointer++;
+                        *p++ = *bitmapRGB888Pointer++;
+                        *p++ = *bitmapRGB888Pointer++;
+                    }
+                    else
+                    {
+                        const uint8_t ialpha = 0xFF - alpha;
+                        *p = LCD::div255(*bitmapRGB888Pointer++ * alpha + *p * ialpha);
+                        p++;
+                        *p = LCD::div255(*bitmapRGB888Pointer++ * alpha + *p * ialpha);
+                        p++;
+                        *p = LCD::div255(*bitmapRGB888Pointer++ * alpha + *p * ialpha);
+                        p++;
+                    }
+                } while (p < p_chunkend);
+                bitmapRGB888Pointer = rgb888_linestart;
+                available = bitmapRectToFrameBuffer.width;
             } while (p < p_lineend);
         }
         else
         {
             do
             {
-                const uint8_t alpha = LCD::div255((*covers++) * widgetAlpha);
-                const uint8_t ialpha = 0xFF - alpha;
-                pByte = *p;
-                *p++ = LCD::div255(*src++ * alpha + pByte * ialpha);
-                pByte = *p;
-                *p++ = LCD::div255(*src++ * alpha + pByte * ialpha);
-                pByte = *p;
-                *p++ = LCD::div255(*src++ * alpha + pByte * ialpha);
+                const unsigned length = MIN(available, count);
+                const uint8_t* const p_chunkend = p + length * 3;
+                count -= length;
+                do
+                {
+                    const uint8_t alpha = LCD::div255((*covers++) * widgetAlpha);
+                    const uint8_t ialpha = 0xFF - alpha;
+                    *p = LCD::div255(*bitmapRGB888Pointer++ * alpha + *p * ialpha);
+                    p++;
+                    *p = LCD::div255(*bitmapRGB888Pointer++ * alpha + *p * ialpha);
+                    p++;
+                    *p = LCD::div255(*bitmapRGB888Pointer++ * alpha + *p * ialpha);
+                    p++;
+                } while (p < p_chunkend);
+                bitmapRGB888Pointer = rgb888_linestart;
+                available = bitmapRectToFrameBuffer.width;
             } while (p < p_lineend);
         }
     }
     else if (bitmapARGB8888Pointer)
     {
-        const uint32_t* src = bitmapARGB8888Pointer;
+        const uint32_t* const argb8888_linestart = ((const uint32_t*)bitmap.getData()) + (currentY * bitmapRectToFrameBuffer.width);
         if (widgetAlpha == 0xFF)
         {
             do
             {
-                const uint8_t srcAlpha = (*src) >> 24;
-                const uint8_t alpha = LCD::div255((*covers++) * srcAlpha);
-                if (alpha == 0xFF)
+                const unsigned length = MIN(available, count);
+                const uint8_t* const p_chunkend = p + length * 3;
+                count -= length;
+                do
                 {
-                    // Solid pixel
-                    *p++ = (*src);       // Blue
-                    *p++ = (*src) >> 8;  // Green
-                    *p++ = (*src) >> 16; // Red
-                }
-                else
-                {
-                    // Non-Transparent pixel
-                    const uint8_t ialpha = 0xFF - alpha;
-                    uint8_t pByte = *p;
-                    uint8_t cByte = (*src);
-                    *p++ = LCD::div255(cByte * alpha + pByte * ialpha);
-                    pByte = *p;
-                    cByte = (*src) >> 8;
-                    *p++ = LCD::div255(cByte * alpha + pByte * ialpha);
-                    pByte = *p;
-                    cByte = (*src) >> 16;
-                    *p++ = LCD::div255(cByte * alpha + pByte * ialpha);
-                }
-                src++;
+                    const uint8_t srcAlpha = (*bitmapARGB8888Pointer) >> 24;
+                    const uint8_t alpha = LCD::div255((*covers++) * srcAlpha);
+                    if (alpha == 0xFF)
+                    {
+                        // Solid pixel
+                        *p++ = (*bitmapARGB8888Pointer);       // Blue
+                        *p++ = (*bitmapARGB8888Pointer) >> 8;  // Green
+                        *p++ = (*bitmapARGB8888Pointer) >> 16; // Red
+                    }
+                    else
+                    {
+                        // Non-Transparent pixel
+                        const uint8_t ialpha = 0xFF - alpha;
+                        uint8_t cByte = (*bitmapARGB8888Pointer);
+                        *p = LCD::div255(cByte * alpha + *p * ialpha);
+                        p++;
+                        cByte = (*bitmapARGB8888Pointer) >> 8;
+                        *p = LCD::div255(cByte * alpha + *p * ialpha);
+                        p++;
+                        cByte = (*bitmapARGB8888Pointer) >> 16;
+                        *p = LCD::div255(cByte * alpha + *p * ialpha);
+                        p++;
+                    }
+                    bitmapARGB8888Pointer++;
+                } while (p < p_chunkend);
+                bitmapARGB8888Pointer = argb8888_linestart;
+                available = bitmapRectToFrameBuffer.width;
             } while (p < p_lineend);
         }
         else
         {
             do
             {
-                const uint8_t srcAlpha = (*src) >> 24;
-                const uint8_t alpha = LCD::div255((*covers++) * LCD::div255(srcAlpha * widgetAlpha));
-                if (alpha)
+                const unsigned length = MIN(available, count);
+                const uint8_t* const p_chunkend = p + length * 3;
+                count -= length;
+                do
                 {
-                    const uint8_t ialpha = 0xFF - alpha;
-                    uint8_t pByte = *p;
-                    uint8_t cByte = (*src);
-                    *p++ = LCD::div255(cByte * alpha + pByte * ialpha);
-                    pByte = *p;
-                    cByte = (*src) >> 8;
-                    *p++ = LCD::div255(cByte * alpha + pByte * ialpha);
-                    pByte = *p;
-                    cByte = (*src) >> 16;
-                    *p++ = LCD::div255(cByte * alpha + pByte * ialpha);
-                }
-                else
-                {
-                    p += 3;
-                }
-                src++;
+                    const uint8_t srcAlpha = (*bitmapARGB8888Pointer) >> 24;
+                    const uint8_t alpha = LCD::div255((*covers++) * LCD::div255(srcAlpha * widgetAlpha));
+                    if (alpha)
+                    {
+                        const uint8_t ialpha = 0xFF - alpha;
+                        uint8_t cByte = (*bitmapARGB8888Pointer);
+                        *p = LCD::div255(cByte * alpha + *p * ialpha);
+                        p++;
+                        cByte = (*bitmapARGB8888Pointer) >> 8;
+                        *p = LCD::div255(cByte * alpha + *p * ialpha);
+                        p++;
+                        cByte = (*bitmapARGB8888Pointer) >> 16;
+                        *p = LCD::div255(cByte * alpha + *p * ialpha);
+                        p++;
+                    }
+                    else
+                    {
+                        p += 3;
+                    }
+                    bitmapARGB8888Pointer++;
+                } while (p < p_chunkend);
+                bitmapARGB8888Pointer = argb8888_linestart;
+                available = bitmapRectToFrameBuffer.width;
             } while (p < p_lineend);
         }
     }
@@ -160,12 +217,14 @@ bool PainterRGB888Bitmap::renderInit()
         return false;
     }
 
-    if ((currentX >= bitmapRectToFrameBuffer.width) || (currentY >= bitmapRectToFrameBuffer.height))
+    if (isTiled)
     {
-        // Outside bitmap area, do not draw anything
-        // Consider the following instead of "return" to get a tiled image:
-        //   currentX %= bitmapRectToFrameBuffer.width
-        //   currentY %= bitmapRectToFrameBuffer.height
+        // Modulus, also handling negative values
+        currentX = ((currentX % bitmapRectToFrameBuffer.width) + bitmapRectToFrameBuffer.width) % bitmapRectToFrameBuffer.width;
+        currentY = ((currentY % bitmapRectToFrameBuffer.height) + bitmapRectToFrameBuffer.height) % bitmapRectToFrameBuffer.height;
+    }
+    else if ((currentX >= bitmapRectToFrameBuffer.width) || (currentY < 0) || (currentY >= bitmapRectToFrameBuffer.height))
+    {
         return false;
     }
 
@@ -192,30 +251,5 @@ bool PainterRGB888Bitmap::renderInit()
     }
 
     return false;
-}
-
-bool PainterRGB888Bitmap::renderNext(uint8_t& red, uint8_t& green, uint8_t& blue, uint8_t& alpha)
-{
-    if (currentX >= bitmapRectToFrameBuffer.width)
-    {
-        return false;
-    }
-
-    if (bitmapARGB8888Pointer != 0)
-    {
-        uint32_t argb8888 = *bitmapARGB8888Pointer++;
-        alpha = (argb8888 >> 24) & 0xFF;
-        red = (argb8888 >> 16) & 0xFF;
-        green = (argb8888 >> 8) & 0xFF;
-        blue = argb8888 & 0xFF;
-    }
-    else if (bitmapRGB888Pointer != 0)
-    {
-        blue = *bitmapRGB888Pointer++;
-        green = *bitmapRGB888Pointer++;
-        red = *bitmapRGB888Pointer++;
-        alpha = 0xFF; // No alpha per pixel in the image, it is solid
-    }
-    return true;
 }
 } // namespace touchgfx

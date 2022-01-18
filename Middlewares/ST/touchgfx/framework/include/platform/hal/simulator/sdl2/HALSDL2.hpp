@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -106,17 +106,6 @@ public:
      * @param  rect The area of the screen that has been drawn, expressed in absolute coordinates.
      */
     virtual void flushFrameBuffer(const Rect& rect);
-
-    /**
-     * This function performs a platform-specific memcpy, if supported by the hardware.
-     *
-     * @param [out] dest     Pointer to destination memory.
-     * @param       src      Pointer to source memory.
-     * @param       numBytes Number of bytes to copy.
-     *
-     * @return true if the copy succeeded, false if copy was not performed.
-     */
-    virtual bool blockCopy(void* RESTRICT dest, const void* RESTRICT src, uint32_t numBytes);
 
     /**
      * Sets vsync interval for simulating same tick speed as the real hardware. Due to
@@ -365,6 +354,18 @@ public:
     {
         return printFile;
     }
+
+    /**
+     * Generate name of file placed next to the simulator.
+     *
+     * @param [in]  buffer      If the buffer to fill with the local filename. Must be at least
+     *                          300+length of filename parameter.
+     * @param       buffer_size The size of the buffer in bytes.
+     * @param [in]  filename    The filename relative to the simulator executable.
+     *
+     * @return  The filled buffer.
+     */
+    char* localFileName(char* buffer, size_t buffer_size, const char* filename);
 
 protected:
     /**

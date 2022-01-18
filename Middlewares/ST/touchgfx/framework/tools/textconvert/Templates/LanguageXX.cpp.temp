@@ -8,31 +8,31 @@
 #include <touchgfx/Unicode.hpp>
 
 TEXT_LOCATION_FLASH_PRAGMA
-KEEP extern const uint32_t indices<%= language %>[] TEXT_LOCATION_FLASH_ATTRIBUTE;
+KEEP extern const uint32_t indices<%= language.capitalize %>[] TEXT_LOCATION_FLASH_ATTRIBUTE;
 <% if not remap_strings? %>
 TEXT_LOCATION_FLASH_PRAGMA
-KEEP extern const touchgfx::Unicode::UnicodeChar texts<%= language %>[]  TEXT_LOCATION_FLASH_ATTRIBUTE;
+KEEP extern const touchgfx::Unicode::UnicodeChar texts<%= language.capitalize %>[]  TEXT_LOCATION_FLASH_ATTRIBUTE;
 <% end %>
 
 <% if remap_strings? %>
 TEXT_LOCATION_FLASH_PRAGMA
-KEEP extern const uint32_t indices<%= language %>[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
+KEEP extern const uint32_t indices<%= language.capitalize %>[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
 <% entries.each_with_index do |entry, index| %>
     <%= string_index(entry) << ((index==entries.length-1) ? '': ',') %> // <%= entry.text_id %>
 <% end %>
 };
 <% else %>
 TEXT_LOCATION_FLASH_PRAGMA
-KEEP extern const touchgfx::Unicode::UnicodeChar texts<%= language %>[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
+KEEP extern const touchgfx::Unicode::UnicodeChar texts<%= language.capitalize %>[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
 <% entries.each_with_index do |entry, index| %>
-    <%= (entry.int_array*',').to_s << ',0' << ((index==entries.length-1) ? ' ': ',') %> // <%= entry.text_id %>
+    <%= (entry.int_array*',').to_s << ((index==entries.length-1) ? ' ': ',') %> // <%= entry.text_id %>
 <% end %>
 };
 
 TEXT_LOCATION_FLASH_PRAGMA
-KEEP extern const uint32_t indices<%= language %>[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
+KEEP extern const uint32_t indices<%= language.capitalize %>[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
 <% index_acc = 0 %><% entries.each_with_index do |entry, index| %>
-    <%= index_acc.to_s << ((index==entries.length-1) ? ' ': ',') %> // <%= entry.text_id %><% index_acc += entry.int_array.length+1 %>
+    <%= index_acc.to_s << ((index==entries.length-1) ? ' ': ',') %> // <%= entry.text_id %><% index_acc += entry.int_array.length %>
 <% end %>
 };
 <% end %>

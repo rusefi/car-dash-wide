@@ -18,7 +18,7 @@ CachedFont.hpp:64:18:virtual void touchgfx::CachedFont::setGSUBTable(const uint1
 CachedFont.hpp:69:45:virtual const touchgfx::FontContextualFormsTable* touchgfx::CachedFont::getContextualFormsTable() const	16	static
 CachedFont.hpp:78:18:virtual void touchgfx::CachedFont::setContextualFormsTable(const touchgfx::FontContextualFormsTable*)	16	static
 CachedFont.cpp:8:16:virtual const uint8_t* touchgfx::CachedFont::getPixelData(const touchgfx::GlyphNode*) const	24	static
-CachedFont.cpp:22:18:virtual const touchgfx::GlyphNode* touchgfx::CachedFont::getGlyph(touchgfx::Unicode::UnicodeChar, const uint8_t*&, uint8_t&) const	32	static
-CachedFont.cpp:53:8:virtual int8_t touchgfx::CachedFont::getKerning(touchgfx::Unicode::UnicodeChar, const touchgfx::GlyphNode*) const	24	static
+CachedFont.cpp:19:18:virtual const touchgfx::GlyphNode* touchgfx::CachedFont::getGlyph(touchgfx::Unicode::UnicodeChar, const uint8_t*&, uint8_t&) const	32	static
+CachedFont.cpp:50:8:virtual int8_t touchgfx::CachedFont::getKerning(touchgfx::Unicode::UnicodeChar, const touchgfx::GlyphNode*) const	24	static
 CachedFont.hpp:12:7:touchgfx::CachedFont::~CachedFont()	16	static
 CachedFont.hpp:12:7:virtual touchgfx::CachedFont::~CachedFont()	16	static

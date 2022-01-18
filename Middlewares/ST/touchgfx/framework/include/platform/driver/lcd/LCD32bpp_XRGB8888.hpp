@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -65,6 +65,12 @@ public:
     virtual uint16_t framebufferStride() const
     {
         return getFramebufferStride();
+    }
+
+    virtual bool supportDynamicBitmapDrawing(const Bitmap::BitmapFormat format)
+    {
+        // DynamicBitmap drawing is not supported by LCD32XRGB
+        return false;
     }
 
     /**
@@ -427,7 +433,7 @@ public:
         const uint8_t r = (fgRGB565 & 0xF800) >> 8;
         const uint8_t g = (fgRGB565 & 0x07E0) >> 3;
         const uint8_t b = fgRGB565 << 3;
-        //return blendRGBwithXrgb8888(r, g, b, bgXRGB8888, fgAlpha, bgAlpha);
+        // return blendRGBwithXrgb8888(r, g, b, bgXRGB8888, fgAlpha, bgAlpha);
         return blendRGBwithXrgb8888(r | (r >> 5), g | (g >> 6), b | (b >> 5), bgXRGB8888, fgAlpha, bgAlpha);
     }
 
@@ -935,6 +941,7 @@ private:
         void writePixelOnEdge(uint32_t* const destBits, const uint16_t* const textureBits, const int16_t bitmapStride, const int16_t bitmapWidth, const int16_t bitmapHeight, const int UInt, const int VInt, const uint8_t UFrac, const uint8_t VFrac);
     };
 };
+
 } // namespace touchgfx
 
 #endif // TOUCHGFX_LCD32BPP_XRGB8888_HPP

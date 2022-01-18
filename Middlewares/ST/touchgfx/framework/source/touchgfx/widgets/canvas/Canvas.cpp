@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -230,7 +230,7 @@ bool Canvas::render(uint8_t customAlpha)
 
     close();
 
-    widget->getPainter().setOffset(offsetX /*+widget->getX()*/, offsetY /*+widget->getY()*/);
+    widget->getPainter().setAreaOffset(offsetX /*+widget->getX()*/, offsetY /*+widget->getY()*/);
     widget->getPainter().setWidgetAlpha(alpha);
     Renderer renderer(rbuf, widget->getPainter());
     return ras.render(renderer);
@@ -281,8 +281,8 @@ void Canvas::close()
         if (previousOutside & penDownOutside)
         {
             // We are outside on the same side as we started. No need
-            //  to close the path, CWR will do this for us.
-            //lineTo(penDownX, penDownY);
+            // to close the path, CWR will do this for us.
+            //   lineTo(penDownX, penDownY);
         }
         else
         {

@@ -33,7 +33,7 @@ touchgfx::Unicode::UnicodeChar touchgfx::TextProvider::getNextLigature(TextDirec
     if (fontGsubTable && nextCharacters.peekChar())
     {
         substituteGlyphs();
-        if (nextCharacters.peekChar(1) == 0x093F) //Hindi I-matra
+        if (nextCharacters.peekChar(1) == 0x093F) // Hindi I-matra
         {
             nextCharacters.replaceAt1(nextCharacters.peekChar());
             nextCharacters.replaceAt0(0x093F);
@@ -92,7 +92,7 @@ void touchgfx::Texts::setLanguage(touchgfx::LanguageId id)
     {
         if (languagesArray[id] != 0)
         {
-            //dynamic translation is added
+            // Dynamic translation is added
             const TranslationHeader* translation = languagesArray[id];
             currentLanguagePtr = (const touchgfx::Unicode::UnicodeChar*)(((const uint8_t*)translation) + translation->offset_to_texts);
             currentLanguageIndices = (const uint32_t*)(((const uint8_t*)translation) + translation->offset_to_indices);
@@ -100,7 +100,7 @@ void touchgfx::Texts::setLanguage(touchgfx::LanguageId id)
         }
         else
         {
-            //compiled and linked in languages
+            // Compiled and linked in languages
             currentLanguagePtr = texts_all_languages;
             currentLanguageIndices = staticLanguageIndices[id];
             currentLanguageTypedText = typedTextDatabaseArray[id];

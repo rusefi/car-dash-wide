@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -27,6 +27,17 @@ void PainterRGBA2222Bitmap::setBitmap(const Bitmap& bmp)
     DisplayTransformation::transformDisplayToFrameBuffer(bitmapRectToFrameBuffer);
 }
 
+void PainterRGBA2222Bitmap::setOffset(int16_t x, int16_t y)
+{
+    xOffset = x;
+    yOffset = y;
+}
+
+void PainterRGBA2222Bitmap::setTiled(bool tiled)
+{
+    isTiled = tiled;
+}
+
 void PainterRGBA2222Bitmap::render(uint8_t* ptr,
                                    int x,
                                    int xAdjust,
@@ -36,54 +47,84 @@ void PainterRGBA2222Bitmap::render(uint8_t* ptr,
 {
     uint8_t* p = ptr + (x + xAdjust);
 
-    currentX = x + areaOffsetX;
-    currentY = y + areaOffsetY;
+    currentX = x + areaOffsetX + xOffset;
+    currentY = y + areaOffsetY + yOffset;
+
+    if (!isTiled && currentX < 0)
+    {
+        if (count < (unsigned int)-currentX)
+        {
+            return;
+        }
+        count += currentX;
+        covers -= currentX;
+        p -= currentX;
+        currentX = 0;
+    }
 
     if (!renderInit())
     {
         return;
     }
 
-    if (currentX + (int)count > bitmapRectToFrameBuffer.width)
+    if (!isTiled && currentX + (int)count > bitmapRectToFrameBuffer.width)
     {
         count = bitmapRectToFrameBuffer.width - currentX;
     }
 
     const uint8_t* const p_lineend = p + count;
-    const uint8_t* src = bitmapRGBA2222Pointer;
+    // Max number of pixels before we reach end of bitmap row
+    unsigned int available = bitmapRectToFrameBuffer.width - currentX;
+    const uint8_t* const rgba2222_linestart = bitmap.getData() + (currentY * bitmapRectToFrameBuffer.width);
     if (widgetAlpha == 0xFF)
     {
         do
         {
-            const uint8_t srcAlpha = ((*src) & 0x03) * 0x55;
-            const uint8_t alpha = LCD::div255((*covers++) * srcAlpha);
-            if (alpha == 0xFF)
+            const unsigned length = MIN(available, count);
+            const uint8_t* const p_chunkend = p + length;
+            count -= length;
+            do
             {
-                // Solid pixel
-                *p = *src;
-            }
-            else if (alpha)
-            {
-                // Non-Transparent pixel
-                *p = mixColors(*src, *p, alpha);
-            }
-            p++;
-            src++;
+                const uint8_t srcAlpha = ((*bitmapRGBA2222Pointer) & 0x03) * 0x55;
+                const uint8_t alpha = LCD::div255((*covers++) * srcAlpha);
+                if (alpha == 0xFF)
+                {
+                    // Solid pixel
+                    *p = *bitmapRGBA2222Pointer;
+                }
+                else if (alpha)
+                {
+                    // Non-Transparent pixel
+                    *p = mixColors(*bitmapRGBA2222Pointer, *p, alpha);
+                }
+                p++;
+                bitmapRGBA2222Pointer++;
+            } while (p < p_chunkend);
+            bitmapRGBA2222Pointer = rgba2222_linestart;
+            available = bitmapRectToFrameBuffer.width;
         } while (p < p_lineend);
     }
     else
     {
         do
         {
-            const uint8_t srcAlpha = ((*src) & 0x03) * 0x55;
-            const uint8_t alpha = LCD::div255((*covers++) * srcAlpha);
-            if (alpha) // This can never get to max=0xFF*0xFF as totalAlpha<255
+            const unsigned length = MIN(available, count);
+            const uint8_t* const p_chunkend = p + length;
+            count -= length;
+            do
             {
-                // Non-Transparent pixel
-                *p = mixColors(*src, *p, alpha);
-            }
-            p++;
-            src++;
+                const uint8_t srcAlpha = ((*bitmapRGBA2222Pointer) & 0x03) * 0x55;
+                const uint8_t alpha = LCD::div255((*covers++) * LCD::div255(srcAlpha * widgetAlpha));
+                if (alpha) // This can never get to max=0xFF*0xFF as widgetAlpha<255
+                {
+                    // Non-Transparent pixel
+                    *p = mixColors(*bitmapRGBA2222Pointer, *p, alpha);
+                }
+                p++;
+                bitmapRGBA2222Pointer++;
+            } while (p < p_chunkend);
+            bitmapRGBA2222Pointer = rgba2222_linestart;
+            available = bitmapRectToFrameBuffer.width;
         } while (p < p_lineend);
     }
 }
@@ -97,12 +138,14 @@ bool PainterRGBA2222Bitmap::renderInit()
         return false;
     }
 
-    if ((currentX >= bitmapRectToFrameBuffer.width) || (currentY >= bitmapRectToFrameBuffer.height))
+    if (isTiled)
     {
-        // Outside bitmap area, do not draw anything
-        // Consider the following instead of "return" to get a tiled image:
-        //   currentX %= bitmapRectToFrameBuffer.width
-        //   currentY %= bitmapRectToFrameBuffer.height
+        // Modulus, also handling negative values
+        currentX = ((currentX % bitmapRectToFrameBuffer.width) + bitmapRectToFrameBuffer.width) % bitmapRectToFrameBuffer.width;
+        currentY = ((currentY % bitmapRectToFrameBuffer.height) + bitmapRectToFrameBuffer.height) % bitmapRectToFrameBuffer.height;
+    }
+    else if ((currentX >= bitmapRectToFrameBuffer.width) || (currentY < 0) || (currentY >= bitmapRectToFrameBuffer.height))
+    {
         return false;
     }
 
@@ -120,20 +163,4 @@ bool PainterRGBA2222Bitmap::renderInit()
     return false;
 }
 
-bool PainterRGBA2222Bitmap::renderNext(uint8_t& red, uint8_t& green, uint8_t& blue, uint8_t& alpha)
-{
-    if (currentX >= bitmapRectToFrameBuffer.width)
-    {
-        return false;
-    }
-    else if (bitmapRGBA2222Pointer != 0)
-    {
-        uint8_t RGBA2222 = *bitmapRGBA2222Pointer++;
-        red = LCD8bpp_RGBA2222::getRedFromNativeColor(RGBA2222);
-        green = LCD8bpp_RGBA2222::getGreenFromNativeColor(RGBA2222);
-        blue = LCD8bpp_RGBA2222::getBlueFromNativeColor(RGBA2222);
-        alpha = LCD8bpp_RGBA2222::getAlphaFromNativeColor(RGBA2222);
-    }
-    return true;
-}
 } // namespace touchgfx

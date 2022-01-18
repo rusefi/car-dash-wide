@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -25,7 +25,7 @@ void RadioButton::draw(const Rect& invalidatedArea) const
     if (bitmap.getId() != BITMAP_INVALID)
     {
         Rect meAbs;
-        translateRectToAbsolute(meAbs); //To find our x and y coords in absolute.
+        translateRectToAbsolute(meAbs); // To find our x and y coords in absolute.
 
         // Calculate intersection between bitmap rect and invalidated area.
         Rect dirtyBitmapArea = bitmap.getRect() & invalidatedArea;

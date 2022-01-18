@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.17.0 distribution.
+* This file is part of the TouchGFX 4.18.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -53,23 +53,6 @@ public:
     }
 
     /**
-     * Sets the offset of the area being drawn. This allows render() to calculate the x, y
-     * relative to the widget, and not just relative to the invalidated area.
-     *
-     * @param  offsetX The offset x coordinate of the invalidated area relative to the
-     *                 widget.
-     * @param  offsetY The offset y coordinate of the invalidated area relative to the
-     *                 widget.
-     *
-     * @note Used by CanvasWidgetRenderer - should not be overwritten.
-     */
-    void setOffset(uint16_t offsetX, uint16_t offsetY)
-    {
-        areaOffsetX = offsetX;
-        areaOffsetY = offsetY;
-    }
-
-    /**
      * Paint a designated part of the RenderingBuffer with respect to the amount of coverage
      * of each pixel given by the parameter covers. The cover is the alpha for each pixel,
      * which is what makes it possible to have smooth anti-aliased edges on the shapes drawn
@@ -94,6 +77,23 @@ protected:
     int16_t areaOffsetX; ///< The offset x coordinate of the area being drawn.
     int16_t areaOffsetY; ///< The offset y coordinate of the area being drawn.
     uint8_t widgetAlpha; ///< The alpha of the widget using the painter.
+
+    /**
+     * Sets the offset of the area being drawn. This allows render() to calculate the x, y
+     * relative to the widget, and not just relative to the invalidated area.
+     *
+     * @param  offsetX The offset x coordinate of the invalidated area relative to the
+     *                 widget.
+     * @param  offsetY The offset y coordinate of the invalidated area relative to the
+     *                 widget.
+     *
+     * @note Used by CanvasWidgetRenderer - should not be overwritten.
+     */
+    void setAreaOffset(uint16_t offsetX, uint16_t offsetY)
+    {
+        areaOffsetX = offsetX;
+        areaOffsetY = offsetY;
+    }
 
     /**
      * Sets the widget alpha to allow an entire canvas widget to easily be faded without

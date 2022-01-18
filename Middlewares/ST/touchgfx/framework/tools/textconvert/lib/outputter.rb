@@ -1,7 +1,7 @@
 # Copyright (c) 2018(-2021) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.17.0 distribution.
+# This file is part of the TouchGFX 4.18.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -47,7 +47,6 @@ class Outputter
 
   def run
 
-    #puts "Running Outputter1, #{Time.now.strftime("%H:%M:%S:%L")}"
     [ GeneratedFontHpp,
       GeneratedFontCpp,
       UnmappedDataFontHpp,
@@ -61,27 +60,20 @@ class Outputter
     [ ApplicationFontProviderCpp,
       ApplicationFontProviderHpp ].each { |template| template.new(@text_entries, @typographies, @fonts_output_directory, @generate_font_format).run }
 
-    #puts "Running Outputter2, #{Time.now.strftime("%H:%M:%S:%L")}"
     [ TextKeysAndLanguages,
       TypedTextDatabaseHpp].each { |template| template.new(@text_entries, @typographies, @localization_output_directory).run }
 
-    #puts "Running Outputter3, #{Time.now.strftime("%H:%M:%S:%L")}"
     TypedTextDatabaseCpp.new(@text_entries, @typographies, @localization_output_directory, @generate_binary_translations, @generate_font_format).run
 
-    #puts "Running Outputter4, #{Time.now.strftime("%H:%M:%S:%L")}"
     TextsCpp.new(@characters, @text_entries, @typographies, @localization_output_directory, @remap_identical_texts, @generate_binary_translations).run
 
-    #puts "Running Outputter5, #{Time.now.strftime("%H:%M:%S:%L")}"
     LanguagesCpp.new(@string_indices, @text_entries, @localization_output_directory, @remap_identical_texts, @generate_binary_translations).run
 
-    #puts "Running Outputter6, #{Time.now.strftime("%H:%M:%S:%L")}"
     FontsCpp.new(@text_entries, @typographies, @fonts_output_directory, @font_asset_path, @data_format, @generate_binary_fonts, @generate_font_format).run
 
     if @generate_binary_translations.downcase == 'yes'
-      #puts "Running Outputter7, #{Time.now.strftime("%H:%M:%S:%L")}"
       [ LanguagesBin ].each { |template| template.new(@text_entries, @typographies, @localization_output_directory).run }
     end
-    #puts "Done Outputter, #{Time.now.strftime("%H:%M:%S:%L")}"
   end
 end
 

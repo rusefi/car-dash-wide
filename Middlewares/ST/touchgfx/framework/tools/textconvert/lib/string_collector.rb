@@ -1,7 +1,7 @@
 # Copyright (c) 2018(-2021) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.17.0 distribution.
+# This file is part of the TouchGFX 4.18.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -9,8 +9,6 @@
 #
 ###############################################################################/
 CollectorStruct = Struct.new(:text_entries, :typographies)
-
-$warning_prefix = "\nWARNING (TextConverter): "
 
 class StringCollector < CollectorStruct
   def run
@@ -24,20 +22,21 @@ class StringCollector < CollectorStruct
         all_strings.push(translation)
       end
     end
-    #sort by length
-    all_strings.sort_by!(){|x| -x.length}
+    # sort by: Same length => sort by text, otherwise reverse sort on length
+    # [ 'Slide','Yes','Cover','None' ] => [ 'Cover', 'Slide', 'None', 'Yes' ]
+    all_strings.sort!{|x,y| x.length == y.length ? x.text <=> y.text : y.length <=> x.length }
 
     #collect all string indeces, and add to characters array
     all_strings.each do |translation|
       #lookup translation in hash
       #if not found, add to characters and insert index in hash for translation and all suffices
       #if found, do nothing
-      unicodes = translation.unicodes
+      unicodes = translation.unicodes # This includes a terminating zero character
       index = string_indices[unicodes]
-      if not index
+      if !index
         new_index = characters.length
         #puts "new string: #{translation.to_cpp} index: #{new_index}"
-        characters.concat(unicodes).push(0)
+        characters.concat(unicodes)
         for start in 0 .. unicodes.length-1
           sub_string = unicodes[start..-1]
           # if the substring is present, all shorter substrings are also present, so do not add again
