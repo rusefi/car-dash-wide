@@ -8,13 +8,13 @@ O_SRCS += \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/ApplicationFontProvider.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/CachedFont.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/FontCache.o \
-../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Font_bahnschrift_20_4bpp_0.o \
-../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Font_bahnschrift_55_4bpp_0.o \
+../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Font_bahnschrift_100_2bpp_0.o \
+../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Font_bahnschrift_25_2bpp_0.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/GeneratedFont.o \
-../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Kerning_bahnschrift_20_4bpp.o \
-../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Kerning_bahnschrift_55_4bpp.o \
-../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Table_bahnschrift_20_4bpp.o \
-../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Table_bahnschrift_55_4bpp.o \
+../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Kerning_bahnschrift_100_2bpp.o \
+../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Kerning_bahnschrift_25_2bpp.o \
+../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Table_bahnschrift_100_2bpp.o \
+../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Table_bahnschrift_25_2bpp.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/UnmappedDataFont.o 
 
 

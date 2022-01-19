@@ -9,27 +9,21 @@
             "Name": "box1",
             "X": 1,
             "Width": 1024,
-            "Height": 600,
-            "Color": {
-              "Red": 43,
-              "Green": 43,
-              "Blue": 43
-            }
+            "Height": 600
           },
           {
             "Type": "Image",
             "Name": "image1",
-            "X": -3,
-            "Y": -9,
+            "Y": -7,
             "Width": 1024,
-            "Height": 615,
+            "Height": 614,
             "RelativeFilename": "race_dash.png"
           },
           {
             "Type": "Image",
             "Name": "indLeft",
             "X": 263,
-            "Y": 29,
+            "Y": 31,
             "Width": 62,
             "Height": 34,
             "RelativeFilename": "indLeft.png"
@@ -38,7 +32,7 @@
             "Type": "Image",
             "Name": "indRight",
             "X": 725,
-            "Y": 29,
+            "Y": 31,
             "Width": 62,
             "Height": 34,
             "RelativeFilename": "indRight.png"
@@ -47,7 +41,7 @@
             "Type": "Image",
             "Name": "indHigh",
             "X": 394,
-            "Y": 282,
+            "Y": 284,
             "Width": 62,
             "Height": 34,
             "RelativeFilename": "indHigh.png"
@@ -56,7 +50,7 @@
             "Type": "Image",
             "Name": "indFuel",
             "X": 563,
-            "Y": 210,
+            "Y": 212,
             "Width": 62,
             "Height": 34,
             "RelativeFilename": "indFuel.png"
@@ -65,7 +59,7 @@
             "Type": "Image",
             "Name": "indOil",
             "X": 410,
-            "Y": 341,
+            "Y": 343,
             "Width": 62,
             "Height": 34,
             "RelativeFilename": "indOil.png"
@@ -74,7 +68,7 @@
             "Type": "Image",
             "Name": "indBatt",
             "X": 425,
-            "Y": 212,
+            "Y": 214,
             "Width": 62,
             "Height": 34,
             "RelativeFilename": "indBatt.png"
@@ -83,7 +77,7 @@
             "Type": "Image",
             "Name": "indPark",
             "X": 496,
-            "Y": 183,
+            "Y": 185,
             "Width": 62,
             "Height": 34,
             "RelativeFilename": "indPark.png"
@@ -92,7 +86,7 @@
             "Type": "Image",
             "Name": "indDTC",
             "X": 495,
-            "Y": 229,
+            "Y": 231,
             "Width": 62,
             "Height": 34,
             "RelativeFilename": "indDTC.png"
@@ -101,7 +95,7 @@
             "Type": "Image",
             "Name": "indECT",
             "X": 451,
-            "Y": 374,
+            "Y": 376,
             "Width": 62,
             "Height": 34,
             "RelativeFilename": "indECT.png"
@@ -110,7 +104,7 @@
             "Type": "Image",
             "Name": "indLow",
             "X": 452,
-            "Y": 284,
+            "Y": 286,
             "Width": 62,
             "Height": 34,
             "RelativeFilename": "indLow.png"
@@ -118,10 +112,10 @@
           {
             "Type": "TextArea",
             "Name": "map_value",
-            "X": 968,
-            "Y": 20,
-            "Width": 30,
-            "Height": 67,
+            "X": 940,
+            "Y": -2,
+            "Width": 55,
+            "Height": 121,
             "TextId": "__SingleUse_LQYM",
             "TextRotation": "0",
             "Color": {
@@ -139,10 +133,10 @@
           {
             "Type": "TextArea",
             "Name": "map_label",
-            "X": 917,
-            "Y": 103,
-            "Width": 81,
-            "Height": 25,
+            "X": 889,
+            "Y": 99,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_W2NZ",
             "TextRotation": "0",
             "Color": {
@@ -160,10 +154,10 @@
           {
             "Type": "TextArea",
             "Name": "map_units",
-            "X": 781,
-            "Y": 103,
-            "Width": 81,
-            "Height": 25,
+            "X": 779,
+            "Y": 99,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_G76O",
             "TextRotation": "0",
             "Color": {
@@ -181,10 +175,10 @@
           {
             "Type": "TextArea",
             "Name": "batt_value",
-            "X": 968,
-            "Y": 167,
-            "Width": 30,
-            "Height": 67,
+            "X": 940,
+            "Y": 146,
+            "Width": 55,
+            "Height": 121,
             "TextId": "__SingleUse_391O",
             "TextRotation": "0",
             "Color": {
@@ -202,10 +196,10 @@
           {
             "Type": "TextArea",
             "Name": "batt_label",
-            "X": 917,
-            "Y": 247,
-            "Width": 81,
-            "Height": 25,
+            "X": 888,
+            "Y": 246,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_4QE0",
             "TextRotation": "0",
             "Color": {
@@ -223,10 +217,10 @@
           {
             "Type": "TextArea",
             "Name": "batt_units",
-            "X": 831,
-            "Y": 247,
-            "Width": 81,
-            "Height": 25,
+            "X": 830,
+            "Y": 246,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_6YBF",
             "TextRotation": "0",
             "Color": {
@@ -244,10 +238,10 @@
           {
             "Type": "TextArea",
             "Name": "tps_value",
-            "X": 968,
-            "Y": 322,
-            "Width": 30,
-            "Height": 67,
+            "X": 940,
+            "Y": 300,
+            "Width": 55,
+            "Height": 121,
             "TextId": "__SingleUse_MP7X",
             "TextRotation": "0",
             "Color": {
@@ -265,10 +259,10 @@
           {
             "Type": "TextArea",
             "Name": "tps_label",
-            "X": 917,
-            "Y": 401,
-            "Width": 81,
-            "Height": 25,
+            "X": 888,
+            "Y": 399,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_L5WH",
             "TextRotation": "0",
             "Color": {
@@ -287,9 +281,9 @@
             "Type": "TextArea",
             "Name": "tps_units",
             "X": 808,
-            "Y": 401,
-            "Width": 81,
-            "Height": 25,
+            "Y": 398,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_RPXE",
             "TextRotation": "0",
             "Color": {
@@ -307,10 +301,10 @@
           {
             "Type": "TextArea",
             "Name": "lambda_value",
-            "X": 968,
-            "Y": 474,
-            "Width": 30,
-            "Height": 67,
+            "X": 940,
+            "Y": 450,
+            "Width": 55,
+            "Height": 121,
             "TextId": "__SingleUse_TLZY",
             "TextRotation": "0",
             "Color": {
@@ -328,10 +322,10 @@
           {
             "Type": "TextArea",
             "Name": "lambda_label",
-            "X": 917,
-            "Y": 552,
-            "Width": 81,
-            "Height": 25,
+            "X": 886,
+            "Y": 550,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_RLOQ",
             "TextRotation": "0",
             "Color": {
@@ -349,10 +343,10 @@
           {
             "Type": "TextArea",
             "Name": "lambda_units",
-            "X": 685,
-            "Y": 552,
-            "Width": 81,
-            "Height": 25,
+            "X": 686,
+            "Y": 550,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_KCKH",
             "TextRotation": "0",
             "Color": {
@@ -370,10 +364,10 @@
           {
             "Type": "TextArea",
             "Name": "ect_value",
-            "X": 34,
-            "Y": 20,
-            "Width": 30,
-            "Height": 67,
+            "X": 30,
+            "Y": -2,
+            "Width": 55,
+            "Height": 121,
             "TextId": "__SingleUse_LD25",
             "TextRotation": "0",
             "Color": {
@@ -383,7 +377,7 @@
             },
             "AutoSize": true,
             "Wildcard1": {
-              "TextId": "__SingleUse_JIWC",
+              "TextId": "__SingleUse_6GW0",
               "UseBuffer": true,
               "BufferSize": 32
             }
@@ -393,8 +387,8 @@
             "Name": "ect_label",
             "X": 34,
             "Y": 96,
-            "Width": 81,
-            "Height": 25,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_4T7D",
             "TextRotation": "0",
             "Color": {
@@ -412,10 +406,10 @@
           {
             "Type": "TextArea",
             "Name": "ect_units",
-            "X": 192,
+            "X": 173,
             "Y": 96,
-            "Width": 81,
-            "Height": 25,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_ERKY",
             "TextRotation": "0",
             "Color": {
@@ -433,10 +427,10 @@
           {
             "Type": "TextArea",
             "Name": "iat_value",
-            "X": 34,
-            "Y": 167,
-            "Width": 30,
-            "Height": 67,
+            "X": 30,
+            "Y": 146,
+            "Width": 55,
+            "Height": 121,
             "TextId": "__SingleUse_Z15X",
             "TextRotation": "0",
             "Color": {
@@ -455,9 +449,9 @@
             "Type": "TextArea",
             "Name": "iat_label",
             "X": 34,
-            "Y": 246,
-            "Width": 81,
-            "Height": 25,
+            "Y": 245,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_S5UQ",
             "TextRotation": "0",
             "Color": {
@@ -475,10 +469,10 @@
           {
             "Type": "TextArea",
             "Name": "iat_units",
-            "X": 151,
-            "Y": 246,
-            "Width": 81,
-            "Height": 25,
+            "X": 123,
+            "Y": 245,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_XBZK",
             "TextRotation": "0",
             "Color": {
@@ -496,10 +490,10 @@
           {
             "Type": "TextArea",
             "Name": "oilp_value",
-            "X": 34,
-            "Y": 322,
-            "Width": 30,
-            "Height": 67,
+            "X": 30,
+            "Y": 298,
+            "Width": 55,
+            "Height": 121,
             "TextId": "__SingleUse_GFHB",
             "TextRotation": "0",
             "Color": {
@@ -518,9 +512,9 @@
             "Type": "TextArea",
             "Name": "oilp_label",
             "X": 34,
-            "Y": 401,
-            "Width": 81,
-            "Height": 25,
+            "Y": 399,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_BVOP",
             "TextRotation": "0",
             "Color": {
@@ -538,10 +532,10 @@
           {
             "Type": "TextArea",
             "Name": "oilp_units",
-            "X": 162,
-            "Y": 401,
-            "Width": 81,
-            "Height": 25,
+            "X": 141,
+            "Y": 399,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_R7A4",
             "TextRotation": "0",
             "Color": {
@@ -559,10 +553,10 @@
           {
             "Type": "TextArea",
             "Name": "fuelp_value",
-            "X": 34,
-            "Y": 473,
-            "Width": 30,
-            "Height": 67,
+            "X": 30,
+            "Y": 450,
+            "Width": 55,
+            "Height": 121,
             "TextId": "__SingleUse_0AFA",
             "TextRotation": "0",
             "Color": {
@@ -581,9 +575,9 @@
             "Type": "TextArea",
             "Name": "fuelp_label",
             "X": 34,
-            "Y": 552,
-            "Width": 81,
-            "Height": 25,
+            "Y": 550,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_MPLH",
             "TextRotation": "0",
             "Color": {
@@ -601,10 +595,10 @@
           {
             "Type": "TextArea",
             "Name": "fuelp_units",
-            "X": 285,
-            "Y": 552,
-            "Width": 81,
-            "Height": 25,
+            "X": 259,
+            "Y": 550,
+            "Width": 101,
+            "Height": 31,
             "TextId": "__SingleUse_INAE",
             "TextRotation": "0",
             "Color": {
@@ -622,20 +616,19 @@
           {
             "Type": "Gauge",
             "Name": "gauge1",
-            "X": 230,
+            "X": 226,
             "Width": 600,
             "Height": 600,
-            "LockPosition": true,
-            "RotationCenterX": 300,
+            "RotationCenterX": 305,
             "RotationCenterY": 300,
             "EndAngle": 240,
             "RangeMax": 8000,
             "Easing": "Linear",
             "EasingOption": "In",
-            "FileNameNeedle": "needel.png",
+            "FileNameNeedle": "__designer\\Blue_Gauges_original_gauge_fill_style_01.png",
             "NeedleRotationCenterX": 13,
-            "NeedleRotationCenterY": 13,
-            "NeedleMovingRenderingAlgorithm": "Bilinear Interpolation",
+            "NeedleRotationCenterY": 18,
+            "NeedleMovingRenderingAlgorithm": "Nearest-neighbor",
             "NeedleSteadyRenderingAlgorithm": "Nearest-neighbor",
             "ArcColor": {
               "Red": 20,
@@ -648,8 +641,8 @@
           {
             "Type": "Image",
             "Name": "image2",
-            "X": 635,
-            "Y": 259,
+            "X": 672,
+            "Y": 252,
             "Width": 100,
             "Height": 32,
             "RelativeFilename": "speeduino1.png"
