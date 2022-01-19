@@ -2,891 +2,633 @@
   "Application": {
     "Screens": [
       {
+        "Name": "Screen1",
         "Components": [
           {
+            "Type": "Box",
+            "Name": "box1",
+            "X": 1,
+            "Width": 1024,
+            "Height": 600,
+            "Color": {
+              "Red": 43,
+              "Green": 43,
+              "Blue": 43
+            }
+          },
+          {
             "Type": "Image",
-            "RelativeFilename": "race.png",
-            "Alpha": 255,
             "Name": "image1",
-            "X": 0,
-            "Y": 0,
-            "Width": 800,
-            "Height": 480,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "X": -3,
+            "Y": -9,
+            "Width": 1024,
+            "Height": 615,
+            "RelativeFilename": "race_dash.png"
           },
           {
             "Type": "Image",
-            "RelativeFilename": "indLeft.png",
-            "Alpha": 255,
             "Name": "indLeft",
-            "X": 202,
-            "Y": 27,
+            "X": 263,
+            "Y": 29,
             "Width": 62,
             "Height": 34,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "indLeft.png"
           },
           {
             "Type": "Image",
-            "RelativeFilename": "indRight.png",
-            "Alpha": 255,
             "Name": "indRight",
-            "X": 561,
-            "Y": 26,
+            "X": 725,
+            "Y": 29,
             "Width": 62,
             "Height": 34,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "indRight.png"
           },
           {
             "Type": "Image",
-            "RelativeFilename": "indHigh.png",
-            "Alpha": 255,
             "Name": "indHigh",
-            "X": 282,
-            "Y": 222,
+            "X": 394,
+            "Y": 282,
             "Width": 62,
             "Height": 34,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "indHigh.png"
           },
           {
             "Type": "Image",
-            "RelativeFilename": "indFuel.png",
-            "Alpha": 255,
             "Name": "indFuel",
-            "X": 451,
-            "Y": 150,
+            "X": 563,
+            "Y": 210,
             "Width": 62,
             "Height": 34,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "indFuel.png"
           },
           {
             "Type": "Image",
-            "RelativeFilename": "indOil.png",
-            "Alpha": 255,
             "Name": "indOil",
-            "X": 298,
-            "Y": 281,
+            "X": 410,
+            "Y": 341,
             "Width": 62,
             "Height": 34,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "indOil.png"
           },
           {
             "Type": "Image",
-            "RelativeFilename": "indBatt.png",
-            "Alpha": 255,
             "Name": "indBatt",
-            "X": 313,
-            "Y": 152,
+            "X": 425,
+            "Y": 212,
             "Width": 62,
             "Height": 34,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "indBatt.png"
           },
           {
             "Type": "Image",
-            "RelativeFilename": "indPark.png",
-            "Alpha": 255,
             "Name": "indPark",
-            "X": 384,
-            "Y": 123,
+            "X": 496,
+            "Y": 183,
             "Width": 62,
             "Height": 34,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "indPark.png"
           },
           {
             "Type": "Image",
-            "RelativeFilename": "indDTC.png",
-            "Alpha": 255,
             "Name": "indDTC",
-            "X": 383,
-            "Y": 169,
+            "X": 495,
+            "Y": 229,
             "Width": 62,
             "Height": 34,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "indDTC.png"
           },
           {
             "Type": "Image",
-            "RelativeFilename": "indECT.png",
-            "Alpha": 255,
             "Name": "indECT",
-            "X": 339,
-            "Y": 314,
+            "X": 451,
+            "Y": 374,
             "Width": 62,
             "Height": 34,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "indECT.png"
           },
           {
             "Type": "Image",
-            "RelativeFilename": "indLow.png",
-            "Alpha": 255,
             "Name": "indLow",
-            "X": 340,
-            "Y": 224,
+            "X": 452,
+            "Y": 284,
             "Width": 62,
             "Height": 34,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "indLow.png"
           },
           {
             "Type": "TextArea",
-            "TextId": "SingleUseId24",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId39",
-              "UseBuffer": true,
-              "BufferSize": 32
-            },
             "Name": "map_value",
-            "X": 747,
-            "Y": 25,
+            "X": 968,
+            "Y": 20,
             "Width": 30,
             "Height": 67,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId22",
+            "TextId": "__SingleUse_LQYM",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId40",
+              "TextId": "__SingleUse_1H44",
               "UseBuffer": true,
-              "BufferSize": 10
-            },
+              "BufferSize": 32
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "map_label",
-            "X": 696,
-            "Y": 82,
+            "X": 917,
+            "Y": 103,
             "Width": 81,
             "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId23",
+            "TextId": "__SingleUse_W2NZ",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId38",
+              "TextId": "__SingleUse_FXL2",
               "UseBuffer": true,
               "BufferSize": 10
-            },
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "map_units",
-            "X": 610,
-            "Y": 82,
+            "X": 781,
+            "Y": 103,
             "Width": 81,
             "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId21",
+            "TextId": "__SingleUse_G76O",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId45",
+              "TextId": "__SingleUse_13X6",
               "UseBuffer": true,
-              "BufferSize": 32
-            },
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "batt_value",
-            "X": 747,
-            "Y": 141,
+            "X": 968,
+            "Y": 167,
             "Width": 30,
             "Height": 67,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId20",
+            "TextId": "__SingleUse_391O",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId49",
+              "TextId": "__SingleUse_TSMP",
               "UseBuffer": true,
-              "BufferSize": 10
-            },
+              "BufferSize": 32
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "batt_label",
-            "X": 709,
-            "Y": 198,
+            "X": 917,
+            "Y": 247,
             "Width": 81,
             "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId19",
+            "TextId": "__SingleUse_4QE0",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId48",
+              "TextId": "__SingleUse_RUP7",
               "UseBuffer": true,
               "BufferSize": 10
-            },
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "batt_units",
-            "X": 650,
-            "Y": 198,
+            "X": 831,
+            "Y": 247,
             "Width": 81,
             "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId18",
+            "TextId": "__SingleUse_6YBF",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId46",
+              "TextId": "__SingleUse_F7I8",
               "UseBuffer": true,
-              "BufferSize": 32
-            },
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "tps_value",
-            "X": 747,
-            "Y": 258,
+            "X": 968,
+            "Y": 322,
             "Width": 30,
             "Height": 67,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId16",
+            "TextId": "__SingleUse_MP7X",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId51",
+              "TextId": "__SingleUse_AYOA",
               "UseBuffer": true,
-              "BufferSize": 10
-            },
+              "BufferSize": 32
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "tps_label",
-            "X": 696,
-            "Y": 317,
+            "X": 917,
+            "Y": 401,
             "Width": 81,
             "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId17",
+            "TextId": "__SingleUse_L5WH",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId50",
+              "TextId": "__SingleUse_VMJT",
               "UseBuffer": true,
               "BufferSize": 10
-            },
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "tps_units",
-            "X": 638,
-            "Y": 317,
+            "X": 808,
+            "Y": 401,
             "Width": 81,
             "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId15",
+            "TextId": "__SingleUse_RPXE",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId47",
+              "TextId": "__SingleUse_L3HM",
               "UseBuffer": true,
-              "BufferSize": 32
-            },
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "lambda_value",
-            "X": 747,
-            "Y": 370,
+            "X": 968,
+            "Y": 474,
             "Width": 30,
             "Height": 67,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId14",
+            "TextId": "__SingleUse_TLZY",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId53",
+              "TextId": "__SingleUse_2H8W",
               "UseBuffer": true,
-              "BufferSize": 10
-            },
+              "BufferSize": 32
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "lambda_label",
-            "X": 687,
-            "Y": 435,
+            "X": 917,
+            "Y": 552,
             "Width": 81,
             "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId13",
+            "TextId": "__SingleUse_RLOQ",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId52",
+              "TextId": "__SingleUse_JQKX",
               "UseBuffer": true,
               "BufferSize": 10
-            },
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "lambda_units",
-            "X": 536,
-            "Y": 435,
+            "X": 685,
+            "Y": 552,
             "Width": 81,
             "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId1",
+            "TextId": "__SingleUse_KCKH",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId41",
+              "TextId": "__SingleUse_J843",
               "UseBuffer": true,
-              "BufferSize": 32
-            },
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "ect_value",
-            "X": 24,
-            "Y": 16,
+            "X": 34,
+            "Y": 20,
             "Width": 30,
             "Height": 67,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId2",
+            "TextId": "__SingleUse_LD25",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId60",
+              "TextId": "__SingleUse_JIWC",
               "UseBuffer": true,
-              "BufferSize": 10
-            },
+              "BufferSize": 32
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "ect_label",
-            "X": 28,
-            "Y": 80,
+            "X": 34,
+            "Y": 96,
             "Width": 81,
             "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId3",
+            "TextId": "__SingleUse_4T7D",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
               "Green": 255,
               "Blue": 255
             },
-            "Alpha": 255,
             "AutoSize": true,
-            "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId61",
+              "TextId": "__SingleUse_P413",
               "UseBuffer": true,
               "BufferSize": 10
-            },
+            }
+          },
+          {
+            "Type": "TextArea",
             "Name": "ect_units",
-            "X": 131,
-            "Y": 82,
-            "Width": 81,
-            "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId4",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId42",
-              "UseBuffer": true,
-              "BufferSize": 32
-            },
-            "Name": "iat_value",
-            "X": 25,
-            "Y": 132,
-            "Width": 30,
-            "Height": 67,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId6",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId59",
-              "UseBuffer": true,
-              "BufferSize": 10
-            },
-            "Name": "iat_label",
-            "X": 29,
-            "Y": 196,
-            "Width": 81,
-            "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId5",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId58",
-              "UseBuffer": true,
-              "BufferSize": 10
-            },
-            "Name": "iat_units",
-            "X": 109,
-            "Y": 196,
-            "Width": 81,
-            "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId7",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId43",
-              "UseBuffer": true,
-              "BufferSize": 32
-            },
-            "Name": "oilp_value",
-            "X": 25,
-            "Y": 250,
-            "Width": 30,
-            "Height": 67,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId9",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId57",
-              "UseBuffer": true,
-              "BufferSize": 10
-            },
-            "Name": "oilp_label",
-            "X": 28,
-            "Y": 316,
-            "Width": 81,
-            "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId8",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId56",
-              "UseBuffer": true,
-              "BufferSize": 10
-            },
-            "Name": "oilp_units",
-            "X": 118,
-            "Y": 317,
-            "Width": 81,
-            "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId10",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId44",
-              "UseBuffer": true,
-              "BufferSize": 32
-            },
-            "Name": "fuelp_value",
-            "X": 25,
-            "Y": 368,
-            "Width": 30,
-            "Height": 67,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId12",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId55",
-              "UseBuffer": true,
-              "BufferSize": 10
-            },
-            "Name": "fuelp_label",
-            "X": 28,
-            "Y": 437,
-            "Width": 81,
-            "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Type": "TextArea",
-            "TextId": "SingleUseId11",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId54",
-              "UseBuffer": true,
-              "BufferSize": 10
-            },
-            "Name": "fuelp_units",
             "X": 192,
-            "Y": 437,
+            "Y": 96,
             "Width": 81,
             "Height": 25,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "TextId": "__SingleUse_ERKY",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_NFMY",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "iat_value",
+            "X": 34,
+            "Y": 167,
+            "Width": 30,
+            "Height": 67,
+            "TextId": "__SingleUse_Z15X",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_H85L",
+              "UseBuffer": true,
+              "BufferSize": 32
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "iat_label",
+            "X": 34,
+            "Y": 246,
+            "Width": 81,
+            "Height": 25,
+            "TextId": "__SingleUse_S5UQ",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_K94Y",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "iat_units",
+            "X": 151,
+            "Y": 246,
+            "Width": 81,
+            "Height": 25,
+            "TextId": "__SingleUse_XBZK",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_S9CZ",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "oilp_value",
+            "X": 34,
+            "Y": 322,
+            "Width": 30,
+            "Height": 67,
+            "TextId": "__SingleUse_GFHB",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_DHUY",
+              "UseBuffer": true,
+              "BufferSize": 32
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "oilp_label",
+            "X": 34,
+            "Y": 401,
+            "Width": 81,
+            "Height": 25,
+            "TextId": "__SingleUse_BVOP",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_9VHS",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "oilp_units",
+            "X": 162,
+            "Y": 401,
+            "Width": 81,
+            "Height": 25,
+            "TextId": "__SingleUse_R7A4",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_9IGG",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "fuelp_value",
+            "X": 34,
+            "Y": 473,
+            "Width": 30,
+            "Height": 67,
+            "TextId": "__SingleUse_0AFA",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_C87O",
+              "UseBuffer": true,
+              "BufferSize": 32
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "fuelp_label",
+            "X": 34,
+            "Y": 552,
+            "Width": 81,
+            "Height": 25,
+            "TextId": "__SingleUse_MPLH",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_4VJ9",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "fuelp_units",
+            "X": 285,
+            "Y": 552,
+            "Width": 81,
+            "Height": 25,
+            "TextId": "__SingleUse_INAE",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_L52U",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
           },
           {
             "Type": "Gauge",
-            "BackgroundOffsetX": 0,
-            "BackgroundOffsetY": 0,
-            "RotationCenterX": 240,
-            "RotationCenterY": 236,
-            "StartAngle": 0,
+            "Name": "gauge1",
+            "X": 230,
+            "Width": 600,
+            "Height": 600,
+            "RotationCenterX": 300,
+            "RotationCenterY": 300,
             "EndAngle": 240,
-            "RangeMin": 0,
             "RangeMax": 8000,
-            "InitialValue": 0,
-            "UseAnimation": false,
             "Easing": "Linear",
             "EasingOption": "In",
             "FileNameNeedle": "needel.png",
@@ -894,256 +636,32 @@
             "NeedleRotationCenterY": 13,
             "NeedleMovingRenderingAlgorithm": "Bilinear Interpolation",
             "NeedleSteadyRenderingAlgorithm": "Nearest-neighbor",
-            "UseArc": false,
             "ArcColor": {
               "Red": 20,
               "Green": 151,
               "Blue": 197
             },
-            "SetArcPosition": false,
-            "ArcX": 0,
-            "ArcY": 0,
-            "ArcWidth": 0,
-            "ArcHeight": 0,
-            "ArcRadius": 0,
-            "ArcLineWidth": 0,
             "ArcCapStyle": "Butt",
-            "ArcOnTopOfNeedle": true,
-            "Alpha": 255,
-            "Name": "gauge1",
-            "X": 173,
-            "Y": 0,
-            "Width": 480,
-            "Height": 480,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "ArcOnTopOfNeedle": true
           },
           {
             "Type": "Image",
-            "RelativeFilename": "speeduino1.png",
-            "Alpha": 255,
             "Name": "image2",
-            "X": 523,
-            "Y": 199,
+            "X": 635,
+            "Y": 259,
             "Width": 100,
             "Height": 32,
-            "Visible": true,
-            "LockPosition": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
+            "RelativeFilename": "speeduino1.png"
           }
         ],
-        "Interactions": [],
-        "Name": "Screen1",
-        "OverrideDefaultBufferSize": false,
-        "CanvasBufferSize": 0
+        "Interactions": []
       }
     ],
     "CustomContainerDefinitions": [],
-    "TextEntries": [
-      {
-        "TextEntryId": "SingleUseId1",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId2",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId3",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId4",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId5",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId6",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId7",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId8",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId9",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId10",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId11",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId12",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId13",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId14",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId15",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId16",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId17",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId18",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId19",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId20",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId21",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId22",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId23",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId24",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId38",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId39",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId40",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId41",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId42",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId43",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId44",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId45",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId46",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId47",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId48",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId49",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId50",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId51",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId52",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId53",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId54",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId55",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId56",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId57",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId58",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId59",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId60",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId61",
-        "IsResource": false
-      }
-    ],
     "Name": "MyApplication",
     "Resolution": {
-      "Width": 800,
-      "Height": 480
+      "Width": 1024,
+      "Height": 600
     },
     "SelectedColorDepth": 16,
     "StartupScreenName": "Screen1",
@@ -1163,8 +681,8 @@
     ],
     "AvailableResolutions": [
       {
-        "Width": 800,
-        "Height": 480
+        "Width": 1024,
+        "Height": 600
       }
     ],
     "PhysicalButtons": [],
@@ -1186,5 +704,5 @@
     "DisplayOrientation": "Landscape",
     "Family": "STM32F4"
   },
-  "Version": "4.17.0"
+  "Version": "4.18.0"
 }

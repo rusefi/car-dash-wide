@@ -14,7 +14,6 @@ RM := rm -rf
 -include TouchGFX/gui/src/screen1_screen/subdir.mk
 -include TouchGFX/gui/src/model/subdir.mk
 -include TouchGFX/gui/src/common/subdir.mk
--include TouchGFX/generated/videos/src/keil/subdir.mk
 -include TouchGFX/generated/texts/src/subdir.mk
 -include TouchGFX/generated/images/src/subdir.mk
 -include TouchGFX/generated/gui_generated/src/screen1_screen/subdir.mk
@@ -108,8 +107,8 @@ all: main-build
 main-build: 429IG_LCD.elf secondary-outputs
 
 # Tool invocations
-429IG_LCD.elf: $(OBJS) $(USER_OBJS) C:\Users\Ben\STM32CubeIDE\workspace_1.8.0\429IG_LCD\STM32F429BITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "429IG_LCD.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Ben\STM32CubeIDE\workspace_1.8.0\429IG_LCD\STM32F429BITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="429IG_LCD.map" -Wl,--gc-sections -static -L"C:\Users\Ben\STM32CubeIDE\workspace_1.8.0\429IG_LCD\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+429IG_LCD.elf: $(OBJS) $(USER_OBJS) D:\Code\STM32\429IG_LCD\STM32F429BITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "429IG_LCD.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Code\STM32\429IG_LCD\STM32F429BITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="429IG_LCD.map" -Wl,--gc-sections -static -L"D:\Code\STM32\429IG_LCD\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

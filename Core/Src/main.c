@@ -388,11 +388,11 @@ static void MX_CAN1_Init(void)
 
   /* USER CODE END CAN1_Init 1 */
   hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 21;
+  hcan1.Init.Prescaler = 12;
   hcan1.Init.Mode = CAN_MODE_NORMAL;
   hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan1.Init.TimeSeg1 = CAN_BS1_1TQ;
-  hcan1.Init.TimeSeg2 = CAN_BS2_2TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_3TQ;
+  hcan1.Init.TimeSeg2 = CAN_BS2_3TQ;
   hcan1.Init.TimeTriggeredMode = DISABLE;
   hcan1.Init.AutoBusOff = DISABLE;
   hcan1.Init.AutoWakeUp = DISABLE;
@@ -422,6 +422,9 @@ static void MX_CAN1_Init(void)
   		/* Start Error */
   		Error_Handler();
   	}
+
+	__HAL_RCC_CAN1_CLK_ENABLE();
+  	//__HAL_RCC_CAN2_CLK_ENABLE();
   /* USER CODE END CAN1_Init 2 */
 
 }
@@ -442,11 +445,11 @@ static void MX_CAN2_Init(void)
 
   /* USER CODE END CAN2_Init 1 */
   hcan2.Instance = CAN2;
-  hcan2.Init.Prescaler = 21;
+  hcan2.Init.Prescaler = 12;
   hcan2.Init.Mode = CAN_MODE_NORMAL;
   hcan2.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan2.Init.TimeSeg1 = CAN_BS1_1TQ;
-  hcan2.Init.TimeSeg2 = CAN_BS2_2TQ;
+  hcan2.Init.TimeSeg1 = CAN_BS1_3TQ;
+  hcan2.Init.TimeSeg2 = CAN_BS2_3TQ;
   hcan2.Init.TimeTriggeredMode = DISABLE;
   hcan2.Init.AutoBusOff = DISABLE;
   hcan2.Init.AutoWakeUp = DISABLE;
@@ -1026,8 +1029,6 @@ void Start_START_Task(void *argument)
 			htim13.Instance->CCR1 = Current_Status.LCD_BRIGHTNESS;
 			Current_Status.LCD_BRIGHTNESS_CHANGED = 0;
 		}
-
-		 Current_Status.RPM = Current_Status.RPM <= 8000 ? Current_Status.RPM + 25 : 0;
 		 osDelay(10);
 	}
   /* USER CODE END 5 */
@@ -1098,11 +1099,12 @@ void Start_CAN_Task(void *argument)
 {
   /* USER CODE BEGIN Start_CAN_Task */
   /* Infinite loop */
+	Current_Status.CAN_PROTOCOL = CAN_LINK;
   for(;;)
   {
 	  if (CAN_ENABLED) {
 
-	  			if (HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK)
+	  			if (HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK)
 	  			{
 	  				if(Current_Status.CAN_PROTOCOL == CAN_LINK)
 	  				{

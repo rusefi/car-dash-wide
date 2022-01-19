@@ -18,7 +18,7 @@ extern "C" {
 #define LED_NUMBER				46
 #define LED_DEFAULT_BRIGHTNESS		5
 
-#define LCD_DEFAULT_BRIGHTNESS	200
+#define LCD_DEFAULT_BRIGHTNESS	1000
 
 #define LCD_RPM_HIGH 			8000
 

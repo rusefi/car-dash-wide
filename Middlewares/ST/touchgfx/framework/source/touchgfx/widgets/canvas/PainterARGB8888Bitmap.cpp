@@ -2,7 +2,7 @@
 * Copyright (c) 2018(-2021) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.0 distribution.
+* This file is part of the TouchGFX 4.18.1 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -160,9 +160,8 @@ void PainterARGB8888Bitmap::render(uint8_t* ptr, int x, int xAdjust, int y, unsi
     else if (bitmapRGB565Pointer)
     {
         const uint16_t* const rgb565_linestart = ((const uint16_t*)bitmap.getData()) + (currentY * bitmapRectToFrameBuffer.width);
-        if (!bitmapRGB565AlphaPointer)
+        if (bitmapRGB565AlphaPointer == 0)
         {
-            const uint8_t* const alpha_linestart = bitmap.getExtraData() + currentY * bitmapRectToFrameBuffer.width;
             do
             {
                 const unsigned length = MIN(available, count);
@@ -195,12 +194,12 @@ void PainterARGB8888Bitmap::render(uint8_t* ptr, int x, int xAdjust, int y, unsi
                     bitmapRGB565Pointer++;
                 } while (p < p_chunkend);
                 bitmapRGB565Pointer = rgb565_linestart;
-                bitmapRGB565AlphaPointer = alpha_linestart;
                 available = bitmapRectToFrameBuffer.width;
             } while (p < p_lineend);
         }
         else
         {
+            const uint8_t* const alpha_linestart = bitmap.getExtraData() + currentY * bitmapRectToFrameBuffer.width;
             do
             {
                 const unsigned length = MIN(available, count);
@@ -229,12 +228,12 @@ void PainterARGB8888Bitmap::render(uint8_t* ptr, int x, int xAdjust, int y, unsi
                     }
                     else
                     {
-                        bitmapRGB565Pointer++;
                         p += 4;
                     }
                     bitmapRGB565Pointer++;
                 } while (p < p_chunkend);
                 bitmapRGB565Pointer = rgb565_linestart;
+                bitmapRGB565AlphaPointer = alpha_linestart;
                 available = bitmapRectToFrameBuffer.width;
             } while (p < p_lineend);
         }

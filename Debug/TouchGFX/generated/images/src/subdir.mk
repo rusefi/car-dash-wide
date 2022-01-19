@@ -20,7 +20,7 @@ CPP_SRCS += \
 ../TouchGFX/generated/images/src/image_indPark.cpp \
 ../TouchGFX/generated/images/src/image_indRight.cpp \
 ../TouchGFX/generated/images/src/image_needel.cpp \
-../TouchGFX/generated/images/src/image_race.cpp \
+../TouchGFX/generated/images/src/image_race_dash.cpp \
 ../TouchGFX/generated/images/src/image_red_100x100.cpp \
 ../TouchGFX/generated/images/src/image_speeduino1.cpp 
 
@@ -40,7 +40,7 @@ OBJS += \
 ./TouchGFX/generated/images/src/image_indPark.o \
 ./TouchGFX/generated/images/src/image_indRight.o \
 ./TouchGFX/generated/images/src/image_needel.o \
-./TouchGFX/generated/images/src/image_race.o \
+./TouchGFX/generated/images/src/image_race_dash.o \
 ./TouchGFX/generated/images/src/image_red_100x100.o \
 ./TouchGFX/generated/images/src/image_speeduino1.o 
 
@@ -60,7 +60,7 @@ CPP_DEPS += \
 ./TouchGFX/generated/images/src/image_indPark.d \
 ./TouchGFX/generated/images/src/image_indRight.d \
 ./TouchGFX/generated/images/src/image_needel.d \
-./TouchGFX/generated/images/src/image_race.d \
+./TouchGFX/generated/images/src/image_race_dash.d \
 ./TouchGFX/generated/images/src/image_red_100x100.d \
 ./TouchGFX/generated/images/src/image_speeduino1.d 
 
@@ -72,7 +72,7 @@ TouchGFX/generated/images/src/%.o: ../TouchGFX/generated/images/src/%.cpp TouchG
 clean: clean-TouchGFX-2f-generated-2f-images-2f-src
 
 clean-TouchGFX-2f-generated-2f-images-2f-src:
-	-$(RM) ./TouchGFX/generated/images/src/BitmapDatabase.d ./TouchGFX/generated/images/src/BitmapDatabase.o ./TouchGFX/generated/images/src/image_blue_100x100.d ./TouchGFX/generated/images/src/image_blue_100x100.o ./TouchGFX/generated/images/src/image_gray_100x100png.d ./TouchGFX/generated/images/src/image_gray_100x100png.o ./TouchGFX/generated/images/src/image_green_100x100.d ./TouchGFX/generated/images/src/image_green_100x100.o ./TouchGFX/generated/images/src/image_indBatt.d ./TouchGFX/generated/images/src/image_indBatt.o ./TouchGFX/generated/images/src/image_indDTC.d ./TouchGFX/generated/images/src/image_indDTC.o ./TouchGFX/generated/images/src/image_indECT.d ./TouchGFX/generated/images/src/image_indECT.o ./TouchGFX/generated/images/src/image_indFuel.d ./TouchGFX/generated/images/src/image_indFuel.o ./TouchGFX/generated/images/src/image_indHigh.d ./TouchGFX/generated/images/src/image_indHigh.o ./TouchGFX/generated/images/src/image_indLeft.d ./TouchGFX/generated/images/src/image_indLeft.o ./TouchGFX/generated/images/src/image_indLow.d ./TouchGFX/generated/images/src/image_indLow.o ./TouchGFX/generated/images/src/image_indOil.d ./TouchGFX/generated/images/src/image_indOil.o ./TouchGFX/generated/images/src/image_indPark.d ./TouchGFX/generated/images/src/image_indPark.o ./TouchGFX/generated/images/src/image_indRight.d ./TouchGFX/generated/images/src/image_indRight.o ./TouchGFX/generated/images/src/image_needel.d ./TouchGFX/generated/images/src/image_needel.o ./TouchGFX/generated/images/src/image_race.d ./TouchGFX/generated/images/src/image_race.o ./TouchGFX/generated/images/src/image_red_100x100.d ./TouchGFX/generated/images/src/image_red_100x100.o ./TouchGFX/generated/images/src/image_speeduino1.d ./TouchGFX/generated/images/src/image_speeduino1.o
+	-$(RM) ./TouchGFX/generated/images/src/BitmapDatabase.d ./TouchGFX/generated/images/src/BitmapDatabase.o ./TouchGFX/generated/images/src/image_blue_100x100.d ./TouchGFX/generated/images/src/image_blue_100x100.o ./TouchGFX/generated/images/src/image_gray_100x100png.d ./TouchGFX/generated/images/src/image_gray_100x100png.o ./TouchGFX/generated/images/src/image_green_100x100.d ./TouchGFX/generated/images/src/image_green_100x100.o ./TouchGFX/generated/images/src/image_indBatt.d ./TouchGFX/generated/images/src/image_indBatt.o ./TouchGFX/generated/images/src/image_indDTC.d ./TouchGFX/generated/images/src/image_indDTC.o ./TouchGFX/generated/images/src/image_indECT.d ./TouchGFX/generated/images/src/image_indECT.o ./TouchGFX/generated/images/src/image_indFuel.d ./TouchGFX/generated/images/src/image_indFuel.o ./TouchGFX/generated/images/src/image_indHigh.d ./TouchGFX/generated/images/src/image_indHigh.o ./TouchGFX/generated/images/src/image_indLeft.d ./TouchGFX/generated/images/src/image_indLeft.o ./TouchGFX/generated/images/src/image_indLow.d ./TouchGFX/generated/images/src/image_indLow.o ./TouchGFX/generated/images/src/image_indOil.d ./TouchGFX/generated/images/src/image_indOil.o ./TouchGFX/generated/images/src/image_indPark.d ./TouchGFX/generated/images/src/image_indPark.o ./TouchGFX/generated/images/src/image_indRight.d ./TouchGFX/generated/images/src/image_indRight.o ./TouchGFX/generated/images/src/image_needel.d ./TouchGFX/generated/images/src/image_needel.o ./TouchGFX/generated/images/src/image_race_dash.d ./TouchGFX/generated/images/src/image_race_dash.o ./TouchGFX/generated/images/src/image_red_100x100.d ./TouchGFX/generated/images/src/image_red_100x100.o ./TouchGFX/generated/images/src/image_speeduino1.d ./TouchGFX/generated/images/src/image_speeduino1.o
 
 .PHONY: clean-TouchGFX-2f-generated-2f-images-2f-src
 

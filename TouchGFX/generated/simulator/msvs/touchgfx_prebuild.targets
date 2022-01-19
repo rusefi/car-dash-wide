@@ -33,7 +33,7 @@
   <Target Name="GenerateTextsAndFontsFiles" BeforeTargets="ClCompile">
     <Message Text="Converting texts and fonts" />
     <Exec Command="echo Converting texts and fonts" />
-    <Exec Command="&quot;$(touchgfx_env)\MinGW\msys\1.0\Ruby30-x64\bin\ruby.exe&quot; &quot;$(TouchGFXReleasePath)\framework\tools\textconvert\main.rb&quot; &quot;$(ApplicationRoot)\assets\texts\texts.xlsx&quot; &quot;$(TouchGFXReleasePath)\framework\tools\fontconvert\build\win\fontconvert.out&quot; &quot;$(ApplicationRoot)\generated\fonts&quot; &quot;$(ApplicationRoot)\generated\texts&quot; &quot;$(ApplicationRoot)\assets\fonts&quot; &quot;$(ApplicationRoot)&quot;" />
+    <Exec Command="&quot;$(touchgfx_env)\MinGW\msys\1.0\Ruby30-x64\bin\ruby.exe&quot; &quot;$(TouchGFXReleasePath)\framework\tools\textconvert\main.rb&quot; &quot;$(ApplicationRoot)\assets\texts\texts.xml&quot; &quot;$(TouchGFXReleasePath)\framework\tools\fontconvert\build\win\fontconvert.out&quot; &quot;$(ApplicationRoot)\generated\fonts&quot; &quot;$(ApplicationRoot)\generated\texts&quot; &quot;$(ApplicationRoot)\assets\fonts&quot; &quot;$(ApplicationRoot)&quot;" />
   </Target>
 
   <Target Name="GenerateVideos" BeforeTargets="ClCompile">
