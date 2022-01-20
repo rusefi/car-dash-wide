@@ -620,13 +620,13 @@ static void MX_LTDC_Init(void)
   hltdc.Init.DEPolarity = LTDC_DEPOLARITY_AL;
   hltdc.Init.PCPolarity = LTDC_PCPOLARITY_IPC;
   hltdc.Init.HorizontalSync = 20;
-  hltdc.Init.VerticalSync = 2;
+  hltdc.Init.VerticalSync = 3;
   hltdc.Init.AccumulatedHBP = 160;
-  hltdc.Init.AccumulatedVBP = 14;
+  hltdc.Init.AccumulatedVBP = 15;
   hltdc.Init.AccumulatedActiveW = 1184;
-  hltdc.Init.AccumulatedActiveH = 614;
+  hltdc.Init.AccumulatedActiveH = 615;
   hltdc.Init.TotalWidth = 1344;
-  hltdc.Init.TotalHeigh = 634;
+  hltdc.Init.TotalHeigh = 635;
   hltdc.Init.Backcolor.Blue = 0;
   hltdc.Init.Backcolor.Green = 0;
   hltdc.Init.Backcolor.Red = 0;
@@ -1043,7 +1043,9 @@ void Start_START_Task(void *argument)
 			htim13.Instance->CCR1 = Current_Status.LCD_BRIGHTNESS;
 			Current_Status.LCD_BRIGHTNESS_CHANGED = 0;
 		}
-        //Current_Status.RPM = Current_Status.RPM <= 8000 ? Current_Status.RPM + 25 : 0;
+		Current_Status.ECT = 50;
+		Current_Status.IAT = 50;
+        Current_Status.RPM = Current_Status.RPM <= 8000 ? Current_Status.RPM + 25 : 0;
 		osDelay(10);
 	}
   /* USER CODE END 5 */

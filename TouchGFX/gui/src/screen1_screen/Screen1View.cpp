@@ -183,7 +183,6 @@ void Screen1View::handleTickEvent() {
 
 	indRight.setVisible(Current_Status.IND_RIGHT);
 	indRight.invalidate();
-
 	gauge1.updateValue(Current_Status.RPM, 0);
 	//gauge1.set
 	//gauge1.invalidate();
