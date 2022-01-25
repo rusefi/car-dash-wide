@@ -156,6 +156,13 @@ const osThreadAttr_t OUTPUT_Task_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for ADC_Task */
+osThreadId_t ADC_TaskHandle;
+const osThreadAttr_t ADC_Task_attributes = {
+  .name = "ADC_Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
 FMC_SDRAM_CommandTypeDef command;
 
@@ -207,6 +214,7 @@ void Start_BH1750_Task(void *argument);
 void Start_LPS22_Task(void *argument);
 void Start_INPUT_Task(void *argument);
 void Start_OUTPUT_Task(void *argument);
+void Start_ADC_Task(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -327,6 +335,9 @@ int main(void)
 
   /* creation of OUTPUT_Task */
   OUTPUT_TaskHandle = osThreadNew(Start_OUTPUT_Task, NULL, &OUTPUT_Task_attributes);
+
+  /* creation of ADC_Task */
+  ADC_TaskHandle = osThreadNew(Start_ADC_Task, NULL, &ADC_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
 	/* add threads, ... */
@@ -786,7 +797,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 0;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 210-1;
+  htim1.Init.Period = 225-1;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -856,9 +867,9 @@ static void MX_TIM9_Init(void)
 
   /* USER CODE END TIM9_Init 1 */
   htim9.Instance = TIM9;
-  htim9.Init.Prescaler = (840 * 3) -1;
+  htim9.Init.Prescaler = 9000 -1;
   htim9.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim9.Init.Period = 2000 -1;
+  htim9.Init.Period = 10000-1;
   htim9.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim9.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_PWM_Init(&htim9) != HAL_OK)
@@ -866,7 +877,7 @@ static void MX_TIM9_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 1000-1;
+  sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim9, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
@@ -902,7 +913,7 @@ static void MX_TIM13_Init(void)
 
   /* USER CODE END TIM13_Init 1 */
   htim13.Instance = TIM13;
-  htim13.Init.Prescaler = 84-1;
+  htim13.Init.Prescaler = 90-1;
   htim13.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim13.Init.Period = 1000-1;
   htim13.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -1476,14 +1487,40 @@ void Start_BTN_Task(void *argument)
 {
   /* USER CODE BEGIN Start_BTN_Task */
   /* Infinite loop */
+
+
+
+
+  	//90Mhz
+  	//Set timer prescaller
+  	//Timer count frequency is set with
+  	//timer_tick_frequency = Timer_default_frequency / (prescaller_set + 1)
+  	//In our case, we want a max frequency for timer, so we set prescaller to 0
+  	//And our timer will have tick frequency
+  	//timer_tick_frequency = 84000000 / (0 + 1) = 84000000
+  	//To get your frequency for PWM, equation is simple
+  	//PWM_frequency = timer_tick_frequency / (TIM_Period + 1)
+  	//If you know your PWM frequency you want to have timer period set correct
+  	//TIM_Period = timer_tick_frequency / PWM_frequency - 1
+  	//In our case, for 10Khz PWM_frequency, set Period to
+  	//TIM_Period = 84000000 / 10000 - 1 = 8399
+
+  	//uint32_t frequency = 90000000;
+  	uint32_t arr = 10000 * 1.2;
+  	uint32_t crr1 = arr / 2;
+  	uint32_t crr2 = arr / 2;
+	htim9.Instance->ARR = arr - 1;
+	//htim9.Instance->CCR1 = crr1 - 1; //left
+	//htim9.Instance->CCR2 = crr2 - 1; //right
+
   for(;;)
   {
 		Current_Status.BTN_TOP_RIGHT = HAL_GPIO_ReadPin(BTN_1_GPIO_Port, BTN_1_Pin);
 		Current_Status.BTN_TOP_LEFT = HAL_GPIO_ReadPin(BTN_3_GPIO_Port, BTN_3_Pin);
 
 		//Current_Status.RPM = Current_Status.LCD_BRIGHTNESS;
-		Current_Status.IND_LEFT = Current_Status.BTN_TOP_LEFT;
-		Current_Status.IND_RIGHT = Current_Status.BTN_TOP_RIGHT;
+		//Current_Status.IND_LEFT = Current_Status.BTN_TOP_LEFT;
+		//Current_Status.IND_RIGHT = Current_Status.BTN_TOP_RIGHT;
 
 		Current_Status.BTN_BOTTOM_RIGHT = HAL_GPIO_ReadPin(BTN_2_GPIO_Port, BTN_2_Pin);
 		Current_Status.BTN_BOTTOM_LEFT = HAL_GPIO_ReadPin(BTN_4_GPIO_Port, BTN_4_Pin);
@@ -1501,7 +1538,19 @@ void Start_BTN_Task(void *argument)
 		}
 
 
-		osDelay(100);
+	  	uint8_t in16 = HAL_GPIO_ReadPin(HALL_OUT_1_PI12_GPIO_Port, HALL_OUT_1_PI12_Pin);
+
+
+		htim9.Instance->CCR1 = Current_Status.BTN_TOP_LEFT == 1 ? crr1 - 1 : 0;
+		htim9.Instance->CCR2 = in16 == 0 ? crr2 - 1 : 0;
+
+		Current_Status.IND_LEFT = Current_Status.BTN_TOP_LEFT == 1 && htim9.Instance->CNT < crr1 ? true : false;
+		Current_Status.IND_RIGHT = in16 == 0 && htim9.Instance->CNT < crr2 ? true : false;
+
+		//Current_Status.ECT = htim9.Instance->CNT;
+
+
+		osDelay(1);
   }
   /* USER CODE END Start_BTN_Task */
 }
@@ -1628,7 +1677,6 @@ void Start_BH1750_Task(void *argument)
 	  				changInProgress = 1;
 	  				Current_Status.LED_BRIGHTNESS =	(int) (Current_Status.LCD_BRIGHTNESS / 5);
 	  				Current_Status.LED_BRIGHTNESS = Current_Status.LED_BRIGHTNESS <= 1 ? 1 : Current_Status.LED_BRIGHTNESS;
-	  				htim9.Instance->CCR2 = Current_Status.LCD_BRIGHTNESS;
 	  				Current_Status.LCD_BRIGHTNESS_CHANGED = 0;
 	  				changInProgress = 0;
 	  			}
@@ -1693,10 +1741,8 @@ void Start_INPUT_Task(void *argument)
 	  	//HAL_GPIO_WritePin(PUD_S1_GPIO_Port, PUD_S1_Pin, 1);
 	  	//HAL_GPIO_WritePin(PUD_S2_GPIO_Port, PUD_S2_Pin, 1);
 	  	//HAL_GPIO_WritePin(HALL_OUT_1_PI12_GPIO_Port, HALL_OUT_1_PI12_Pin, 0);
-	  	uint8_t value = HAL_GPIO_ReadPin(HALL_OUT_1_PI12_GPIO_Port, HALL_OUT_1_PI12_Pin);
 
-	  	Current_Status.IND_BATT = value;
-	  	Current_Status.IND_DTC = !value;
+
     osDelay(1);
   }
   /* USER CODE END Start_INPUT_Task */
@@ -1717,8 +1763,8 @@ void Start_OUTPUT_Task(void *argument)
   {
 	  ADC_ChannelConfTypeDef sConfig = {0};
 	  //sConfig.Channel = ADC_CHANNEL_1; //IN
-	  //sConfig.Channel = ADC_CHANNEL_2; //BATT
-	  sConfig.Channel = ADC_CHANNEL_11; //MULTISENSE
+	  sConfig.Channel = ADC_CHANNEL_2; //BATT
+	  //sConfig.Channel = ADC_CHANNEL_11; //MULTISENSE
 	  sConfig.Rank = 1;
 	  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
 	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
@@ -1727,70 +1773,96 @@ void Start_OUTPUT_Task(void *argument)
 	  }
 
 	  uint32_t ADCValue = 0;
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion (&hadc1, 1000);
+	  ADCValue = HAL_ADC_GetValue(&hadc1);
+	  HAL_ADC_Stop(&hadc1);
+	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+	  Current_Status.IND_BATT = Current_Status.BATT < 1198 ? true : false;
+	  //Current_Status.ECT = (ADCValue * 749) * (3.3 / 4096);
+	  osDelay(1000);
 
 		  //RESET all outputs
-	  HAL_GPIO_WritePin(MULTISENSE_RST_GPIO_Port, MULTISENSE_RST_Pin, 0);
-	  HAL_GPIO_WritePin(MULTISENSE_EN5_GPIO_Port, MULTISENSE_EN5_Pin, 0);
-
-	  osDelay(10);
-
-	  HAL_GPIO_WritePin(MULTISENSE_EN5_GPIO_Port, MULTISENSE_EN5_Pin, 1);
-
-	  //Channel 0 diagnostic
-	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 0);
-	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 0);
-
-
-	  HAL_ADC_Start(&hadc1);
-	  HAL_ADC_PollForConversion (&hadc1, 1000);
-	  ADCValue = HAL_ADC_GetValue(&hadc1);
-	  HAL_ADC_Stop(&hadc1);
-	  Current_Status.TPS = 10;
-	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
-	    osDelay(1000);
-
-	  //Channel 1 diagnostic
-	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 0);
-	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 1);
-
-
-	  HAL_ADC_Start(&hadc1);
-	  HAL_ADC_PollForConversion (&hadc1, 1000);
-	  ADCValue = HAL_ADC_GetValue(&hadc1);
-	  HAL_ADC_Stop(&hadc1);
-
-	  Current_Status.TPS = 20;
-	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
-	    osDelay(1000);
-
-	  //TCHIP Sense
-	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 1);
-	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 0);
-
-
-	  HAL_ADC_Start(&hadc1);
-	  HAL_ADC_PollForConversion (&hadc1, 1000);
-	  ADCValue = HAL_ADC_GetValue(&hadc1);
-	  HAL_ADC_Stop(&hadc1);
-
-	  Current_Status.TPS = 30;
-	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
-	    osDelay(1000);
-
-	  //VCC Sense
-	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 1);
-	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 1);
-
-	  HAL_ADC_Start(&hadc1);
-	  HAL_ADC_PollForConversion (&hadc1, 1000);
-	  ADCValue = HAL_ADC_GetValue(&hadc1);
-	  HAL_ADC_Stop(&hadc1);
-
-	  Current_Status.TPS = 40;
-	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
-	    osDelay(1000);
+//	  HAL_GPIO_WritePin(MULTISENSE_RST_GPIO_Port, MULTISENSE_RST_Pin, 0);
+//	  HAL_GPIO_WritePin(MULTISENSE_EN5_GPIO_Port, MULTISENSE_EN5_Pin, 0);
+//
+//	  osDelay(10);
+//
+//	  HAL_GPIO_WritePin(MULTISENSE_EN5_GPIO_Port, MULTISENSE_EN5_Pin, 1);
+//
+//	  //Channel 0 diagnostic
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 0);
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 0);
+//
+//
+//	  HAL_ADC_Start(&hadc1);
+//	  HAL_ADC_PollForConversion (&hadc1, 1000);
+//	  ADCValue = HAL_ADC_GetValue(&hadc1);
+//	  HAL_ADC_Stop(&hadc1);
+//	  Current_Status.TPS = 10;
+//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+//	    osDelay(1000);
+//
+//	  //Channel 1 diagnostic
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 0);
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 1);
+//
+//
+//	  HAL_ADC_Start(&hadc1);
+//	  HAL_ADC_PollForConversion (&hadc1, 1000);
+//	  ADCValue = HAL_ADC_GetValue(&hadc1);
+//	  HAL_ADC_Stop(&hadc1);
+//
+//	  Current_Status.TPS = 20;
+//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+//	    osDelay(1000);
+//
+//	  //TCHIP Sense
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 1);
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 0);
+//
+//
+//	  HAL_ADC_Start(&hadc1);
+//	  HAL_ADC_PollForConversion (&hadc1, 1000);
+//	  ADCValue = HAL_ADC_GetValue(&hadc1);
+//	  HAL_ADC_Stop(&hadc1);
+//
+//	  Current_Status.TPS = 30;
+//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+//	    osDelay(1000);
+//
+//	  //VCC Sense
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 1);
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 1);
+//
+//	  HAL_ADC_Start(&hadc1);
+//	  HAL_ADC_PollForConversion (&hadc1, 1000);
+//	  ADCValue = HAL_ADC_GetValue(&hadc1);
+//	  HAL_ADC_Stop(&hadc1);
+//
+//	  Current_Status.TPS = 40;
+//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+//	    osDelay(1000);
   }
   /* USER CODE END Start_OUTPUT_Task */
+}
+
+/* USER CODE BEGIN Header_Start_ADC_Task */
+/**
+* @brief Function implementing the ADC_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Start_ADC_Task */
+void Start_ADC_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_ADC_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END Start_ADC_Task */
 }
 
 /**
