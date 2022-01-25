@@ -20,7 +20,7 @@ struct Typography
 
 struct TypographyFontIndex
 {
-    static const touchgfx::FontId SENSOR_VALUES = 0; // bahnschrift_100_2bpp
+    static const touchgfx::FontId SENSOR_VALUES = 0; // bahnschrift_80_2bpp
     static const touchgfx::FontId SENSOR_LABEL = 1;  // bahnschrift_25_2bpp
     static const touchgfx::FontId SENSOR_UNIT = 1;   // bahnschrift_25_2bpp
     static const uint16_t NUMBER_OF_FONTS = 2;

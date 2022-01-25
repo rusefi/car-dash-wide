@@ -5,11 +5,11 @@
 #include <fonts/GeneratedFont.hpp>
 #include <texts/TypedTextDatabase.hpp>
 
-extern touchgfx::GeneratedFont& getFont_bahnschrift_100_2bpp();
+extern touchgfx::GeneratedFont& getFont_bahnschrift_80_2bpp();
 extern touchgfx::GeneratedFont& getFont_bahnschrift_25_2bpp();
 
 const touchgfx::Font* touchgfx_fonts[] = {
-    &(getFont_bahnschrift_100_2bpp()),
+    &(getFont_bahnschrift_80_2bpp()),
     &(getFont_bahnschrift_25_2bpp())
 };
 
@@ -102,7 +102,7 @@ void resetFont(touchgfx::FontId fontId)
     switch (fontId)
     {
     case 0:
-        touchgfx_fonts[0] = &(getFont_bahnschrift_100_2bpp());
+        touchgfx_fonts[0] = &(getFont_bahnschrift_80_2bpp());
         break;
     case 1:
         touchgfx_fonts[1] = &(getFont_bahnschrift_25_2bpp());

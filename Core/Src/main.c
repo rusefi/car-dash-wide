@@ -50,6 +50,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 CAN_HandleTypeDef hcan1;
 CAN_HandleTypeDef hcan2;
 
@@ -140,6 +142,20 @@ const osThreadAttr_t LPS22_Task_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for INPUT_Task */
+osThreadId_t INPUT_TaskHandle;
+const osThreadAttr_t INPUT_Task_attributes = {
+  .name = "INPUT_Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for OUTPUT_Task */
+osThreadId_t OUTPUT_TaskHandle;
+const osThreadAttr_t OUTPUT_Task_attributes = {
+  .name = "OUTPUT_Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
 FMC_SDRAM_CommandTypeDef command;
 
@@ -178,6 +194,7 @@ static void MX_CAN1_Init(void);
 static void MX_CAN2_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_SDIO_SD_Init(void);
+static void MX_ADC1_Init(void);
 void Start_START_Task(void *argument);
 void TouchGFX_Task(void *argument);
 void Start_SD_Task(void *argument);
@@ -188,6 +205,8 @@ void Start_BARO_Task(void *argument);
 void Start_RGB_Task(void *argument);
 void Start_BH1750_Task(void *argument);
 void Start_LPS22_Task(void *argument);
+void Start_INPUT_Task(void *argument);
+void Start_OUTPUT_Task(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -239,6 +258,7 @@ int main(void)
   MX_I2C2_Init();
   MX_SDIO_SD_Init();
   MX_FATFS_Init();
+  MX_ADC1_Init();
   MX_TouchGFX_Init();
   /* USER CODE BEGIN 2 */
 
@@ -301,6 +321,12 @@ int main(void)
 
   /* creation of LPS22_Task */
   LPS22_TaskHandle = osThreadNew(Start_LPS22_Task, NULL, &LPS22_Task_attributes);
+
+  /* creation of INPUT_Task */
+  INPUT_TaskHandle = osThreadNew(Start_INPUT_Task, NULL, &INPUT_Task_attributes);
+
+  /* creation of OUTPUT_Task */
+  OUTPUT_TaskHandle = osThreadNew(Start_OUTPUT_Task, NULL, &OUTPUT_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
 	/* add threads, ... */
@@ -375,6 +401,56 @@ void SystemClock_Config(void)
   /** Enables the Clock Security System
   */
   HAL_RCC_EnableCSS();
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
 }
 
 /**
@@ -935,20 +1011,33 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOI_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOJ_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOJ_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOK_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOH, OUT_S0_Pin|OUT_E_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOJ, MULTISENSE_EN5_Pin|LED_PJ12_Pin|LED_PJ13_Pin|LED_PJ14_Pin
+                          |LED_PJ15_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOK, MULTISENSE_RST_Pin|MULTISENSE_SEL0_Pin|MULTISENSE_SEL1_Pin|CAN1_SEL0_Pin
+                          |CAN2_SEL0_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_PI3_GPIO_Port, LED_PI3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_PD4_GPIO_Port, LED_PD4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, PUD_S0_Pin|PUD_S1_Pin|PUD_S2_Pin|PUD_E_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOJ, LED_PJ12_Pin|LED_PJ13_Pin|LED_PJ14_Pin|LED_PJ15_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOG, IN_E_Pin|IN_S0_Pin|IN_S1_Pin|IN_S2_Pin
+                          |IN_S3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : BTN_1_Pin BTN_2_Pin */
   GPIO_InitStruct.Pin = BTN_1_Pin|BTN_2_Pin;
@@ -956,11 +1045,42 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : HALL_OUT_1_PI12_Pin */
+  GPIO_InitStruct.Pin = HALL_OUT_1_PI12_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(HALL_OUT_1_PI12_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : OUT_S0_Pin OUT_E_Pin */
+  GPIO_InitStruct.Pin = OUT_S0_Pin|OUT_E_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : MULTISENSE_EN5_Pin LED_PJ12_Pin LED_PJ13_Pin LED_PJ14_Pin
+                           LED_PJ15_Pin */
+  GPIO_InitStruct.Pin = MULTISENSE_EN5_Pin|LED_PJ12_Pin|LED_PJ13_Pin|LED_PJ14_Pin
+                          |LED_PJ15_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOJ, &GPIO_InitStruct);
+
   /*Configure GPIO pins : BTN_3_Pin BTN_4_Pin */
   GPIO_InitStruct.Pin = BTN_3_Pin|BTN_4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOJ, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : MULTISENSE_RST_Pin MULTISENSE_SEL0_Pin MULTISENSE_SEL1_Pin CAN1_SEL0_Pin
+                           CAN2_SEL0_Pin */
+  GPIO_InitStruct.Pin = MULTISENSE_RST_Pin|MULTISENSE_SEL0_Pin|MULTISENSE_SEL1_Pin|CAN1_SEL0_Pin
+                          |CAN2_SEL0_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOK, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SDIO_ENT_Pin */
   GPIO_InitStruct.Pin = SDIO_ENT_Pin;
@@ -983,19 +1103,21 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_PI3_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LED_PD4_Pin */
-  GPIO_InitStruct.Pin = LED_PD4_Pin;
+  /*Configure GPIO pins : PUD_S0_Pin PUD_S1_Pin PUD_S2_Pin PUD_E_Pin */
+  GPIO_InitStruct.Pin = PUD_S0_Pin|PUD_S1_Pin|PUD_S2_Pin|PUD_E_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_PD4_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LED_PJ12_Pin LED_PJ13_Pin LED_PJ14_Pin LED_PJ15_Pin */
-  GPIO_InitStruct.Pin = LED_PJ12_Pin|LED_PJ13_Pin|LED_PJ14_Pin|LED_PJ15_Pin;
+  /*Configure GPIO pins : IN_E_Pin IN_S0_Pin IN_S1_Pin IN_S2_Pin
+                           IN_S3_Pin */
+  GPIO_InitStruct.Pin = IN_E_Pin|IN_S0_Pin|IN_S1_Pin|IN_S2_Pin
+                          |IN_S3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOJ, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PB3 PB4 PB5 */
   GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
@@ -1535,6 +1657,140 @@ void Start_LPS22_Task(void *argument)
     osDelay(1);
   }
   /* USER CODE END Start_LPS22_Task */
+}
+
+/* USER CODE BEGIN Header_Start_INPUT_Task */
+/**
+* @brief Function implementing the INPUT_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Start_INPUT_Task */
+void Start_INPUT_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_INPUT_Task */
+  /* Infinite loop */
+
+  for(;;)
+  {
+
+	  //PIN SETUP
+	  	HAL_GPIO_WritePin(IN_E_GPIO_Port, IN_E_Pin, 0);
+	  	HAL_GPIO_WritePin(IN_S0_GPIO_Port, IN_S0_Pin, 1);
+	  	HAL_GPIO_WritePin(IN_S1_GPIO_Port, IN_S1_Pin, 1);
+	  	HAL_GPIO_WritePin(IN_S2_GPIO_Port, IN_S2_Pin, 1);
+	  	HAL_GPIO_WritePin(IN_S3_GPIO_Port, IN_S3_Pin, 1);
+
+	  	//PULL SETUP
+	  	HAL_GPIO_WritePin(PUD_E_GPIO_Port, PUD_E_Pin, 0);
+	  	HAL_GPIO_WritePin(PUD_S0_GPIO_Port, PUD_S0_Pin, 1);
+	  	HAL_GPIO_WritePin(PUD_S1_GPIO_Port, PUD_S1_Pin, 1);
+	  	HAL_GPIO_WritePin(PUD_S2_GPIO_Port, PUD_S2_Pin, 1);
+
+	  	//OUTPUT SETUP
+	  	HAL_GPIO_WritePin(OUT_E_GPIO_Port, OUT_E_Pin, 0);
+	  	HAL_GPIO_WritePin(OUT_S0_GPIO_Port, OUT_S0_Pin, 1);
+	  	//HAL_GPIO_WritePin(PUD_S1_GPIO_Port, PUD_S1_Pin, 1);
+	  	//HAL_GPIO_WritePin(PUD_S2_GPIO_Port, PUD_S2_Pin, 1);
+	  	//HAL_GPIO_WritePin(HALL_OUT_1_PI12_GPIO_Port, HALL_OUT_1_PI12_Pin, 0);
+	  	uint8_t value = HAL_GPIO_ReadPin(HALL_OUT_1_PI12_GPIO_Port, HALL_OUT_1_PI12_Pin);
+
+	  	Current_Status.IND_BATT = value;
+	  	Current_Status.IND_DTC = !value;
+    osDelay(1);
+  }
+  /* USER CODE END Start_INPUT_Task */
+}
+
+/* USER CODE BEGIN Header_Start_OUTPUT_Task */
+/**
+* @brief Function implementing the OUTPUT_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Start_OUTPUT_Task */
+void Start_OUTPUT_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_OUTPUT_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+	  ADC_ChannelConfTypeDef sConfig = {0};
+	  //sConfig.Channel = ADC_CHANNEL_1; //IN
+	  //sConfig.Channel = ADC_CHANNEL_2; //BATT
+	  sConfig.Channel = ADC_CHANNEL_11; //MULTISENSE
+	  sConfig.Rank = 1;
+	  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+	  {
+		  Error_Handler();
+	  }
+
+	  uint32_t ADCValue = 0;
+
+		  //RESET all outputs
+	  HAL_GPIO_WritePin(MULTISENSE_RST_GPIO_Port, MULTISENSE_RST_Pin, 0);
+	  HAL_GPIO_WritePin(MULTISENSE_EN5_GPIO_Port, MULTISENSE_EN5_Pin, 0);
+
+	  osDelay(10);
+
+	  HAL_GPIO_WritePin(MULTISENSE_EN5_GPIO_Port, MULTISENSE_EN5_Pin, 1);
+
+	  //Channel 0 diagnostic
+	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 0);
+	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 0);
+
+
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion (&hadc1, 1000);
+	  ADCValue = HAL_ADC_GetValue(&hadc1);
+	  HAL_ADC_Stop(&hadc1);
+	  Current_Status.TPS = 10;
+	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+	    osDelay(1000);
+
+	  //Channel 1 diagnostic
+	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 0);
+	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 1);
+
+
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion (&hadc1, 1000);
+	  ADCValue = HAL_ADC_GetValue(&hadc1);
+	  HAL_ADC_Stop(&hadc1);
+
+	  Current_Status.TPS = 20;
+	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+	    osDelay(1000);
+
+	  //TCHIP Sense
+	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 1);
+	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 0);
+
+
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion (&hadc1, 1000);
+	  ADCValue = HAL_ADC_GetValue(&hadc1);
+	  HAL_ADC_Stop(&hadc1);
+
+	  Current_Status.TPS = 30;
+	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+	    osDelay(1000);
+
+	  //VCC Sense
+	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 1);
+	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 1);
+
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion (&hadc1, 1000);
+	  ADCValue = HAL_ADC_GetValue(&hadc1);
+	  HAL_ADC_Stop(&hadc1);
+
+	  Current_Status.TPS = 40;
+	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+	    osDelay(1000);
+  }
+  /* USER CODE END Start_OUTPUT_Task */
 }
 
 /**

@@ -6,6 +6,8 @@ extern "C" {
 #endif
 
 #include <stdio.h>
+#include <stdbool.h>
+
 
 #define BH1750_ENABLED			0
 #define GPS_ENABLED				1
@@ -92,143 +94,107 @@ struct RGBLED {
 	int color;
 };
 
+
+typedef enum {
+	ACTIVE_LOW = 0,
+	ACTIVE_LOW_ROTARY,
+	ACTIVE_HIGH,
+	ACTIVE_HIGH_LINEAR, // 2x2 map
+	ACTIVE_HIGH_CALIBRATED //2x16 map
+} InputTypeEnum;
+
+typedef enum {
+	UP_1M = 0,
+	UP_1K,
+	UP_10K,
+	UP_2K49, //TEMP
+	DOWN_1M,
+	DOWN_1K,
+	DOWN_10K,
+	DOWN_2K49, //TEMP
+} InputPullEnum;
+
+
+typedef enum {
+	ON_OFF = 0,
+	PWM
+} OutputTypeEnum;
+
+typedef enum {
+	SINGLE = 0,
+	DOUBLE,
+	TRIPLE,
+	QUADRUPLE
+} OutputPinTypeEnum;
+
+typedef enum {
+	CAN = 0,
+	INPUT,
+	SCREEN
+} OutputTriggerTypeEnum;
+
 typedef struct {
-	uint16_t Enabled;
+	uint8_t Id;
 	char Label[10];
 	char Unit[10];
+	bool Enabled;
+	InputTypeEnum Type;
+	InputPullEnum PullValue;
+	uint16_t CalibratedRange[2][16];
+} InputDef;
+
+
+typedef struct {
+	uint8_t Id;
+	char Label[10];
+	char Unit[10];
+	bool Enabled;
+	OutputTypeEnum Type;
+	OutputPinTypeEnum PinType;
+	uint16_t PinRange[4];
+
+	OutputTriggerTypeEnum TriggerType;
+	uint8_t TriggerId;
+
+	uint16_t InrushCurrent;
+	uint16_t InrushTime;
+	uint16_t MaxCurrent;
+	uint16_t MinCurrent;
+
+	uint16_t RetryCount;
+	uint16_t RetryEvery;
+	uint16_t RetryForever;
+
+	uint8_t Frequency;
+	uint8_t DutyCycle;
+	uint8_t SoftStartTime;
+
+	bool DefaultValue;
+} OutputDef;
+
+
+
+typedef struct {
+	uint8_t Id;
+	char Label[10];
+	char Unit[10];
+	bool Enabled;
+	uint8_t CanId;
+	uint8_t StartByte;
+	uint8_t EndByte;
+} CANDef;
+
+typedef struct {
+	uint8_t Id;
+	char Label[10];
+	char Unit[10];
+	bool Enabled;
 	uint16_t Offset;
 	uint16_t Multiplier;
 	uint16_t Divider;
 	uint16_t DecimalPlaces;
 	uint16_t DefaultValue;
-	uint16_t Channel;
 } FieldDef;
-
-//
-//typedef struct {
-//
-//	uint16_t TPS;
-//	uint16_t MAP;
-//	uint16_t BOOST;
-//	uint16_t BARO;
-//	uint16_t CLT;
-//	uint16_t IAT;
-//	uint16_t SPEED;
-//	uint16_t BATTERY;
-//
-//	uint16_t EGT1;
-//	uint16_t EGT2;
-//	uint16_t EGT3;
-//	uint16_t EGT4;
-//	uint16_t EGT5;
-//	uint16_t EGT6;
-//	uint16_t EGT7;
-//	uint16_t EGT8;
-//
-//	uint16_t ANALOG1;
-//	uint16_t ANALOG2;
-//	uint16_t ANALOG3;
-//	uint16_t ANALOG4;
-//	uint16_t ANALOG5;
-//	uint16_t ANALOG6;
-//	uint16_t ANALOG7;
-//	uint16_t ANALOG8;
-//
-//	uint16_t DIGITAL1;
-//	uint16_t DIGITAL2;
-//	uint16_t DIGITAL3;
-//	uint16_t DIGITAL4;
-//	uint16_t DIGITAL5;
-//	uint16_t DIGITAL6;
-//	uint16_t DIGITAL7;
-//	uint16_t DIGITAL8;
-//
-//	uint16_t IGNANGLE;
-//	uint16_t IGNDWELL;
-//	uint16_t INJPW;
-//	uint16_t INJDC;
-//	uint16_t SECINJPW;
-//	uint16_t SECINJDC;
-//	uint16_t KNOCKLVL;
-//	uint16_t LAMBDA1;
-//	uint16_t LAMBDA2;
-//	uint16_t AFR1;
-//	uint16_t AFR2;
-//
-//	uint16_t OILPRESS;
-//	uint16_t OILTEMP;
-//	uint16_t FUELTEMP;
-//	uint16_t FUELPRESS;
-//	uint16_t WATERPRESS;
-//
-//	uint16_t MPG;
-//	uint16_t L100KM;
-//
-//} ECU;
-//
-//typedef struct {
-//	uint16_t CLT_ERROR;
-//	uint16_t IAT_ERROR;
-//	uint16_t MAP_ERROR;
-//	uint16_t TPS_ERROR;
-//	uint16_t BARO_ERROR;
-//	uint16_t EGT_ERROR;
-//	uint16_t KNOCK_ERROR;
-//
-//} ERRORS;
-//
-//
-//typedef struct {
-//	uint16_t CHN_ID;
-//	uint16_t CHN_CAN_ID;
-//	uint16_t CHN_CAN_TYPE;
-//	uint16_t CHN_CAN_FORMAT;
-//	uint16_t CHN_CAN_ENDIAN;
-//	uint16_t CHN_CAN_OFFSET;
-//	uint16_t CHN_DATA_MULTIPLIER;
-//	uint16_t CHN_DATA_DIVIDER;
-//	uint16_t CHN_DATA_OFFSET;
-//	uint16_t CHN_DATA_DEFAULT;
-//	uint16_t CHN_DATA_TIMEOUT;
-//} CHANNEL;
-
-//typedef struct {
-//	uint16_t CLT_LOW;
-//	uint16_t CLT_HIGH;
-//
-//	uint16_t IAT_LOW;
-//	uint16_t IAT_HIGH;
-//
-//	uint16_t RPM_LOW;
-//	uint16_t RPM_HIGH;
-//
-//	uint16_t MAP_LOW;
-//	uint16_t MAP_HIGH;
-//
-//	uint16_t LAMBDA_LOW;
-//	uint16_t LAMBDA_HIGH;
-//
-//	uint16_t OIL_P_LOW;
-//	uint16_t OIL_P_HIGH;
-//
-//	uint16_t FUEL_P_LOW;
-//	uint16_t FUEL_P_HIGH;
-//
-//	uint16_t OIL_T_LOW;
-//	uint16_t OIL_T_HIGH;
-//
-//	uint16_t FUEL_T_LOW;
-//	uint16_t FUEL_T_HIGH;
-//
-//	uint16_t EGT_LOW;
-//	uint16_t EGT_HIGH;
-//
-//	uint16_t KNOCK_LOW;
-//	uint16_t KNOCK_HIGH;
-//
-//	uint16_t BATTERY_LOW;
-//	uint16_t BATTERY_HIGH;
-//} FLAGS;
 
 typedef struct {
 	uint16_t RPM;

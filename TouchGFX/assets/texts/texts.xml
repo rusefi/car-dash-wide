@@ -147,7 +147,7 @@
     </Text>
   </Texts>
   <Typographies>
-    <Typography Id="Sensor_Values" Font="bahnschrift.ttf" Size="100" Bpp="2" WildcardCharacters="0-9." WildcardCharacterRanges="0-9,A-Z,a-z,0x20,0x24,0x2C,0x2A,0x25,0xB0" />
+    <Typography Id="Sensor_Values" Font="bahnschrift.ttf" Size="80" Bpp="2" WildcardCharacters="0-9." WildcardCharacterRanges="0-9,A-Z,a-z,0x20,0x24,0x2C,0x2A,0x25,0xB0" />
     <Typography Id="Sensor_Label" Font="bahnschrift.ttf" Size="25" Bpp="2" WildcardCharacters="0-9." WildcardCharacterRanges="0-9,A-Z,a-z,0x20,0x24,0x2C,0x2A,0x25,0xB0" />
     <Typography Id="Sensor_Unit" Font="bahnschrift.ttf" Size="25" Bpp="2" WildcardCharacters="0-9." WildcardCharacterRanges="0-9,A-Z,a-z,0x20,0x24,0x2C,0x2A,0x25,0xB0" />
   </Typographies>

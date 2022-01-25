@@ -10,11 +10,14 @@ O_SRCS += \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/FontCache.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Font_bahnschrift_100_2bpp_0.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Font_bahnschrift_25_2bpp_0.o \
+../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Font_bahnschrift_80_2bpp_0.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/GeneratedFont.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Kerning_bahnschrift_100_2bpp.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Kerning_bahnschrift_25_2bpp.o \
+../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Kerning_bahnschrift_80_2bpp.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Table_bahnschrift_100_2bpp.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Table_bahnschrift_25_2bpp.o \
+../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/Table_bahnschrift_80_2bpp.o \
 ../TouchGFX/build/MINGW32_NT-6.2/generated/fonts/src/UnmappedDataFont.o 
 
 

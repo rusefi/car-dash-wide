@@ -10,7 +10,7 @@ touchgfx::Font* ApplicationFontProvider::getFont(touchgfx::FontId typography)
     switch (typography)
     {
     case Typography::SENSOR_VALUES:
-        // bahnschrift_100_2bpp
+        // bahnschrift_80_2bpp
         return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[0]);
     case Typography::SENSOR_LABEL:
         // bahnschrift_25_2bpp
