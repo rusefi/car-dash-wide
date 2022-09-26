@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -18,11 +18,12 @@
 #ifndef TOUCHGFX_APPLICATION_HPP
 #define TOUCHGFX_APPLICATION_HPP
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/UIEventListener.hpp>
 #include <touchgfx/events/ClickEvent.hpp>
 #include <touchgfx/events/DragEvent.hpp>
 #include <touchgfx/events/GestureEvent.hpp>
+#include <touchgfx/hal/Config.hpp>
+#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/lcd/LCD.hpp>
 
 namespace touchgfx
@@ -57,6 +58,21 @@ public:
     }
 
     /**
+     * This function can be called to send your application back to
+     * the start screen. The simulator will call this function when F5
+     * is pressed. To make this work, please implement this function
+     * in FrontendApplication.
+     *
+     * @note The application will not make a complete restart - if
+     *       your Model contains data, this will not be reset, unless
+     *       this is explicitly done in your
+     *       FrontendApplication::changeToStartScreen().
+     */
+    virtual void changeToStartScreen()
+    {
+    }
+
+    /**
      * Switch to another Screen. Will call tearDownScreen on current Screen before switching,
      * and subsequently call setupScreen and draw automatically for the new Screen.
      *
@@ -73,6 +89,7 @@ public:
      */
     virtual void appSwitchScreen(uint8_t screenId)
     {
+        (void)screenId; // Unused variable
     }
 
     /** An application specific function for requesting redraw of entire screen. */
@@ -87,24 +104,6 @@ public:
     {
         redraw = rect;
     }
-
-    /**
-     * Initiate a draw operation of the entire screen. Standard implementation is to
-     * delegate draw request to the current Screen.
-     */
-    virtual void draw();
-
-    /**
-     * Initiate a draw operation of the specified region of the screen. Standard
-     * implementation is to delegate draw request to the current Screen.
-     *
-     * @param [in] rect The area to draw.
-     *
-     * @note Unlike Widget::draw this is safe to call from user code as it will properly traverse
-     *       widgets in z-order.
-     * @note The coordinates given must be absolute coordinates.
-     */
-    virtual void draw(Rect& rect);
 
     /**
      * Handle a click event. Standard implementation is to delegate the event to the current
@@ -141,7 +140,7 @@ public:
      * Handle an incoming character received by the HAL layer. Standard implementation
      * delegates to current screen (which, in turn, does nothing).
      *
-     * @param  c The incomming character to handle.
+     * @param  c The incoming character to handle.
      */
     virtual void handleKeyEvent(uint8_t c);
 
@@ -152,20 +151,22 @@ public:
     virtual void handlePendingScreenTransition();
 
     /**
-     * This function allows for deferring draw operations to a later time. If active, calls
-     * to draw will simply note that the specified area is dirty, but not perform any actual
-     * drawing. When disabling the draw cache, the dirty area will be flushed (drawn)
-     * immediately.
+     * Clears the cached areas so coming calls to invalidate are collected for future drawing.
      *
-     * @param  enableCache if true, all future draw operations will be cached. If false draw
-     *                     caching is disabled, and the current cache (if not empty) is
-     *                     drawn immediately.
+     * @see drawCachedAreas
      */
-    virtual void cacheDrawOperations(bool enableCache);
+    virtual void clearCachedAreas();
+
+    /**
+     * Draws all cached, invalidated areas on the screen.
+     *
+     * @see clearCachedAreas
+     */
+    virtual void drawCachedAreas();
 
     /**
      * This function copies the parts that were updated in the
-     * previous frame (in the tft buffer) to the active framebuffer
+     * previous frame (in the TFT buffer) to the active framebuffer
      * (client buffer).
      *
      * This function only copies pixels in double buffering mode.
@@ -264,16 +265,41 @@ public:
         }
     }
 
-protected:
     /**
-     * Invalidates this area.
+     * Invalidates the entire screen.
+     *
+     * @param   area    The area to invalidate.
+     */
+    void invalidate();
+
+    /**
+     * Invalidates the given area.
      *
      * @param  area The area to invalidate.
      */
     void invalidateArea(Rect area);
 
+protected:
     /** Protected constructor. */
     Application();
+
+    /**
+     * Initiate a draw operation of the entire screen. Standard implementation is to
+     * delegate draw request to the current Screen.
+     */
+    virtual void draw();
+
+    /**
+     * Initiate a draw operation of the specified region of the screen. Standard
+     * implementation is to delegate draw request to the current Screen.
+     *
+     * @param [in] rect The area to draw.
+     *
+     * @note Unlike Widget::draw this is safe to call from user code as it will properly traverse
+     *       widgets in z-order.
+     * @note The coordinates given must be absolute coordinates.
+     */
+    virtual void draw(Rect& rect);
 
     typedef Vector<Rect, 8> RectVector_t;              ///< Type to ensure the same number of rects are in the Vector
     Vector<Drawable*, MAX_TIMER_WIDGETS> timerWidgets; ///< List of widgets that receive timer ticks.
@@ -281,7 +307,6 @@ protected:
     RectVector_t cachedDirtyAreas;                     ///< When draw caching is enabled, these rects keeps track of the dirty screen area.
     RectVector_t lastRects;                            ///< The dirty areas from last frame that needs to be redrawn because we have swapped frame buffers.
     Rect redraw;                                       ///< Rect describing application requested invalidate area
-    bool drawCacheEnabled;                             ///< True when draw caching is active.
     bool transitionHandled;                            ///< True if the transition is done and Screen::afterTransition has been called.
     static Screen* currentScreen;                      ///< Pointer to currently displayed Screen.
     static Transition* currentTransition;              ///< Pointer to current transition.

@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -10,9 +10,6 @@
 *
 *******************************************************************************/
 
-#include <touchgfx/hal/Types.hpp>
-#include <touchgfx/Drawable.hpp>
-#include <touchgfx/containers/Container.hpp>
 #include <touchgfx/containers/scrollers/DrawableList.hpp>
 
 namespace touchgfx
@@ -177,7 +174,10 @@ void DrawableList::setOffset(int32_t ofs)
     {
         // Make sure that firstIndex is "in range"
         newFirstItem %= numItems;
-        newFirstItem = (newFirstItem + numItems) % numItems;
+        if (newFirstItem < 0)
+        {
+            newFirstItem += numItems;
+        }
     }
     else
     {
@@ -260,7 +260,7 @@ void DrawableList::setOffset(int32_t ofs)
                 if (updateDrawable->isValid())
                 {
                     updateDrawable->execute(drawableItems, drawableIndex + firstDrawableIndex, itemIndex);
-                    drawable->invalidate();
+                    drawable->invalidateContent();
                 }
             }
         }
@@ -314,7 +314,7 @@ int16_t DrawableList::getDrawableIndex(int16_t itemIndex, int16_t prevDrawableIn
     }
     if (prevDrawableIndex >= 0)
     {
-        prevDrawableIndex = (prevDrawableIndex - firstDrawable + numDrawables) % numDrawables;
+        prevDrawableIndex = ((prevDrawableIndex - firstDrawable) + numDrawables) % numDrawables;
     }
     for (int16_t i = prevDrawableIndex + 1; i < numDrawables; i++)
     {
@@ -359,8 +359,7 @@ void DrawableList::refreshDrawables()
         if (drawable->getParent() != 0)
         {
             // Remove drawable from the current parent
-            Container* parent = static_cast<Container*>(drawable->getParent());
-            parent->remove(*drawable);
+            static_cast<Container*>(drawable->getParent())->remove(*drawable);
         }
         Container::add(*drawable);
     }

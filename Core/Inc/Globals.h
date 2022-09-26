@@ -1,5 +1,5 @@
-#ifndef GLOBALS_H
-#define GLOBALS_H
+#ifndef __GLOBALS_H
+#define __GLOBALS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,13 +14,13 @@ extern "C" {
 #define CAN_ENABLED				1
 #define RGB_ENABLED				1
 #define UART_ENABLED			0
-#define IND_ENABLED 			1
-#define ALERT_ENABLED  			1
+#define IND_ENABLED 			0
+#define ALERT_ENABLED  			0
 
-#define LED_NUMBER				46
-#define LED_DEFAULT_BRIGHTNESS		5
+#define LED_NUMBER				24
+#define LED_DEFAULT_BRIGHTNESS		2
 
-#define LCD_DEFAULT_BRIGHTNESS	1000
+#define LCD_DEFAULT_BRIGHTNESS	400
 
 #define LCD_RPM_HIGH 			8000
 
@@ -33,18 +33,42 @@ extern "C" {
 #define PROTECTION_FUEL_LOW 	40
 
 #define PSI_TO_BAR 				0.0689476f
+#define PSI_TO_KPA 				6.89476f
 #define BAR_TO_PSI 				14.5038f
+#define BAR_TO_KPA 				100.0f
 #define KPA_TO_BAR 				0.01f
 #define KPA_TO_PSI 				0.145038f
 
-#define AFR_TO_LAMBDA 			14.7f
+#define AFR_TO_LAMBDA 			0.06802721088f
 
 #define SYSTEM_DEBUG_COUNT 		4
 #define SYSTEM_DEBUG_LENGTH 	64
 
+
+#define USE_1024x600
+#ifdef USE_1024x600
+	#define LCD_RES_X  1024
+	#define LCD_RES_Y  600
+#endif
+
+typedef enum {
+	kPa = 0,
+	BAR,
+	PSI,
+	C,
+	F,
+	Kmh,
+	Mph,
+	Lambda,
+	Afr
+} UnitDefEnum;
+
+
 typedef enum {
 	CAN_LINK = 0,
-	CAN_MX5
+	CAN_AIM,
+	CAN_MX5,
+	CAN_BMW_PHEV
 } CANDefEnum;
 
 typedef enum {
@@ -197,6 +221,12 @@ typedef struct {
 } FieldDef;
 
 typedef struct {
+
+	uint8_t PRES_UNIT;
+	uint8_t TEMP_UNIT;
+	uint8_t SPEED_UNIT;
+
+
 	uint16_t RPM;
 	uint16_t RPM_100;
 	uint16_t RPM_180;
@@ -236,16 +266,16 @@ typedef struct {
 	uint16_t LIMITS;
 
 	uint16_t TPS;
-	uint16_t ECT;
-	uint16_t IAT;
+	int16_t ECT;
+	int16_t IAT;
 	uint16_t ETHANOL;
 	int16_t MAP;
 	uint16_t BARO;
 	uint16_t BATT;
 	uint16_t FUELP;
 	uint16_t OILP;
-	uint16_t FUELT;
-	uint16_t OILT;
+	int16_t FUELT;
+	int16_t OILT;
 
 	uint16_t BH1750_LUX;
 
@@ -274,6 +304,7 @@ typedef struct {
 	char * SYSTEM_DEBUG_MESSAGE[SYSTEM_DEBUG_COUNT];
 
 	uint16_t LED_BRIGHTNESS;
+	uint8_t LED_BRIGHTNESS_CHANGED;
 	uint16_t LCD_BRIGHTNESS;
 	uint8_t LCD_BRIGHTNESS_CHANGED;
 	uint8_t CAN_PROTOCOL;
@@ -283,6 +314,9 @@ typedef struct {
 	uint8_t BTN_TOP_LEFT;
 	uint8_t BTN_BOTTOM_RIGHT;
 	uint8_t BTN_BOTTOM_LEFT;
+
+
+	uint8_t CELL[16];
 
 } Statuses;
 

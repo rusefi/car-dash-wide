@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -18,8 +18,8 @@
 #ifndef TOUCHGFX_FONT_HPP
 #define TOUCHGFX_FONT_HPP
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/Unicode.hpp>
+#include <touchgfx/hal/Types.hpp>
 
 namespace touchgfx
 {
@@ -65,7 +65,7 @@ struct GlyphNode
      *
      * @return the right value of "width".
      */
-    FORCE_INLINE_FUNCTION uint16_t width() const
+    FORCE_INLINE_FUNCTION int16_t width() const
     {
         return ((flags & GLYPH_DATA_WIDTH_BIT8) << 5) | _width;
     }
@@ -75,7 +75,7 @@ struct GlyphNode
      *
      * @return the right value of "height".
      */
-    FORCE_INLINE_FUNCTION uint16_t height() const
+    FORCE_INLINE_FUNCTION int16_t height() const
     {
         return ((flags & GLYPH_DATA_HEIGHT_BIT8) << 4) | _height;
     }
@@ -387,6 +387,8 @@ public:
      */
     virtual int8_t getKerning(Unicode::UnicodeChar prevChar, const GlyphNode* glyph) const
     {
+        (void)prevChar; // Unused variable
+        (void)glyph;    // Unused variable
         return 0;
     }
 

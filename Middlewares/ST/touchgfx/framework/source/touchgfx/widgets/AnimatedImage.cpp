@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -10,11 +10,8 @@
 *
 *******************************************************************************/
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/Application.hpp>
-#include <touchgfx/Bitmap.hpp>
 #include <touchgfx/widgets/AnimatedImage.hpp>
-#include <touchgfx/widgets/Image.hpp>
 
 namespace touchgfx
 {
@@ -127,15 +124,15 @@ void AnimatedImage::pauseAnimation()
     }
 }
 
-void AnimatedImage::setBitmap(const Bitmap& bitmap)
+void AnimatedImage::setBitmap(const Bitmap& bmp)
 {
-    startId = bitmap.getId();
-    Image::setBitmap(bitmap);
+    startId = bmp.getId();
+    Image::setBitmap(bmp);
 }
 
-void AnimatedImage::setBitmapEnd(const Bitmap& bitmap)
+void AnimatedImage::setBitmapEnd(const Bitmap& bmp)
 {
-    endId = bitmap.getId();
+    endId = bmp.getId();
 }
 
 void AnimatedImage::setBitmaps(BitmapId start, BitmapId end)

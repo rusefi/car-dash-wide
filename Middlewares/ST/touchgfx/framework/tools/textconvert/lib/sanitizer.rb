@@ -1,14 +1,14 @@
-# Copyright (c) 2018(-2021) STMicroelectronics.
+# Copyright (c) 2018(-2022) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.18.1 distribution.
+# This file is part of the TouchGFX 4.20.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
 # If no LICENSE file comes with this software, it is provided AS-IS.
 #
 ###############################################################################/
-TextEntrySanitizer = Struct.new(:text_entries, :typographies, :framebuffer_bpp)
+TextEntrySanitizer = Struct.new(:text_entries, :typographies, :languages, :framebuffer_bpp)
 
 class Sanitizer < TextEntrySanitizer
 
@@ -23,7 +23,7 @@ class Sanitizer < TextEntrySanitizer
       CheckSizeAndBpp,
       DowngradeFontsBitDepth
     ].each do |sanitizer|
-      sanitizer.new(text_entries, typographies, framebuffer_bpp).run
+      sanitizer.new(text_entries, typographies, languages, framebuffer_bpp).run
     end
   end
 end
@@ -47,7 +47,6 @@ end
 
 class RemoveIncompleteLanguages < TextEntrySanitizer
   def run
-    languages = text_entries.languages
     languages.each do |language|
       text_entries_with_missing_translations = text_entries.select do |text_entry|
         text_entry.translation_in(language).empty?
@@ -64,7 +63,7 @@ end
 
 class RemoveKeysWithMoreThanTwoSubstitutions < TextEntrySanitizer
   def run
-    text_entries.languages.each do |language|
+    languages.each do |language|
       text_entries_with_more_than_two_substitutions = text_entries.select do |text_entry|
         text_entry.number_of_substitutions_in(language) > 2
       end
@@ -72,7 +71,7 @@ class RemoveKeysWithMoreThanTwoSubstitutions < TextEntrySanitizer
         fail "ERROR: Text Id #{text_entry.text_id} has #{text_entry.number_of_substitutions_in(language)} substitutions"
         #text_entries.remove(text_entry)
       end
-    end
+    end if languages
   end
 end
 
@@ -106,7 +105,7 @@ class RemoveTextEntriesWithInvalidAlignment < TextEntrySanitizer
   def run
     text_entries.each do |text_entry|
       alignments = text_entry.get_all_alignments_as_string
-      illegal_alignments = alignments.select { |a| !['LEFT', 'RIGHT', 'CENTER'].include?(a) }
+      illegal_alignments = alignments.uniq - ['LEFT', 'RIGHT', 'CENTER']
       if illegal_alignments.any?
         fail "ERROR: Text Id #{text_entry.text_id} uses unknown alignments #{illegal_alignments}"
         #text_entries.remove(text_entry)
@@ -119,9 +118,9 @@ class RemoveTextEntriesWithInvalidDirection < TextEntrySanitizer
   def run
     text_entries.each do |text_entry|
       directions = text_entry.get_all_directions_as_string
-      illegal_directions = directions.select { |d| !['LTR', 'RTL'].include?(d) }
+      illegal_directions = directions.uniq - ['LTR', 'RTL']
       if illegal_directions.any?
-        fail "ERROR: Text Id #{text_entry.text_id} uses unknown directions #{illegal_directions}"
+        fail "ERROR: Text Id '#{text_entry.text_id}' uses unknown directions #{illegal_directions}"
         #text_entries.remove(text_entry)
       end
     end

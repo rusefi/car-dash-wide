@@ -12,8 +12,9 @@ void SDRAM_delay(__IO uint32_t nCount)
 }
 
 
-void SDRAM_Initialization_Sequence(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_CommandTypeDef *Command)
+HAL_StatusTypeDef SDRAM_Initialization_Sequence(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_CommandTypeDef *Command)
 {
+	HAL_StatusTypeDef status = HAL_OK;
   __IO uint32_t tmpmrd = 0;
   
   /* Configure a clock configuration enable command */
@@ -22,7 +23,7 @@ void SDRAM_Initialization_Sequence(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_Comman
   Command->AutoRefreshNumber 			= 1;
   Command->ModeRegisterDefinition 	= 0;
   
-  HAL_SDRAM_SendCommand(hsdram, Command, SDRAM_TIMEOUT);	// ���Ϳ���ָ��
+  status = HAL_SDRAM_SendCommand(hsdram, Command, SDRAM_TIMEOUT);	// ���Ϳ���ָ��
   SDRAM_delay(1);		// ��ʱ�ȴ�
   
   /* Configure a PALL (precharge all) command */ 
@@ -31,7 +32,7 @@ void SDRAM_Initialization_Sequence(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_Comman
   Command->AutoRefreshNumber 			= 1;
   Command->ModeRegisterDefinition 	= 0;
   
-  HAL_SDRAM_SendCommand(hsdram, Command, SDRAM_TIMEOUT);  // ���Ϳ���ָ��
+  status = HAL_SDRAM_SendCommand(hsdram, Command, SDRAM_TIMEOUT);  // ���Ϳ���ָ��
   
   /* Configure a Auto-Refresh command */ 
   Command->CommandMode 					= FMC_SDRAM_CMD_AUTOREFRESH_MODE;	// ʹ���Զ�ˢ��
@@ -39,7 +40,7 @@ void SDRAM_Initialization_Sequence(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_Comman
   Command->AutoRefreshNumber			= 8;                                // �Զ�ˢ�´���
   Command->ModeRegisterDefinition 	= 0;
   
-  HAL_SDRAM_SendCommand(hsdram, Command, SDRAM_TIMEOUT);	// ���Ϳ���ָ��
+  status = HAL_SDRAM_SendCommand(hsdram, Command, SDRAM_TIMEOUT);	// ���Ϳ���ָ��
   
   /* Program the external memory mode register */
   tmpmrd = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_2          |
@@ -53,7 +54,9 @@ void SDRAM_Initialization_Sequence(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_Comman
   Command->AutoRefreshNumber 			= 1;
   Command->ModeRegisterDefinition 	= tmpmrd;
   
-  HAL_SDRAM_SendCommand(hsdram, Command, SDRAM_TIMEOUT);	// ���Ϳ���ָ��
+  status = HAL_SDRAM_SendCommand(hsdram, Command, SDRAM_TIMEOUT);	// ���Ϳ���ָ��
   
   hsdram->Instance->SDRTR |= ((uint32_t)((1386)<< 1));	// ����ˢ�¼����� 
+
+  return status;
 }

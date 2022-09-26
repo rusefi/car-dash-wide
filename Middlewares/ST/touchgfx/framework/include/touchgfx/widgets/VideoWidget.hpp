@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -18,9 +18,9 @@
 #ifndef TOUCHGFX_VIDEOWIDGET_HPP
 #define TOUCHGFX_VIDEOWIDGET_HPP
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/Bitmap.hpp>
 #include <touchgfx/Callback.hpp>
+#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/hal/VideoController.hpp>
 #include <touchgfx/widgets/Widget.hpp>
 
@@ -42,45 +42,56 @@ public:
     VideoWidget();
 
     /** Destructor. Unregisters the Widget from the Controller. */
-    ~VideoWidget();
+    virtual ~VideoWidget();
 
     /** Play the video. */
-    void play();
+    void play() const;
 
     /** Pause the video. */
-    void pause();
+    void pause() const;
 
     /** Stop the video. */
-    void stop();
+    void stop() const;
 
     /**
      * Check if the video is playing (not paused or stopped).
      *
      * @return  Returns true if the video is playing.
      */
-    bool isPlaying();
+    bool isPlaying() const;
 
     /**
      * Set repeat mode. When set the video is restarted when the end is reached.
      *
      * @param   repeat  When true, the video is repeated.
      */
-    void setRepeat(bool repeat);
+    void setRepeat(bool repeat) const;
 
     /**
-     * Seek to specific frame. Frame number 1 is the first frame.
-     * The display is not updated updated unless the video is playing.
+     * Seek to specific frame. Frame number 1 is the first frame. The display is not updated updated
+     * unless the video is playing.
      *
      * @param   frameNumber The frame number to seek to.
+     *
+     * @see showFrame
      */
-    void seek(uint32_t frameNumber);
+    void seek(uint32_t frameNumber) const;
+
+    /**
+     * Seek to a specific frame and update the display. Equal to seek if the video is playing.
+     *
+     * @param   frameNumber The frame number to seek to.
+     *
+     * @see seek
+     */
+    void showFrame(uint32_t frameNumber) const;
 
     /**
      * Get the current frame number.
      *
      * @return  Returns the current frame number.
      */
-    uint32_t getCurrentFrameNumber();
+    uint32_t getCurrentFrameNumber() const;
 
     /**
      * Associates an action to be performed when the movie has ended. If the video is set to repeat,
@@ -111,7 +122,7 @@ public:
      * @param   ui_frames       Number of UI frames (divider)
      * @param   video_frames    Number of video_frames (dividend)
      */
-    void setFrameRate(uint32_t ui_frames, uint32_t video_frames);
+    void setFrameRate(uint32_t ui_frames, uint32_t video_frames) const;
 
     /**
      * Set the video data for the stream.
@@ -137,7 +148,7 @@ public:
      *
      * @param [in,out]  data    Pointer to VideoInformation where information should be stored.
      */
-    void getVideoInformation(VideoInformation* data);
+    void getVideoInformation(VideoInformation* data) const;
 
     /**
      * Set video buffer data.
@@ -158,7 +169,7 @@ public:
      * @param width  Width of the videoBuffer in pixels
      * @param height Height of the videoBuffer in pixels
      */
-    void setVideoBufferFormat(Bitmap::BitmapFormat bufferFormat, uint16_t width, uint16_t height)
+    void setVideoBufferFormat(Bitmap::BitmapFormat bufferFormat, int16_t width, int16_t height)
     {
         format = bufferFormat;
         bufferWidth = width;
@@ -183,10 +194,10 @@ private:
     GenericCallback<const VideoWidget&>* movieEndedAction; ///< Pointer to the callback to be executed when the video is done.
     uint8_t* buffer;                                       ///< The buffer where the pixels are copied from
     Bitmap::BitmapFormat format;                           ///< The pixel format for the data.
-    uint16_t bufferWidth;                                  ///< Width (stride) of buffer in pixels (when used)
-    uint16_t bufferHeight;                                 ///< Height of buffer in pixels (when used)
-    uint16_t videoWidth;                                   ///< Width of video in pixels
-    uint16_t videoHeight;                                  ///< Height of video in pixels
+    int16_t bufferWidth;                                   ///< Width (stride) of buffer in pixels (when used)
+    int16_t bufferHeight;                                  ///< Height of buffer in pixels (when used)
+    int16_t videoWidth;                                    ///< Width of video in pixels
+    int16_t videoHeight;                                   ///< Height of video in pixels
 };
 
 } // namespace touchgfx

@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -18,9 +18,9 @@
 #ifndef TOUCHGFX_TEXTPROVIDER_HPP
 #define TOUCHGFX_TEXTPROVIDER_HPP
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/Font.hpp>
 #include <touchgfx/Unicode.hpp>
+#include <touchgfx/hal/Types.hpp>
 
 namespace touchgfx
 {
@@ -301,7 +301,7 @@ private:
     void unicodeConverterInit();
     Unicode::UnicodeChar unicodeConverter(const TextDirection direction);
 
-    const Unicode::UnicodeChar* binarySearch(uint16_t key, const Unicode::UnicodeChar contextualFormTable[][5], int maxIndex) const;
+    FORCE_INLINE_FUNCTION const Unicode::UnicodeChar* binarySearch(uint16_t key, const Unicode::UnicodeChar contextualFormTable[][5], int maxIndex) const;
     FORCE_INLINE_FUNCTION const Unicode::UnicodeChar* contextualFormForChar(const Unicode::UnicodeChar currChar) const;
 
     FORCE_INLINE_FUNCTION void adjustGlyph(Unicode::UnicodeChar originalCharacter, Unicode::UnicodeChar currentCharacter, const GlyphNode*& glyph, const Font* font);

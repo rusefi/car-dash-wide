@@ -1,7 +1,7 @@
-# Copyright (c) 2018(-2021) STMicroelectronics.
+# Copyright (c) 2018(-2022) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.18.1 distribution.
+# This file is part of the TouchGFX 4.20.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -9,25 +9,26 @@
 #
 ###############################################################################/
 class UnicodesTxt
-  def initialize(text_entries, typographies, output_directory)
+  def initialize(text_entries, typographies, languages, output_directory)
     @text_entries = text_entries
     @typographies = typographies
+    @languages = languages
     @output_directory = output_directory
   end
   def run
     unique_typographies = @typographies.map{ |t| Typography.new("", t.font_file, t.font_size, t.bpp) }.uniq.sort_by { |t| sprintf("%s %04d %d",t.font_file,t.font_size,t.bpp) }
     unique_typographies.each do |unique_typography|
-      UnicodeForTypographyTxt.new(@text_entries, @output_directory, @typographies, unique_typography).run
+      UnicodeForTypographyTxt.new(@text_entries, @typographies, unique_typography, @output_directory).run
     end
   end
 end
 
 class UnicodeForTypographyTxt
-  def initialize(text_entries, output_directory, typographies, unique_typography)
+  def initialize(text_entries, typographies, unique_typography, output_directory)
     @text_entries = text_entries
-    @output_directory = output_directory
     @typographies = typographies
     @unique_typography = unique_typography
+    @output_directory = output_directory
   end
 
   def convert_to_contextual_forms(unicodes)
@@ -440,7 +441,7 @@ class UnicodeForTypographyTxt
     typographies_identical = @typographies.select{ |t| t.font_file == @unique_typography.font_file &&
                                                    t.font_size == @unique_typography.font_size &&
                                                    t.bpp == @unique_typography.bpp }
-    typography_names = typographies_identical.map{ |t| t.name }.uniq
+    typography_names = typographies_identical.map(&:name).uniq
 
     # Find a typography with a fallback character
     typography_with_fallback_character = typographies_identical.find { |t| t.fallback_character }

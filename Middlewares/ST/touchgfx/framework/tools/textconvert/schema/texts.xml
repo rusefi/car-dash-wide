@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextDatabase xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="texts.xsd" Version="4.18.0">
+<TextDatabase xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="texts.xsd" Version="4.20.0">
+  <Languages>
+    <Language Id="GB" />
+    <Language Id="AR" />
+  </Languages>
   <Texts>
-    <Text Id="Main_text" TypographyId="Normal" Alignment="Left" Direction="LTR">
-      <Translation Language="GB">Lorem Ipsum is simply dummy &#10;text of the printing and type-&#10;setting industry.</Translation>
-      <Translation Language="AR" TypographyId="Normal_arabic" Alignment="Right" Direction="RTL">لوريم إيبسوم(Lorem Ipsum)&#10;هو ببساطة نص شكلي (بمعنى أن &#10;الغاية هي الشكل وليس المحتوى) &#10;ويُستخدم في صناعات المطابع &#10;ودور النشر.</Translation>
-    </Text>
-    <Text Id="Switch_language" TypographyId="Button_style_arabic" Alignment="Center" Direction="LTR">
-      <Translation Language="GB">العربية</Translation>
-      <Translation Language="AR" TypographyId="Button_style" Direction="RTL">English</Translation>
-    </Text>
-    <Text Id="Tick_counter" TypographyId="Normal" Alignment="Left" Direction="LTR">
-      <Translation Language="GB">Timer: &lt;number&gt;</Translation>
-      <Translation Language="AR" TypographyId="Normal_arabic" Alignment="Right" Direction="RTL">مؤقت: &lt;x&gt;</Translation>
-    </Text>
+    <TextGroup Id="Texts1">
+      <Text Id="Id1" TypographyId="Default" Alignment="Left">
+        <Translation Language="GB">main page</Translation>
+        <Translation Language="AR" Alignment="Right">الصفحة الرئيسية</Translation>
+      </Text>
+      <Text Id="Id2" TypographyId="Default" Alignment="Left">
+        <Translation Language="GB">title</Translation>
+        <Translation Language="AR" Alignment="Right">لقب</Translation>
+      </Text>
+    </TextGroup>
   </Texts>
   <Typographies>
-    <Typography Id="Normal" Font="Asap-Regular.ttf" Size="14" Bpp="4" FallbackCharacter="skip" WildcardCharacterRanges="0-9" />
-    <Typography Id="Normal_arabic" Font="arabtype.ttf" Size="24" Bpp="4" FallbackCharacter="skip" WildcardCharacterRanges="0-9" />
-    <Typography Id="Button_style" Font="Asap-Regular.ttf" Size="18" Bpp="4" />
-    <Typography Id="Button_style_arabic" Font="arabtype.ttf" Size="26" Bpp="4" />
+    <Typography Id="Default" Font="verdana.ttf" Size="20" Bpp="4" Direction="LTR" FallbackCharacter="?">
+      <LanguageSetting Language="AR" Font="helvetica.ttf" Size="14" Bpp="4" Direction="RTL" />
+    </Typography>
   </Typographies>
 </TextDatabase>

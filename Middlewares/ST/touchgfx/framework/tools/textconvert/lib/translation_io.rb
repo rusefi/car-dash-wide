@@ -1,7 +1,7 @@
-# Copyright (c) 2018(-2021) STMicroelectronics.
+# Copyright (c) 2018(-2022) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.18.1 distribution.
+# This file is part of the TouchGFX 4.20.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -13,9 +13,8 @@ require 'nokogiri'
 require 'rubyxl'
 require 'rubyXL/convenience_methods'
 require 'lib/text_entries'
-require 'lib/text_entries_xml_reader'
-require 'lib/typographies_xml_reader'
 require 'lib/xml_reader'
+require 'lib/xml_writer'
 
 # From https://github.com/weshatheleopard/rubyXL/wiki/How-to
 class RubyXL::Cell
@@ -43,12 +42,10 @@ end
 
 class TranslationIO
   def initialize(file_name, translation_name)
-    xml_doc = XMLReader.new.read(file_name)
-    @text_entries = TextEntriesXMLReader.new(xml_doc).run
-    @typographies = TypographiesXMLReader.new(xml_doc).run
+    @xml_doc = XMLReader.new.read(file_name)
     @translation_name = translation_name
     @file_name = file_name
-    @xml_file_version = xml_doc.at("TextDatabase")["Version"]
+    @xml_file_version = @xml_doc.at("TextDatabase")["Version"]
   end
 
   WHITE = 'FFFFFF'
@@ -69,7 +66,7 @@ class TranslationIO
     worksheet = workbook[0]
     worksheet.sheet_name = SHEET_NAME
 
-    existing_languages = @text_entries.languages
+    existing_languages = get_languages
     if languages.empty?
       # Empty string means "put TextID in this column"
       languages = [ '' ] + existing_languages
@@ -93,9 +90,9 @@ class TranslationIO
 
     # This line is only needed if the font_size of each cell is to be updated (inside the loop below)
     # typography_map = @typographies.inject({}) { |map,typo| map[typo.name] = typo; map }
-    @text_entries.each_with_index do |text, row|
+    get_text_entries.each_with_index do |text, row|
       languages.each_with_index do |lang, column|
-        cell = worksheet.add_cell(row+1, column, lang.empty? ? text.text_id : text.translation_in(lang).text)
+        cell = worksheet.add_cell(row+1, column, lang.empty? ? text.text_id : text.translation_in(lang))
         cell.change_vertical_alignment('top')
         if (row % 2) == 0
           cell.change_font_color(FIRST_ROW_FOREGROUND)
@@ -112,7 +109,7 @@ class TranslationIO
           # Lines only needed if the font size of each cell is to be updated
           #typography_name = text.typographies[lang] || text.typography
           #cell.change_font_size((typography_map[typography_name].font_size / 1.5).to_i)
-          alignment = text.alignments[lang] || text.alignment
+          alignment = text.alignment_in(lang) || text.alignment
           cell.change_horizontal_alignment(alignment.downcase)
           cell.unlock
         end
@@ -132,6 +129,8 @@ class TranslationIO
     worksheet = workbook.worksheets.find { |sheet| sheet.sheet_name == SHEET_NAME }
     fail "ERROR: \"#{@translation_name}\" does not contain a sheet called \"#{SHEET_NAME}\"" if !worksheet
 
+    existing_languages = get_languages
+
     header = [] # Collect the header with correctly capitalized languages
     text_id_column = nil # Which column contains the TEXT_ID
     import_columns = [] # Which columns to import
@@ -147,7 +146,7 @@ class TranslationIO
             header << ''
           else
             # Find the language with the correct capitalization
-            orig_lang = @text_entries.languages.find { |l| l.upcase == lang_upcase }
+            orig_lang = existing_languages.find { |l| l.upcase == lang_upcase }
             # Fail if all languages should be imported AND the language from the spreadsheet is illegal
             fail "ERROR: Text Database does not contain language \"#{lang_cell}\", create the language in the TouchGFX Designer" if languages.empty? && !orig_lang
             # if no languages specified, import all. Otherwise only import if language is wanted
@@ -162,12 +161,13 @@ class TranslationIO
       column += 1
     end
 
-    upper_languages = languages.map { |lang| lang.upcase }
-    upper_existing_languages = @text_entries.languages.map { |lang| lang.upcase }
+    upper_languages = languages.map(&:upcase)
+    upper_existing_languages = existing_languages.map(&:upcase)
     # Did we ask to import a language (on the command line) which does not exist in the spreadsheet?
     fail "ERROR: Unknown language(s) #{(upper_languages - upper_existing_languages)*','}" if !(upper_languages - upper_existing_languages).empty?
     fail "ERROR: Missing column \"#{TEXT_ID}\"" if !text_id_column
 
+    text_nodes = get_text_nodes_map
     # Row 0 is the header
     row = 1
     all_text_ids = []
@@ -177,11 +177,11 @@ class TranslationIO
         if text_id && !text_id.empty?
           fail "ERROR: Extra translations of Text Id \"#{text_id}\" given in line #{row}" if all_text_ids.include?(text_id)
           import_columns.each do |column|
-            text_entry = @text_entries.text_id(text_id)
-            fail "ERROR: The Text Id \"#{text_id}\" in line #{row} does not exist in the database" if !text_entry
+            text_node = text_nodes[text_id]
+            fail "ERROR: The Text Id \"#{text_id}\" in line #{row} does not exist in the database" if !text_node
             cell = worksheet[row][column]
             cell_text = cell ? cell.value.to_s : ''
-            text_entry.add_translation(header[column], cell_text)
+            set_text_node_translation(text_node, header[column], cell_text)
             #puts "Setting #{text_id}.#{header[column]} = #{worksheet[row][column].value}"
           end
           all_text_ids << text_id
@@ -190,11 +190,93 @@ class TranslationIO
       row += 1
     end
 
-    all_predefined_ids = @text_entries.all_text_ids
+    all_predefined_ids = get_text_ids
     if !(all_predefined_ids - all_text_ids).empty?
       puts "WARNING: \"#{@translation_name}\" does not contain the following Text Id's: #{(all_predefined_ids - all_text_ids)*', '}"
     end
 
-    XMLWriter.new.run(@file_name, @xml_file_version, @text_entries, @typographies)
+    XMLWriter.new.write(@file_name, @xml_doc)
+  end
+
+protected
+  def empty_to_nil(str)
+    str ? str.strip.empty? ? nil : str.strip : nil
+  end
+
+  #Get array of all Languages in XML
+  def get_languages
+    @xml_doc.xpath("/TextDatabase/Languages/Language").inject([]) do |languages, lang_node|
+      language = empty_to_nil(lang_node["Id"])
+      languages.push(language)
+    end
+  end
+
+  #Get array of all text IDs in XML
+  def get_text_ids
+    @xml_doc.xpath("/TextDatabase/Texts/TextGroup/Text").map{ |text_node| text_node["Id"] }
+  end
+
+  #Map of textId to XML node
+  def get_text_nodes_map
+    @xml_doc.xpath("/TextDatabase/Texts/TextGroup/Text").inject({}) do |nodes, text_node|
+      nodes[text_node["Id"]] = text_node
+      nodes
+    end
+  end
+
+  #Update the translation of a text
+  def set_text_node_translation(text_node, language, new_translation)
+    text_node.xpath("./Translation").each do |translation_node|
+      if translation_node["Language"] == language
+        #Remove old translation
+        translation_node.child.remove if translation_node.child
+
+        translation_node.add_child(Nokogiri::XML::Text.new(new_translation, @xml_doc))
+      end
+    end
+  end
+
+  #Class holding single text with ID, default alignment, translations, and alignments
+  class TextEntry
+    def initialize(text_id, alignment)
+      @text_id = text_id
+      @alignment = alignment
+      @alignments = {}    # Language -> alignment
+      @translations = {}  # Language -> text (translation)
+    end
+    def text_id
+      @text_id
+    end
+    def translation_in(language)
+      @translations[language]
+    end
+    def alignment
+      @alignment
+    end
+    def alignment_in(language)
+      @alignments[language] || alignment
+    end
+    def set_alignment(language, alignment)
+      @alignments[language] = alignment
+    end
+    def set_translation(language, text)
+      @translations[language] = text
+    end
+  end
+
+  #Compute array of TextEntry objects
+  def get_text_entries
+    texts = []
+    @xml_doc.xpath("/TextDatabase/Texts/TextGroup/Text").each do |text_node|
+      text = TextEntry.new(text_node["Id"], text_node["Alignment"])
+      text_node.search("Translation").each do |translation|
+        language = translation["Language"]
+        alignment = translation["Alignment"]
+        text.set_alignment(language, alignment) unless alignment.nil?
+        text.set_translation(language, translation.text)
+      end
+      texts << text
+    end
+    texts
   end
 end

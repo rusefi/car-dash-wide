@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -10,19 +10,17 @@
 *
 *******************************************************************************/
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/Drawable.hpp>
 #include <touchgfx/hal/HAL.hpp>
 #include <touchgfx/lcd/LCD.hpp>
-#include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/BoxWithBorder.hpp>
 
 namespace touchgfx
 {
 void BoxWithBorder::draw(const Rect& area) const
 {
-    const Rect center = Rect(borderSize, borderSize, getWidth() - (2 * borderSize), getHeight() - (2 * borderSize));
-    if (center.isEmpty())
+    const Rect centerRect = Rect(borderSize, borderSize, getWidth() - (2 * borderSize), getHeight() - (2 * borderSize));
+    if (centerRect.isEmpty())
     {
         Rect dirty = area;
         translateRectToAbsolute(dirty);
@@ -30,7 +28,7 @@ void BoxWithBorder::draw(const Rect& area) const
         return;
     }
 
-    Rect dirty = area & center;
+    Rect dirty = area & centerRect;
     Box::draw(dirty);
 
     if (borderSize == 0)

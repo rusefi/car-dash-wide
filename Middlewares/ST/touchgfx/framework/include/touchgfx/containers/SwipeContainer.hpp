@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -18,11 +18,11 @@
 #ifndef TOUCHGFX_SWIPECONTAINER_HPP
 #define TOUCHGFX_SWIPECONTAINER_HPP
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/containers/ListLayout.hpp>
 #include <touchgfx/events/ClickEvent.hpp>
 #include <touchgfx/events/DragEvent.hpp>
 #include <touchgfx/events/GestureEvent.hpp>
+#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/widgets/Image.hpp>
 #include <touchgfx/widgets/TiledImage.hpp>
 
@@ -106,8 +106,6 @@ public:
      * @note This method should not be used until all pages have been added, the
      *       setPageIndicatorBitmaps() has been called and the page indicator therefore has the
      *       correct width.
-     *
-     * ### param  x The center x coordinate.
      */
     void setPageIndicatorCenteredX();
 
@@ -150,7 +148,7 @@ public:
      */
     uint8_t getNumberOfPages()
     {
-        return numberOfPages;
+        return pageIndicator.getNumberOfPages();
     }
 
     /**
@@ -183,13 +181,11 @@ private:
         NO_ANIMATION
     } currentState;
 
-    uint8_t numberOfPages;
     uint8_t animationCounter;
     uint16_t swipeCutoff;
     int16_t dragX;
     int16_t animateDistance;
     int16_t startX;
-    uint8_t currentPage;
     uint16_t endElasticWidth;
 
     ListLayout pages;
@@ -209,7 +205,9 @@ private:
         void setBitmaps(const Bitmap& normalPage, const Bitmap& highlightedPage);
         void goRight();
         void goLeft();
-        void setHighlightPosition(uint8_t index);
+        void setCurrentPage(uint8_t page);
+        uint8_t getNumberOfPages() const;
+        uint8_t getCurrentPage() const;
 
     private:
         TiledImage unselectedPages;

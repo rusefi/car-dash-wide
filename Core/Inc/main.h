@@ -69,10 +69,10 @@ void show_neopixels();
 #define HALL_OUT_1_PI12_GPIO_Port GPIOI
 #define MULTISENSE_ADC_Pin GPIO_PIN_1
 #define MULTISENSE_ADC_GPIO_Port GPIOC
-#define IN_ADC_Pin GPIO_PIN_1
-#define IN_ADC_GPIO_Port GPIOA
-#define BAT_ADC_Pin GPIO_PIN_2
-#define BAT_ADC_GPIO_Port GPIOA
+#define LED_TIM2_CH2_PA1_Pin GPIO_PIN_1
+#define LED_TIM2_CH2_PA1_GPIO_Port GPIOA
+#define LED_TIM2_CH3_PA2_Pin GPIO_PIN_2
+#define LED_TIM2_CH3_PA2_GPIO_Port GPIOA
 #define OUT_S0_Pin GPIO_PIN_2
 #define OUT_S0_GPIO_Port GPIOH
 #define OUT_E_Pin GPIO_PIN_3
@@ -119,10 +119,12 @@ void show_neopixels();
 #define MULTISENSE_SEL0_GPIO_Port GPIOK
 #define MULTISENSE_SEL1_Pin GPIO_PIN_4
 #define MULTISENSE_SEL1_GPIO_Port GPIOK
+#define CAN2_SEL0_Pin GPIO_PIN_5
+#define CAN2_SEL0_GPIO_Port GPIOK
 #define CAN1_SEL0_Pin GPIO_PIN_6
 #define CAN1_SEL0_GPIO_Port GPIOK
-#define CAN2_SEL0_Pin GPIO_PIN_7
-#define CAN2_SEL0_GPIO_Port GPIOK
+#define CAN2_SEL0K7_Pin GPIO_PIN_7
+#define CAN2_SEL0K7_GPIO_Port GPIOK
 /* USER CODE BEGIN Private defines */
 /* USER CODE END Private defines */
 

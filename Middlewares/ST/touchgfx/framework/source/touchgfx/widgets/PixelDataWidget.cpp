@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -10,12 +10,9 @@
 *
 *******************************************************************************/
 
-#include <touchgfx/hal/Types.hpp>
-#include <touchgfx/Bitmap.hpp>
 #include <touchgfx/hal/HAL.hpp>
 #include <touchgfx/lcd/LCD.hpp>
 #include <touchgfx/widgets/PixelDataWidget.hpp>
-#include <touchgfx/widgets/Widget.hpp>
 
 namespace touchgfx
 {
@@ -39,22 +36,22 @@ Rect PixelDataWidget::getSolidRect() const
         // There are at least some solid pixels
         switch (format)
         {
-        case Bitmap::BW:     // 1-bit, black / white, no alpha channel
-        case Bitmap::BW_RLE: // 1-bit, black / white, no alpha channel compressed with horizontal RLE
-        case Bitmap::GRAY2:  // 2-bit, gray scale, no alpha channel
-        case Bitmap::GRAY4:  // 4-bit, gray scale, no alpha channel
-        case Bitmap::RGB565: // 16-bit, 5 bits for red, 6 bits for green, 5 bits for blue, no alpha channel
-        case Bitmap::RGB888: // 16-bit, 5 bits for red, 6 bits for green, 5 bits for blue, no alpha channel
+        case Bitmap::BW:
+        case Bitmap::BW_RLE:
+        case Bitmap::GRAY2:
+        case Bitmap::GRAY4:
+        case Bitmap::RGB565:
+        case Bitmap::RGB888:
             // All solid pixels
             return Rect(0, 0, getWidth(), getHeight());
-        case Bitmap::ARGB8888: // 32-bit, 8 bits for each of red, green, blue and alpha channel
-        case Bitmap::ARGB2222: // 8-bit color
-        case Bitmap::ABGR2222: // 8-bit color
-        case Bitmap::RGBA2222: // 8-bit color
-        case Bitmap::BGRA2222: // 8-bit color
-        case Bitmap::L8:       // 8-bit indexed color
-        case Bitmap::A4:       // 4-bit alpha level
-        case Bitmap::CUSTOM:   // Custom pixel format
+        case Bitmap::ARGB8888:
+        case Bitmap::ARGB2222:
+        case Bitmap::ABGR2222:
+        case Bitmap::RGBA2222:
+        case Bitmap::BGRA2222:
+        case Bitmap::L8:
+        case Bitmap::A4:
+        case Bitmap::CUSTOM:
             // No knowledge about solid pixels
             break;
         }

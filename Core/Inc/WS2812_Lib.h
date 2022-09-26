@@ -1,22 +1,19 @@
-/**
- * WS2812 Neopixel LED driver for STM32, Header
- * @Author: Nicolas Dammin, 2016
- */
+#ifndef __WS2812_H
+#define __WS2812_H
 
 #pragma once
 
-#include "Globals.h"
+#include "extern.h"
 #include "stm32f4xx_hal.h"
 
 TIM_HandleTypeDef htim1;
-DMA_HandleTypeDef hdma_tim1_ch1;
 
 #define WS2812_NUM_LEDS_CH1		LED_NUMBER
 
-#define  WS2812_TIM_PERIODE   	htim1.Instance->ARR //225-1  // F_PWM 180000000/800000 = 225 -> 800 kHz (1.25us)
+#define  WS2812_TIM_PERIODE   	htim1.Instance->ARR //52  // F_PWM 84000000/800000 = 225 -> 800 kHz (1.25us)
 
-#define  WS2812_LO_TIME        	(WS2812_TIM_PERIODE / (1.25 / 0.22))	  //(1.25 / 0.22) 0.220us - 0.380us
-#define  WS2812_HI_TIME         (WS2812_TIM_PERIODE / (1.25 / 0.58))  //(1.25 / 0.58) 0.580us - 1us
+#define  WS2812_LO_TIME        	(WS2812_TIM_PERIODE / (1.25 / 0.22)) - 1	  //(1.25 / 0.22) 0.220us - 0.380us
+#define  WS2812_HI_TIME         (WS2812_TIM_PERIODE / (1.25 / 0.58)) - 1  //(1.25 / 0.58) 0.580us - 1us
 
 //--------------------------------------------------------------
 // RGB LED Farbdefinition (3 x 8bit)
@@ -40,5 +37,7 @@ void WS2812_Clear(uint8_t refresh);
 void WS2812_One_RGB(uint32_t nr, WS2812_RGB_t rgb_col, uint8_t refresh);
 void WS2812_All_RGB(WS2812_RGB_t rgb_col, uint8_t refresh);
 
+
+#endif // __WS2812_H
 
 

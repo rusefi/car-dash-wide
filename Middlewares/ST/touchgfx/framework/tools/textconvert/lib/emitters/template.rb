@@ -1,7 +1,7 @@
-# Copyright (c) 2018(-2021) STMicroelectronics.
+# Copyright (c) 2018(-2022) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.18.1 distribution.
+# This file is part of the TouchGFX 4.20.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -14,10 +14,12 @@ require 'lib/file_io'
 class Template
   attr_accessor :text_entries
   attr_accessor :typographies
+  attr_accessor :languages
 
-  def initialize(text_entries, typographies, output_directory)
+  def initialize(text_entries, typographies, languages, output_directory)
     @text_entries = text_entries
     @typographies = typographies
+    @languages = languages
     @output_directory = output_directory
   end
   def run

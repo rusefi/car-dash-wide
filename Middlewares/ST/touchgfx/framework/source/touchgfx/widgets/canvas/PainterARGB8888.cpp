@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -10,53 +10,47 @@
 *
 *******************************************************************************/
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/lcd/LCD.hpp>
 #include <touchgfx/widgets/canvas/PainterARGB8888.hpp>
 
 namespace touchgfx
 {
-void PainterARGB8888::render(uint8_t* ptr, int x, int xAdjust, int /*y*/, unsigned count, const uint8_t* covers)
+void PainterARGB8888::paint(uint8_t* destination, int16_t offset, int16_t /*widgetX*/, int16_t /*widgetY*/, int16_t count, uint8_t alpha) const
 {
-    uint8_t* p = ptr + (x + xAdjust) * 4;
-    const uint8_t* const p_lineend = p + 4 * count;
-    do
+    uint32_t* RESTRICT framebuffer = reinterpret_cast<uint32_t*>(destination) + offset;
+    const uint32_t* const lineEnd = framebuffer + count;
+    uint32_t color = (painterColor & 0x00FFFFFF) | (alpha << 24);
+
+    if (alpha == 0xFF)
     {
-        const uint8_t alphaFg = LCD::div255(*covers++ * widgetAlpha);
-        const uint8_t alphaBg = p[3];
-        if (alphaFg == 255 || alphaBg == 0)
+        do
         {
-            *p++ = painterBlue;
-            *p++ = painterGreen;
-            *p++ = painterRed;
-            *p++ = alphaFg;
-        }
-        else if (alphaFg > 0)
+            *framebuffer = color;
+        } while (++framebuffer < lineEnd);
+    }
+    else
+    {
+        do
         {
-            const uint8_t alphaMult = LCD::div255(alphaFg * alphaBg);
-            const uint8_t alphaOut = alphaFg + alphaBg - alphaMult;
-
-            const uint8_t blueBg = *p;
-            *p++ = (painterBlue * alphaFg + blueBg * alphaBg - blueBg * alphaMult) / alphaOut;
-            const uint8_t greenBg = *p;
-            *p++ = (painterGreen * alphaFg + greenBg * alphaBg - greenBg * alphaMult) / alphaOut;
-            const uint8_t redBg = *p;
-            *p++ = (painterRed * alphaFg + redBg * alphaBg - redBg * alphaMult) / alphaOut;
-            *p++ = alphaOut;
-        }
-        else
-        {
-            p += 4;
-        }
-    } while (p < p_lineend);
-}
-
-bool PainterARGB8888::renderNext(uint8_t& red, uint8_t& green, uint8_t& blue, uint8_t& alpha)
-{
-    red = painterRed;
-    green = painterGreen;
-    blue = painterBlue;
-    alpha = 0xFF;
-    return true;
+            const uint32_t argbBg = *framebuffer;
+            const uint8_t alphaBg = argbBg >> 24;
+            if (alphaBg == 0)
+            {
+                *framebuffer = color;
+            }
+            else if (alpha > 0)
+            {
+                const uint8_t alphaMult = LCD::div255(alpha * alphaBg);
+                const uint8_t alphaOut = alpha + alphaBg - alphaMult;
+                const uint8_t blueBg = (argbBg & 0xFF);
+                const uint8_t greenBg = ((argbBg >> 8) & 0xFF);
+                const uint8_t redBg = ((argbBg >> 16) & 0xFF);
+                *framebuffer = ((painterBlue * alpha + blueBg * alphaBg - blueBg * alphaMult) / alphaOut) |
+                               (((painterGreen * alpha + greenBg * alphaBg - greenBg * alphaMult) / alphaOut) << 8) |
+                               (((painterRed * alpha + redBg * alphaBg - redBg * alphaMult) / alphaOut) << 16) |
+                               (alphaOut << 24);
+            }
+        } while (++framebuffer < lineEnd);
+    }
 }
 } // namespace touchgfx

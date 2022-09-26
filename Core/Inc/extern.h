@@ -5,8 +5,8 @@
  *      Author: Dev
  */
 
-#ifndef INC_EXTERN_H_
-#define INC_EXTERN_H_
+#ifndef __EXTERN_H_
+#define __EXTERN_H_
 
 #include "Globals.h"
 

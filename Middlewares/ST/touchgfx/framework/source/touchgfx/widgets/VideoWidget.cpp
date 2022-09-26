@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -10,7 +10,6 @@
 *
 *******************************************************************************/
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/Application.hpp>
 #include <touchgfx/Utils.hpp>
 #include <touchgfx/hal/HAL.hpp>
@@ -30,35 +29,47 @@ VideoWidget::VideoWidget()
 VideoWidget::~VideoWidget()
 {
     VideoController::getInstance().unregisterVideoWidget(handle);
-    Application::getInstance()->registerTimerWidget(this);
+    Application::getInstance()->unregisterTimerWidget(this);
 }
 
-void VideoWidget::play()
+void VideoWidget::play() const
 {
     VideoController::getInstance().setCommand(handle, VideoController::PLAY, 0);
 }
 
-void VideoWidget::pause()
+void VideoWidget::pause() const
 {
     VideoController::getInstance().setCommand(handle, VideoController::PAUSE, 0);
 }
 
-void VideoWidget::stop()
+void VideoWidget::stop() const
 {
     VideoController::getInstance().setCommand(handle, VideoController::STOP, 0);
 }
 
-bool VideoWidget::isPlaying()
+bool VideoWidget::isPlaying() const
 {
     return VideoController::getInstance().getIsPlaying(handle);
 }
 
-void VideoWidget::seek(uint32_t frameNumber)
+void VideoWidget::seek(uint32_t frameNumber) const
 {
     VideoController::getInstance().setCommand(handle, VideoController::SEEK, frameNumber);
 }
 
-void VideoWidget::setRepeat(bool repeat)
+void VideoWidget::showFrame(uint32_t frameNumber) const
+{
+    if (isPlaying())
+    {
+        seek(frameNumber);
+    }
+    else
+    {
+        VideoController::getInstance().setCommand(handle, VideoController::SHOW, frameNumber);
+    }
+}
+
+void VideoWidget::setRepeat(bool repeat) const
 {
     VideoController::getInstance().setCommand(handle, VideoController::SET_REPEAT, repeat ? 1 : 0);
 }
@@ -87,7 +98,7 @@ Rect VideoWidget::getSolidRect() const
         {
             return Rect(0, 0, MIN(videoWidth, bufferWidth), MIN(videoHeight, bufferHeight));
         }
-        return Rect(0, 0, 0, 0);
+        return Rect();
     }
 
     //Direct to framebuffer, solid inside the video area
@@ -117,12 +128,12 @@ void VideoWidget::draw(const Rect& invalidatedArea) const
     }
 }
 
-uint32_t VideoWidget::getCurrentFrameNumber()
+uint32_t VideoWidget::getCurrentFrameNumber() const
 {
     return VideoController::getInstance().getCurrentFrameNumber(handle);
 }
 
-void VideoWidget::setFrameRate(uint32_t ui_frames, uint32_t video_frames)
+void VideoWidget::setFrameRate(uint32_t ui_frames, uint32_t video_frames) const
 {
     VideoController::getInstance().setFrameRate(handle, ui_frames, video_frames);
 }
@@ -141,7 +152,7 @@ void VideoWidget::setVideoData(VideoDataReader& reader)
     readVideoInformation();
 }
 
-void VideoWidget::getVideoInformation(VideoInformation* data)
+void VideoWidget::getVideoInformation(VideoInformation* data) const
 {
     VideoController::getInstance().getVideoInformation(handle, data);
 }
@@ -151,8 +162,8 @@ void VideoWidget::readVideoInformation()
     // Set frame rate to movie speed (assuming 60 ui frames in a second)
     VideoInformation videoInformation;
     VideoController::getInstance().getVideoInformation(handle, &videoInformation);
-    videoWidth = videoInformation.frame_width;
-    videoHeight = videoInformation.frame_height;
+    videoWidth = (int16_t)videoInformation.frame_width;
+    videoHeight = (int16_t)videoInformation.frame_height;
     uint32_t videoFramesIn1000ms = 1000 / videoInformation.ms_between_frames;
     setFrameRate(60, videoFramesIn1000ms);
 }

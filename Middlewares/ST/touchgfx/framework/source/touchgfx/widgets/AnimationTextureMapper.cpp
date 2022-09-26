@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -10,12 +10,8 @@
 *
 *******************************************************************************/
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/Application.hpp>
-#include <touchgfx/Callback.hpp>
-#include <touchgfx/EasingEquations.hpp>
 #include <touchgfx/widgets/AnimationTextureMapper.hpp>
-#include <touchgfx/widgets/TextureMapper.hpp>
 
 namespace touchgfx
 {
@@ -102,7 +98,8 @@ void AnimationTextureMapper::handleTickEvent()
     {
         return;
     }
-    bool newValuesAssigned = false;
+    bool newAngleAssigned = false;
+    bool newScaleAssigned = false;
     bool activeAnimationExists = false;
 
     animationCounter++;
@@ -138,26 +135,27 @@ void AnimationTextureMapper::handleTickEvent()
                 distance = (int16_t)((animations[i].animationStart - animations[i].animationEnd) * 1000);
             }
 
-            float delta = directionModifier * (animations[i].animationProgressionEquation(actualAnimationCounter, 0, distance, animations[i].animationDuration) / 1000.f);
+            float delta = (float)directionModifier * (animations[i].animationProgressionEquation(actualAnimationCounter, 0, distance, animations[i].animationDuration) / 1000.f);
 
             switch ((AnimationParameter)i)
             {
             case X_ROTATION:
                 newXAngle = animations[X_ROTATION].animationStart + delta;
+                newAngleAssigned = true;
                 break;
             case Y_ROTATION:
                 newYAngle = animations[Y_ROTATION].animationStart + delta;
+                newAngleAssigned = true;
                 break;
             case Z_ROTATION:
                 newZAngle = animations[Z_ROTATION].animationStart + delta;
+                newAngleAssigned = true;
                 break;
             case SCALE:
                 newScale = animations[SCALE].animationStart + delta;
-                break;
-            default:
+                newScaleAssigned = true;
                 break;
             }
-            newValuesAssigned = true;
         }
         if (animationCounter >= (uint32_t)(animations[i].animationDelay + animations[i].animationDuration))
         {
@@ -169,13 +167,13 @@ void AnimationTextureMapper::handleTickEvent()
         }
     }
 
-    if (newValuesAssigned)
+    if (newAngleAssigned || newScaleAssigned)
     {
-        if (newXAngle != xAngle || newYAngle != yAngle || newZAngle != zAngle)
+        if (newAngleAssigned)
         {
             updateAngles(newXAngle, newYAngle, newZAngle);
         }
-        if (newScale != scale)
+        if (newScaleAssigned)
         {
             updateScale(newScale);
         }

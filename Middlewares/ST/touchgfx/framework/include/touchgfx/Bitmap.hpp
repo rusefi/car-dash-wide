@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -180,14 +180,14 @@ public:
      *
      * @return The Bitmap width in pixels.
      */
-    uint16_t getWidth() const;
+    int16_t getWidth() const;
 
     /**
      * Gets the height of the Bitmap in pixels.
      *
      * @return The Bitmap height in pixels.
      */
-    uint16_t getHeight() const;
+    int16_t getHeight() const;
 
     /**
      * Gets the rectangle describing the dimensions of the Bitmap.

@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -19,9 +19,9 @@
 #ifndef TOUCHGFX_DMA_HPP
 #define TOUCHGFX_DMA_HPP
 
-#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/hal/Atomic.hpp>
 #include <touchgfx/hal/BlitOp.hpp>
+#include <touchgfx/hal/Types.hpp>
 
 namespace touchgfx
 {
@@ -209,7 +209,7 @@ public:
      *
      * @return a DMAType value of the concrete DMA_Interface implementation.
      */
-    virtual DMAType getDMAType(void)
+    virtual DMAType getDMAType()
     {
         return DMA_TYPE_GENERIC;
     }

@@ -15,7 +15,7 @@ Screen1ViewBase::Screen1ViewBase()
     box1.setPosition(1, 1, 1024, 600);
     box1.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
 
-    image1.setXY(1, -8);
+    image1.setXY(2, -8);
     image1.setBitmap(touchgfx::Bitmap(BITMAP_RACE_DASH_ID));
 
     indLeft.setXY(263, 32);

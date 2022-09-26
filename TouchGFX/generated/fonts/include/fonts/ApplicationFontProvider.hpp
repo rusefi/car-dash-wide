@@ -13,16 +13,16 @@ class FlashDataReader;
 
 struct Typography
 {
-    static const touchgfx::FontId SENSOR_VALUES = 0;
-    static const touchgfx::FontId SENSOR_LABEL = 1;
-    static const touchgfx::FontId SENSOR_UNIT = 2;
+    static const touchgfx::FontId SENSOR_LABEL = 0;
+    static const touchgfx::FontId SENSOR_UNIT = 1;
+    static const touchgfx::FontId SENSOR_VALUES = 2;
 };
 
 struct TypographyFontIndex
 {
-    static const touchgfx::FontId SENSOR_VALUES = 0; // bahnschrift_80_2bpp
-    static const touchgfx::FontId SENSOR_LABEL = 1;  // bahnschrift_25_2bpp
-    static const touchgfx::FontId SENSOR_UNIT = 1;   // bahnschrift_25_2bpp
+    static const touchgfx::FontId SENSOR_LABEL = 0;  // bahnschrift_25_2bpp
+    static const touchgfx::FontId SENSOR_UNIT = 0;   // bahnschrift_25_2bpp
+    static const touchgfx::FontId SENSOR_VALUES = 1; // bahnschrift_80_2bpp
     static const uint16_t NUMBER_OF_FONTS = 2;
 };
 
@@ -31,9 +31,10 @@ class ApplicationFontProvider : public touchgfx::FontProvider
 public:
     virtual touchgfx::Font* getFont(touchgfx::FontId typography);
 
-    static void setFlashReader(touchgfx::FlashDataReader* /* flashReader */)
+    static void setFlashReader(touchgfx::FlashDataReader* /*flashReader*/)
     {
     }
+
     static touchgfx::FlashDataReader* getFlashReader()
     {
         return 0;

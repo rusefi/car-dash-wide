@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -10,12 +10,7 @@
 *
 *******************************************************************************/
 
-#include <touchgfx/hal/Types.hpp>
-#include <touchgfx/containers/progress_indicators/AbstractProgressIndicator.hpp>
 #include <touchgfx/containers/progress_indicators/LineProgress.hpp>
-#include <touchgfx/widgets/canvas/AbstractPainter.hpp>
-#include <touchgfx/widgets/canvas/CWRUtil.hpp>
-#include <touchgfx/widgets/canvas/Line.hpp>
 
 namespace touchgfx
 {
@@ -99,8 +94,8 @@ void LineProgress::setValue(int value)
         int progress = (int)AbstractProgressIndicator::getProgress(rangeSteps);
         CWRUtil::Q5 r(rangeSteps);
         CWRUtil::Q5 p(progress);
-        CWRUtil::Q5 x = startX + (endX - startX) / r * p;
-        CWRUtil::Q5 y = startY + (endY - startY) / r * p;
+        CWRUtil::Q5 x = startX + ((endX - startX) / r) * p;
+        CWRUtil::Q5 y = startY + ((endY - startY) / r) * p;
         line.updateEnd(x, y);
     }
 }

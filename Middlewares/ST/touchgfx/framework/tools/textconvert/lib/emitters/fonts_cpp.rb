@@ -1,7 +1,7 @@
-# Copyright (c) 2018(-2021) STMicroelectronics.
+# Copyright (c) 2018(-2022) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.18.1 distribution.
+# This file is part of the TouchGFX 4.20.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -13,10 +13,12 @@ class FontsCpp
     @@font_convert = font_convert
   end
 
-  def initialize(text_entries, typographies, output_directory, font_asset_path, data_format, generate_binary_fonts, generate_font_format)
+  def initialize(text_entries, typographies, languages, output_directory, font_asset_path, autohint_setting, data_format, generate_binary_fonts, generate_font_format)
     @typographies = typographies
+    @languages = languages
     @output_directory = output_directory
     @font_asset_path = font_asset_path
+    @autohint_setting = autohint_setting
     @data_format = data_format
     @generate_binary_fonts = generate_binary_fonts
     @generate_font_format = generate_font_format
@@ -65,11 +67,12 @@ class FontsCpp
     unique_typographies.sort_by { |t| sprintf("%s %04d %d",t.font_file,t.font_size,t.bpp) }.each do |typography|
       fonts_directory = @output_directory
       font_file = "#{@font_asset_path}/#{typography.font_file}"
-      font_index = fontmap["getFont_#{typography.cpp_name}_#{typography.font_size}_#{typography.bpp}bpp"]
+      font_index = get_font_index(typography)
       fallback_char = typography[:fallback_character]
       fallback_char ||= 0
       ellipsis_char = typography[:ellipsis_character]
       ellipsis_char ||= 0
+      autohint = @autohint_setting == "no" ? "-nah" : @autohint_setting == "force" ? "-fah" : ""
       byte_align = @data_format.match("A#{typography.bpp}") ? "-ba" : ""
       #generate contextual forms table for font if not already done
       generate_contextual_table = context_tables_is_generated[typography.cpp_name] ? "no" : "yes"
@@ -88,10 +91,11 @@ class FontsCpp
 -ct #{generate_contextual_table} \
 -bf #{@generate_binary_fonts} \
 -ff #{@generate_font_format} \
+#{autohint} \
 #{byte_align}"
-      #puts "Command: #{cmd}"
+      puts "Command: #{cmd}" if ENV['DEBUG']
       output = `#{cmd}`.force_encoding('iso-8859-1')
-      #puts "FontConverter: #{output}\n"
+      puts "FontConverter: #{output}\n" if ENV['DEBUG']
       if !$?.success?
         puts cmd
         puts output
@@ -103,23 +107,16 @@ class FontsCpp
   end
 
   def fonts
-    @fonts ||=
-      begin
-        @typographies.map{ |t| Typography.new("", t.font_file, t.font_size, t.bpp) }.uniq.collect do |f|
-          "getFont_#{f.cpp_name}_#{f.font_size}_#{f.bpp}bpp"
-        end
-      end
+    @cached_fonts ||=
+      @typographies.map{ |t| Typography.new("", t.font_file, t.font_size, t.bpp) }.uniq.collect { |t| get_getFont_name(t) }
   end
 
   def fontmap
-    @fontmap ||=
-      begin
-        @fontmap = Hash.new
-        fonts.each_with_index do |f, i|
-          fontmap[f] = i
-        end
-        fontmap
-      end
+    @cached_fontmap ||=
+      fonts.each_with_index.inject(Hash.new) { |map, (f, i)| map[f] = i; map }
   end
 
+  def get_font_index(typography)
+    fontmap[get_getFont_name(typography)]
+  end
 end

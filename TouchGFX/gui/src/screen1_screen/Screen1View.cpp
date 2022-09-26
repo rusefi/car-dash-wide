@@ -14,7 +14,7 @@ void Screen1View::setupScreen() {
 
 	//.................UNITS.................
 
-	Unicode::strncpy(buffer, "BAR", 10);
+	Unicode::strncpy(buffer, "kPa", 10);
 	Unicode::snprintf(map_unitsBuffer, 10, "%s", buffer);
 	map_units.resizeToCurrentTextWithAlignment();
 	map_units.invalidate();
@@ -24,12 +24,12 @@ void Screen1View::setupScreen() {
 	map_units.resizeToCurrentTextWithAlignment();
 	lambda_units.invalidate();
 
-	Unicode::strncpy(buffer, "BAR", 10);
+	Unicode::strncpy(buffer, "kPa", 10);
 	Unicode::snprintf(oilp_unitsBuffer, 10, "%s", buffer);
 	oilp_units.resizeToCurrentTextWithAlignment();
 	oilp_units.invalidate();
 
-	Unicode::strncpy(buffer, "BAR", 10);
+	Unicode::strncpy(buffer, "kPa", 10);
 	Unicode::snprintf(fuelp_unitsBuffer, 10, "%s", buffer);
 	fuelp_units.resizeToCurrentTextWithAlignment();
 	fuelp_units.invalidate();
@@ -106,53 +106,58 @@ void Screen1View::handleTickEvent() {
 	Unicode::UnicodeChar buffer[16];
 
 	map_value.invalidate();
-	Unicode::snprintfFloat(buffer, 16, "%.1f",
-			(Current_Status.MAP * PSI_TO_BAR));
+	Unicode::snprintfFloat(buffer, 16, "%.1f", (float)(Current_Status.MAP / 10.0));
 	Unicode::snprintf(map_valueBuffer, 16, "%s", buffer);
 	map_value.resizeToCurrentTextWithAlignment();
 	map_value.invalidate();
 
 	batt_value.invalidate();
-	Unicode::snprintfFloat(buffer, 16, "%.1f", (Current_Status.BATT / 100.00f));
+	Unicode::snprintfFloat(buffer, 16, "%.1f", (float)(Current_Status.BATT / 100.0));
 	Unicode::snprintf(batt_valueBuffer, 16, "%s", buffer);
 	batt_value.resizeToCurrentTextWithAlignment();
 	batt_value.invalidate();
 
 	tps_value.invalidate();
-	Unicode::snprintf(tps_valueBuffer, 16, "%d", (Current_Status.TPS / 10));
+	Unicode::snprintfFloat(buffer, 16, "%.0f", (float)(Current_Status.TPS / 10.0));
+	Unicode::snprintf(tps_valueBuffer, 16, "%s", buffer);
 	tps_value.resizeToCurrentTextWithAlignment();
 	tps_value.invalidate();
 
 	lambda_value.invalidate();
-	Unicode::snprintfFloat(buffer, 16, "%.2f",
-			(Current_Status.LAMBDA1 * AFR_TO_LAMBDA / 100.00f));
+	Unicode::snprintfFloat(buffer, 16, "%.2f", (float)(Current_Status.LAMBDA1 / 1000.0));
 	Unicode::snprintf(lambda_valueBuffer, 16, "%s", buffer);
 	lambda_value.resizeToCurrentTextWithAlignment();
 	lambda_value.invalidate();
 
 	ect_value.invalidate();
-	Unicode::snprintf(ect_valueBuffer, 16, "%d", Current_Status.ECT - 50);
+	Unicode::snprintfFloat(buffer, 16, "%.0f", (float)(Current_Status.ECT / 10.0));
+	Unicode::snprintf(ect_valueBuffer, 16, "%s", buffer);
 	ect_value.resizeToCurrentTextWithAlignment();
 	ect_value.invalidate();
 
 	iat_value.invalidate();
-	Unicode::snprintf(iat_valueBuffer, 16, "%d", Current_Status.IAT - 50);
+	Unicode::snprintfFloat(buffer, 16, "%.0f", (float)(Current_Status.IAT / 10.0));
+	Unicode::snprintf(iat_valueBuffer, 16, "%s", buffer);
 	iat_value.resizeToCurrentTextWithAlignment();
 	iat_value.invalidate();
 
 	oilp_value.invalidate();
-	Unicode::snprintfFloat(buffer, 16, "%.1f",
-			(Current_Status.OILP * PSI_TO_BAR));
+	Unicode::snprintfFloat(buffer, 16, "%.1f", (float)(Current_Status.OILP / 10.0));
 	Unicode::snprintf(oilp_valueBuffer, 16, "%s", buffer);
 	oilp_value.resizeToCurrentTextWithAlignment();
 	oilp_value.invalidate();
 
 	fuelp_value.invalidate();
-	Unicode::snprintfFloat(buffer, 16, "%.1f",
-			(Current_Status.FUELP * PSI_TO_BAR));
+	Unicode::snprintfFloat(buffer, 16, "%.1f", (float)(Current_Status.FUELP / 10.0));
 	Unicode::snprintf(fuelp_valueBuffer, 16, "%s", buffer);
 	fuelp_value.resizeToCurrentTextWithAlignment();
 	fuelp_value.invalidate();
+
+//	map_units.invalidate();
+//	Unicode::snprintfFloat(buffer, 16, "%.0f", (float)(Current_Status.BARO / 10.0));
+//	Unicode::snprintf(map_unitsBuffer, 16, "%s", buffer);
+//	map_units.resizeToCurrentTextWithAlignment();
+//	map_units.invalidate();
 
 	indLeft.setVisible(Current_Status.IND_LEFT);
 	indLeft.invalidate();

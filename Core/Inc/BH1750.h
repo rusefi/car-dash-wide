@@ -1,29 +1,10 @@
-/**
- * @author  Alexander Hoffman
- * @email   alxhoff@gmail.com
- * @website http://alexhoffman.info
- * @license GNU GPL v3
- * @brief   STM32 HAL library for BH1750 devices
- *
-@verbatim
-   ----------------------------------------------------------------------
-    Copyright (C) Alexander Hoffman, 2017
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    any later version.
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-   ----------------------------------------------------------------------
-@endverbatim
- */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __BH1750_H
+#define __BH1750_H
 
-#ifndef BH1750_H_
-#define BH1750_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //Device Address
 //Please note that arduino uses 7 bit addresses, STM32 uses 8
@@ -46,19 +27,8 @@
 #define CMD_CNG_TIME_HIGH       0x30    // 3 LSB set time
 #define CMD_CNG_TIME_LOW        0x60    // 5 LSB set time
 
-#ifndef bool
-#define bool    uint8_t
-#endif
-
-#ifndef true
-#define true    1
-#endif
-
-#ifndef false
-#define false   0
-#endif
-
 typedef struct BH1750_device BH1750_device_t;
+
 struct BH1750_device{
     char* name;
 
@@ -73,13 +43,12 @@ struct BH1750_device{
     uint8_t mode;
 
     void (* poll)(BH1750_device_t*);
-} ;
+};
 
 HAL_StatusTypeDef BH1750_read_dev(BH1750_device_t* dev);
 HAL_StatusTypeDef BH1750_init_i2c(I2C_HandleTypeDef* i2c_handle);
-BH1750_device_t* BH1750_init_dev_struct(I2C_HandleTypeDef* i2c_handle,
-        char* name, bool addr_grounded);
+BH1750_device_t* BH1750_init_dev_struct(I2C_HandleTypeDef* i2c_handle, char* name, int addr_grounded);
 HAL_StatusTypeDef BH1750_init_dev(BH1750_device_t* dev);
 HAL_StatusTypeDef BH1750_get_lumen(BH1750_device_t* dev);
 
-#endif /* BH1750_H_ */
+#endif // __BH1750_H

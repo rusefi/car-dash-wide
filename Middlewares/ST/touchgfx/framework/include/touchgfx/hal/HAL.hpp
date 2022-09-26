@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2021) STMicroelectronics.
+* Copyright (c) 2018(-2022) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.18.1 distribution.
+* This file is part of the TouchGFX 4.20.0 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -18,17 +18,17 @@
 #ifndef TOUCHGFX_HAL_HPP
 #define TOUCHGFX_HAL_HPP
 
-#include <touchgfx/hal/Types.hpp>
+#include <platform/core/MCUInstrumentation.hpp>
+#include <platform/driver/button/ButtonController.hpp>
+#include <platform/driver/touch/TouchController.hpp>
 #include <touchgfx/Bitmap.hpp>
 #include <touchgfx/Drawable.hpp>
 #include <touchgfx/hal/BlitOp.hpp>
 #include <touchgfx/hal/DMA.hpp>
 #include <touchgfx/hal/FrameBufferAllocator.hpp>
 #include <touchgfx/hal/Gestures.hpp>
+#include <touchgfx/hal/Types.hpp>
 #include <touchgfx/lcd/LCD.hpp>
-#include <platform/core/MCUInstrumentation.hpp>
-#include <platform/driver/button/ButtonController.hpp>
-#include <platform/driver/touch/TouchController.hpp>
 
 namespace touchgfx
 {
@@ -215,8 +215,9 @@ public:
     virtual void flushDMA();
 
     /**
-     * Waits for the framebuffer to become available for use (i.e. not used by DMA
-     * transfers).
+     * Waits for the framebuffer to become available for use (i.e. not
+     * used by DMA transfers). Calls the InvalidateCache virtual if
+     * previous operation was hardware based.
      *
      * @return A pointer to the beginning of the currently used framebuffer.
      *
@@ -224,6 +225,27 @@ public:
      *       unlockFrameBuffer() when framebuffer operation has completed.
      */
     virtual uint16_t* lockFrameBuffer();
+
+    /**
+     * A list of rendering methods.
+     *
+     * @see setRenderingMethod
+     */
+    enum RenderingMethod
+    {
+        SOFTWARE, ///< Transition to this method will invalidate the D-Cache, if enabled
+        HARDWARE  ///< Transition to this method will flush the D-Cache, if enabled
+    };
+
+    /**
+     * Locks the framebuffer and sets rendering method for correct
+     * cache management.
+     *
+     * @param method The rendering method to be used.
+     *
+     * @return A pointer to the beginning of the currently used framebuffer.
+     */
+    uint16_t* lockFrameBufferForRenderingMethod(RenderingMethod method);
 
     /**
      * Unlocks the framebuffer (MUST be called exactly once for each call to
@@ -488,6 +510,19 @@ public:
     virtual void blitFill(colortype color, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t alpha, uint16_t dstWidth, Bitmap::BitmapFormat dstFormat, bool replaceBgAlpha);
 
     /**
+     * Copies a region of the currently displayed framebuffer to memory. Used for e.g.
+     * BlockTransition and for displaying pre-rendered drawables
+     * e.g. in animations where redrawing the drawable is not necessary.
+     *
+     * @param  region               The displayed framebuffer region to copy.
+     *
+     * @return A pointer to the memory address containing the copy of the framebuffer.
+     *
+     * @note Requires double framebuffer to be enabled.
+     */
+    virtual uint16_t* copyFromTFTToClientBuffer(Rect region);
+
+    /**
      * Blits a color value to the framebuffer performing alpha-blending as specified.
      *
      * @param  color                The desired fill-color.
@@ -634,6 +669,7 @@ public:
      */
     virtual bool sampleKey(uint8_t& key)
     {
+        (void)key; // Unused variable
         return false;
     }
 
@@ -678,14 +714,29 @@ public:
      *                              buffering is disabled.
      * @param [in] animationStorage If non-null, the animation storage. If null animation storage
      *                              is disabled.
+     *
+     * @see setAnimationStorage
      */
     virtual void setFrameBufferStartAddresses(void* frameBuffer, void* doubleBuffer, void* animationStorage)
     {
         assert(frameBuffer != 0 && "A framebuffer address must be set");
         frameBuffer0 = reinterpret_cast<uint16_t*>(frameBuffer);
         frameBuffer1 = reinterpret_cast<uint16_t*>(doubleBuffer);
-        frameBuffer2 = reinterpret_cast<uint16_t*>(animationStorage);
         USE_DOUBLE_BUFFERING = doubleBuffer != 0;
+        setAnimationStorage(animationStorage);
+    }
+
+    /**
+     * Sets animation storage address.
+     *
+     * @param [in] animationStorage If non-null, the animation storage. If null animation storage
+     *                              is disabled.
+     *
+     * @see setFrameBufferStartAddresses
+     */
+    virtual void setAnimationStorage(void* animationStorage)
+    {
+        frameBuffer2 = reinterpret_cast<uint16_t*>(animationStorage);
         USE_ANIMATION_STORAGE = animationStorage != 0;
     }
 
@@ -1051,17 +1102,6 @@ public:
     {
         return auxiliaryLCD;
     }
-
-    /**
-     * A list of rendering methods.
-     *
-     * @see setRenderingMethod
-     */
-    enum RenderingMethod
-    {
-        SOFTWARE,
-        HARDWARE
-    };
 
     /**
      * Set current rendering method for cache maintenance.

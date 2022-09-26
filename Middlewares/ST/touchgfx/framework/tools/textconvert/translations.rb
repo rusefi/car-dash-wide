@@ -1,8 +1,8 @@
 #!env ruby
-# Copyright (c) 2018(-2021) STMicroelectronics.
+# Copyright (c) 2018(-2022) STMicroelectronics.
 # All rights reserved.
 #
-# This file is part of the TouchGFX 4.18.1 distribution.
+# This file is part of the TouchGFX 4.20.0 distribution.
 #
 # This software is licensed under terms that can be found in the LICENSE file in
 # the root directory of this software component.
@@ -12,6 +12,7 @@
 
 $:.unshift File.dirname(__FILE__)
 
+require 'lib/text_database_validator'
 require 'lib/translation_io'
 require 'lib/version'
 
@@ -53,6 +54,7 @@ BANNER
   languages = ARGV # Remaining arguments are the languages
 
   begin
+    TextDatabaseValidator.new.validate(file_name)
     translation_io = TranslationIO.new(file_name, translation_name)
     if option == 'export'
       translation_io.exportExcel(languages)
@@ -64,6 +66,7 @@ BANNER
 
   rescue Exception => e
     STDERR.puts e
+    STDERR.puts e.backtrace if ENV['DEBUG']
     abort "An error occurred during translations #{option}!"
   end
 end

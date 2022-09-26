@@ -22,6 +22,7 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "WS2812_Lib.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -78,7 +79,6 @@ void NMI_Handler(void)
   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
 
   /* USER CODE END NonMaskableInt_IRQn 0 */
-  HAL_RCC_NMI_IRQHandler();
   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
   while (1)
   {
@@ -214,7 +214,6 @@ void TIM6_DAC_IRQHandler(void)
 void DMA2_Stream1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA2_Stream1_IRQn 0 */
-
 	DMA_Callback();
   /* USER CODE END DMA2_Stream1_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_tim1_ch1);
@@ -268,4 +267,3 @@ void DMA2D_IRQHandler(void)
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
-

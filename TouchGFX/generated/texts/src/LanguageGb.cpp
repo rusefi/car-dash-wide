@@ -7,54 +7,55 @@
 TEXT_LOCATION_FLASH_PRAGMA
 KEEP extern const uint32_t indicesGb[] TEXT_LOCATION_FLASH_ATTRIBUTE;
 
+// Remap all strings
 TEXT_LOCATION_FLASH_PRAGMA
 KEEP extern const uint32_t indicesGb[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
-    9, // T___SingleUse_4T7D
-    9, // T___SingleUse_ERKY
-    9, // T___SingleUse_Z15X
-    9, // T___SingleUse_XBZK
-    9, // T___SingleUse_S5UQ
-    9, // T___SingleUse_GFHB
-    9, // T___SingleUse_R7A4
-    9, // T___SingleUse_BVOP
-    9, // T___SingleUse_0AFA
-    9, // T___SingleUse_INAE
-    9, // T___SingleUse_MPLH
-    9, // T___SingleUse_KCKH
-    9, // T___SingleUse_RLOQ
-    9, // T___SingleUse_TLZY
-    9, // T___SingleUse_L5WH
-    9, // T___SingleUse_RPXE
-    9, // T___SingleUse_MP7X
-    9, // T___SingleUse_6YBF
-    9, // T___SingleUse_4QE0
-    9, // T___SingleUse_391O
-    9, // T___SingleUse_W2NZ
-    9, // T___SingleUse_G76O
-    9, // T___SingleUse_LQYM
-    0, // T___SingleUse_13X6
-    11, // T___SingleUse_1H44
-    0, // T___SingleUse_FXL2
-    11, // T___SingleUse_H85L
-    11, // T___SingleUse_DHUY
-    11, // T___SingleUse_C87O
-    11, // T___SingleUse_TSMP
-    11, // T___SingleUse_AYOA
-    11, // T___SingleUse_2H8W
-    0, // T___SingleUse_F7I8
-    0, // T___SingleUse_RUP7
-    0, // T___SingleUse_L3HM
-    0, // T___SingleUse_VMJT
-    0, // T___SingleUse_J843
-    0, // T___SingleUse_JQKX
-    0, // T___SingleUse_L52U
-    0, // T___SingleUse_4VJ9
-    0, // T___SingleUse_9IGG
-    0, // T___SingleUse_9VHS
-    0, // T___SingleUse_S9CZ
-    0, // T___SingleUse_K94Y
-    0, // T___SingleUse_P413
-    0, // T___SingleUse_NFMY
-    9, // T___SingleUse_LD25
-    11 // T___SingleUse_6GW0
+    9,  // T___SINGLEUSE_4T7D: "<>"
+    9,  // T___SINGLEUSE_ERKY: "<>"
+    9,  // T___SINGLEUSE_Z15X: "<>"
+    9,  // T___SINGLEUSE_XBZK: "<>"
+    9,  // T___SINGLEUSE_S5UQ: "<>"
+    9,  // T___SINGLEUSE_GFHB: "<>"
+    9,  // T___SINGLEUSE_R7A4: "<>"
+    9,  // T___SINGLEUSE_BVOP: "<>"
+    9,  // T___SINGLEUSE_0AFA: "<>"
+    9,  // T___SINGLEUSE_INAE: "<>"
+    9,  // T___SINGLEUSE_MPLH: "<>"
+    9,  // T___SINGLEUSE_KCKH: "<>"
+    9,  // T___SINGLEUSE_RLOQ: "<>"
+    9,  // T___SINGLEUSE_TLZY: "<>"
+    9,  // T___SINGLEUSE_L5WH: "<>"
+    9,  // T___SINGLEUSE_RPXE: "<>"
+    9,  // T___SINGLEUSE_MP7X: "<>"
+    9,  // T___SINGLEUSE_6YBF: "<>"
+    9,  // T___SINGLEUSE_4QE0: "<>"
+    9,  // T___SINGLEUSE_391O: "<>"
+    9,  // T___SINGLEUSE_W2NZ: "<>"
+    9,  // T___SINGLEUSE_G76O: "<>"
+    9,  // T___SINGLEUSE_LQYM: "<>"
+    0,  // T___SINGLEUSE_13X6: "New Text"
+    11, // T___SINGLEUSE_1H44: "0"
+    0,  // T___SINGLEUSE_FXL2: "New Text"
+    11, // T___SINGLEUSE_H85L: "0"
+    11, // T___SINGLEUSE_DHUY: "0"
+    11, // T___SINGLEUSE_C87O: "0"
+    11, // T___SINGLEUSE_TSMP: "0"
+    11, // T___SINGLEUSE_AYOA: "0"
+    11, // T___SINGLEUSE_2H8W: "0"
+    0,  // T___SINGLEUSE_F7I8: "New Text"
+    0,  // T___SINGLEUSE_RUP7: "New Text"
+    0,  // T___SINGLEUSE_L3HM: "New Text"
+    0,  // T___SINGLEUSE_VMJT: "New Text"
+    0,  // T___SINGLEUSE_J843: "New Text"
+    0,  // T___SINGLEUSE_JQKX: "New Text"
+    0,  // T___SINGLEUSE_L52U: "New Text"
+    0,  // T___SINGLEUSE_4VJ9: "New Text"
+    0,  // T___SINGLEUSE_9IGG: "New Text"
+    0,  // T___SINGLEUSE_9VHS: "New Text"
+    0,  // T___SINGLEUSE_S9CZ: "New Text"
+    0,  // T___SINGLEUSE_K94Y: "New Text"
+    0,  // T___SINGLEUSE_P413: "New Text"
+    0,  // T___SINGLEUSE_NFMY: "New Text"
+    9,  // T___SINGLEUSE_LD25: "<>"
+    11  // T___SINGLEUSE_6GW0: "0"
 };
