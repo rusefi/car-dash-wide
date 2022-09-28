@@ -55,14 +55,12 @@ TouchGFX/build/MINGW32_NT-6.2/gui/src/model \
 TouchGFX/build/MINGW32_NT-6.2/gui/src/screen1_screen \
 TouchGFX/generated/fonts/src \
 TouchGFX/generated/gui_generated/src/common \
-TouchGFX/generated/gui_generated/src/containers \
-TouchGFX/generated/gui_generated/src/screen2_screen \
+TouchGFX/generated/gui_generated/src/screen1_screen \
 TouchGFX/generated/images/src \
 TouchGFX/generated/texts/src \
 TouchGFX/gui/src/common \
-TouchGFX/gui/src/containers \
 TouchGFX/gui/src/model \
-TouchGFX/gui/src/screen2_screen \
+TouchGFX/gui/src/screen1_screen \
 TouchGFX/target \
 TouchGFX/target/generated \
 

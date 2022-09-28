@@ -3,18 +3,17 @@
 
 #pragma once
 
-#include "Globals.h"
+#include "extern.h"
 #include "stm32f4xx_hal.h"
 
-TIM_HandleTypeDef htim2;
-DMA_HandleTypeDef hdma_htim2_ch2;
+TIM_HandleTypeDef htim1;
 
 #define WS2812_NUM_LEDS_CH1		LED_NUMBER
 
-#define  WS2812_TIM_PERIODE   	htim2.Instance->ARR //225-1  // F_PWM 180000000/800000 = 225 -> 800 kHz (1.25us)
+#define  WS2812_TIM_PERIODE   	htim1.Instance->ARR //52  // F_PWM 84000000/800000 = 225 -> 800 kHz (1.25us)
 
-#define  WS2812_LO_TIME        	(WS2812_TIM_PERIODE / (1.25 / 0.22))	  //(1.25 / 0.22) 0.220us - 0.380us
-#define  WS2812_HI_TIME         (WS2812_TIM_PERIODE / (1.25 / 0.58))  //(1.25 / 0.58) 0.580us - 1us
+#define  WS2812_LO_TIME        	(WS2812_TIM_PERIODE / (1.25 / 0.22)) - 1	  //(1.25 / 0.22) 0.220us - 0.380us
+#define  WS2812_HI_TIME         (WS2812_TIM_PERIODE / (1.25 / 0.58)) - 1  //(1.25 / 0.58) 0.580us - 1us
 
 //--------------------------------------------------------------
 // RGB LED Farbdefinition (3 x 8bit)

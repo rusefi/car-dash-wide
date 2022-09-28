@@ -63,7 +63,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h ../FATFS/Target/sd_diskio.h \
  ../TouchGFX/App/app_touchgfx.h ../Core/Inc/Globals.h \
  ../Core/Inc/extern.h ../Core/Inc/Globals.h ../Core/Inc/sdram.h \
- ../Core/Inc/WS2812_Lib.h ../Core/Inc/BH1750.h
+ ../Core/Inc/WS2812_Lib.h ../Core/Inc/extern.h ../Core/Inc/BH1750.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -137,4 +137,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/Globals.h:
 ../Core/Inc/sdram.h:
 ../Core/Inc/WS2812_Lib.h:
+../Core/Inc/extern.h:
 ../Core/Inc/BH1750.h:

@@ -65,8 +65,9 @@ LTDC_HandleTypeDef hltdc;
 
 SD_HandleTypeDef hsd;
 
-TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim13;
+DMA_HandleTypeDef hdma_tim1_ch1;
 
 UART_HandleTypeDef huart1;
 
@@ -85,7 +86,21 @@ const osThreadAttr_t START_Task_attributes = {
 osThreadId_t TouchGFXTaskHandle;
 const osThreadAttr_t TouchGFXTask_attributes = {
   .name = "TouchGFXTask",
-  .stack_size = 4096 * 4,
+  .stack_size = 2048 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for SD_Task */
+osThreadId_t SD_TaskHandle;
+const osThreadAttr_t SD_Task_attributes = {
+  .name = "SD_Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for LED_Task */
+osThreadId_t LED_TaskHandle;
+const osThreadAttr_t LED_Task_attributes = {
+  .name = "LED_Task",
+  .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for CAN_Task */
@@ -102,6 +117,13 @@ const osThreadAttr_t BTN_Task_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for BARO_Task */
+osThreadId_t BARO_TaskHandle;
+const osThreadAttr_t BARO_Task_attributes = {
+  .name = "BARO_Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for RGB_Task */
 osThreadId_t RGB_TaskHandle;
 const osThreadAttr_t RGB_Task_attributes = {
@@ -109,10 +131,38 @@ const osThreadAttr_t RGB_Task_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
-/* Definitions for BMS_Task */
-osThreadId_t BMS_TaskHandle;
-const osThreadAttr_t BMS_Task_attributes = {
-  .name = "BMS_Task",
+/* Definitions for BH1750_Task */
+osThreadId_t BH1750_TaskHandle;
+const osThreadAttr_t BH1750_Task_attributes = {
+  .name = "BH1750_Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for LPS22_Task */
+osThreadId_t LPS22_TaskHandle;
+const osThreadAttr_t LPS22_Task_attributes = {
+  .name = "LPS22_Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for INPUT_Task */
+osThreadId_t INPUT_TaskHandle;
+const osThreadAttr_t INPUT_Task_attributes = {
+  .name = "INPUT_Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for OUTPUT_Task */
+osThreadId_t OUTPUT_TaskHandle;
+const osThreadAttr_t OUTPUT_Task_attributes = {
+  .name = "OUTPUT_Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for ADC_Task */
+osThreadId_t ADC_TaskHandle;
+const osThreadAttr_t ADC_Task_attributes = {
+  .name = "ADC_Task",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
@@ -141,6 +191,7 @@ BH1750_device_t *BH1750_sensor;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_LTDC_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_FMC_Init(void);
@@ -152,14 +203,21 @@ static void MX_I2C2_Init(void);
 static void MX_SDIO_SD_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
-static void MX_TIM2_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_TIM1_Init(void);
 void Start_START_Task(void *argument);
 void TouchGFX_Task(void *argument);
+void Start_SD_Task(void *argument);
+void Start_LED_Task(void *argument);
 void Start_CAN_Task(void *argument);
 void Start_BTN_Task(void *argument);
+void Start_BARO_Task(void *argument);
 void Start_RGB_Task(void *argument);
-void Start_BMS_Task(void *argument);
+void Start_BH1750_Task(void *argument);
+void Start_LPS22_Task(void *argument);
+void Start_INPUT_Task(void *argument);
+void Start_OUTPUT_Task(void *argument);
+void Start_ADC_Task(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -198,6 +256,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_LTDC_Init();
   MX_DMA2D_Init();
   MX_FMC_Init();
@@ -210,14 +269,14 @@ int main(void)
   MX_FATFS_Init();
   MX_ADC1_Init();
   MX_USB_OTG_FS_PCD_Init();
-  MX_TIM2_Init();
   MX_USART1_UART_Init();
+  MX_TIM1_Init();
   MX_TouchGFX_Init();
+  /* Call PreOsInit function */
+  MX_TouchGFX_PreOSInit();
   /* USER CODE BEGIN 2 */
 
 	HAL_TIM_PWM_Start(&htim13, TIM_CHANNEL_1);
-	//HAL_TIM_PWM_Start(&htim9, TIM_CHANNEL_1);
-	//HAL_TIM_PWM_Start(&htim9, TIM_CHANNEL_2);
 
 	//BH1750_sensor = BH1750_init_dev_struct(&hi2c2, "BH1750 device", true);
 
@@ -252,17 +311,38 @@ int main(void)
   /* creation of TouchGFXTask */
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
 
+  /* creation of SD_Task */
+  SD_TaskHandle = osThreadNew(Start_SD_Task, NULL, &SD_Task_attributes);
+
+  /* creation of LED_Task */
+  LED_TaskHandle = osThreadNew(Start_LED_Task, NULL, &LED_Task_attributes);
+
   /* creation of CAN_Task */
   CAN_TaskHandle = osThreadNew(Start_CAN_Task, NULL, &CAN_Task_attributes);
 
   /* creation of BTN_Task */
   BTN_TaskHandle = osThreadNew(Start_BTN_Task, NULL, &BTN_Task_attributes);
 
+  /* creation of BARO_Task */
+  BARO_TaskHandle = osThreadNew(Start_BARO_Task, NULL, &BARO_Task_attributes);
+
   /* creation of RGB_Task */
   RGB_TaskHandle = osThreadNew(Start_RGB_Task, NULL, &RGB_Task_attributes);
 
-  /* creation of BMS_Task */
-  BMS_TaskHandle = osThreadNew(Start_BMS_Task, NULL, &BMS_Task_attributes);
+  /* creation of BH1750_Task */
+  BH1750_TaskHandle = osThreadNew(Start_BH1750_Task, NULL, &BH1750_Task_attributes);
+
+  /* creation of LPS22_Task */
+  LPS22_TaskHandle = osThreadNew(Start_LPS22_Task, NULL, &LPS22_Task_attributes);
+
+  /* creation of INPUT_Task */
+  INPUT_TaskHandle = osThreadNew(Start_INPUT_Task, NULL, &INPUT_Task_attributes);
+
+  /* creation of OUTPUT_Task */
+  OUTPUT_TaskHandle = osThreadNew(Start_OUTPUT_Task, NULL, &OUTPUT_Task_attributes);
+
+  /* creation of ADC_Task */
+  ADC_TaskHandle = osThreadNew(Start_ADC_Task, NULL, &ADC_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
 	/* add threads, ... */
@@ -308,7 +388,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 6;
+  RCC_OscInitStruct.PLL.PLLM = 4;
   RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 7;
@@ -628,10 +708,10 @@ static void MX_LTDC_Init(void)
   hltdc.Init.VerticalSync = 3;
   hltdc.Init.AccumulatedHBP = 160;
   hltdc.Init.AccumulatedVBP = 15;
-  hltdc.Init.AccumulatedActiveW = 960;
-  hltdc.Init.AccumulatedActiveH = 495;
-  hltdc.Init.TotalWidth = 1120;
-  hltdc.Init.TotalHeigh = 515;
+  hltdc.Init.AccumulatedActiveW = 1184;
+  hltdc.Init.AccumulatedActiveH = 615;
+  hltdc.Init.TotalWidth = 1344;
+  hltdc.Init.TotalHeigh = 635;
   hltdc.Init.Backcolor.Blue = 0;
   hltdc.Init.Backcolor.Green = 0;
   hltdc.Init.Backcolor.Red = 0;
@@ -640,17 +720,17 @@ static void MX_LTDC_Init(void)
     Error_Handler();
   }
   pLayerCfg.WindowX0 = 0;
-  pLayerCfg.WindowX1 = 800;
+  pLayerCfg.WindowX1 = 1024;
   pLayerCfg.WindowY0 = 0;
-  pLayerCfg.WindowY1 = 480;
+  pLayerCfg.WindowY1 = 600;
   pLayerCfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
   pLayerCfg.Alpha = 255;
   pLayerCfg.Alpha0 = 0;
   pLayerCfg.BlendingFactor1 = LTDC_BLENDING_FACTOR1_PAxCA;
   pLayerCfg.BlendingFactor2 = LTDC_BLENDING_FACTOR2_PAxCA;
   pLayerCfg.FBStartAdress = 0xD0000000;
-  pLayerCfg.ImageWidth = 800;
-  pLayerCfg.ImageHeight = 480;
+  pLayerCfg.ImageWidth = 1024;
+  pLayerCfg.ImageHeight = 600;
   pLayerCfg.Backcolor.Blue = 0;
   pLayerCfg.Backcolor.Green = 0;
   pLayerCfg.Backcolor.Red = 0;
@@ -693,65 +773,77 @@ static void MX_SDIO_SD_Init(void)
 }
 
 /**
-  * @brief TIM2 Initialization Function
+  * @brief TIM1 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_TIM2_Init(void)
+static void MX_TIM1_Init(void)
 {
 
-  /* USER CODE BEGIN TIM2_Init 0 */
+  /* USER CODE BEGIN TIM1_Init 0 */
 
-  /* USER CODE END TIM2_Init 0 */
+  /* USER CODE END TIM1_Init 0 */
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
+  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
-  /* USER CODE BEGIN TIM2_Init 1 */
+  /* USER CODE BEGIN TIM1_Init 1 */
 
-  /* USER CODE END TIM2_Init 1 */
-  htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 0;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4294967295;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 0;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 210;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
   {
     Error_Handler();
   }
   sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
   {
     Error_Handler();
   }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
+  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+  if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN TIM2_Init 2 */
+  /* USER CODE BEGIN TIM1_Init 2 */
 
-  /* USER CODE END TIM2_Init 2 */
-  HAL_TIM_MspPostInit(&htim2);
+  /* USER CODE END TIM1_Init 2 */
+  HAL_TIM_MspPostInit(&htim1);
 
 }
 
@@ -869,6 +961,22 @@ static void MX_USB_OTG_FS_PCD_Init(void)
 
 }
 
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA2_Stream1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream1_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream1_IRQn);
+
+}
+
 /* FMC initialization function */
 static void MX_FMC_Init(void)
 {
@@ -973,6 +1081,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(HALL_OUT_1_PI12_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LED_TIM2_CH2_PA1_Pin LED_TIM2_CH3_PA2_Pin */
+  GPIO_InitStruct.Pin = LED_TIM2_CH2_PA1_Pin|LED_TIM2_CH3_PA2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : OUT_S0_Pin OUT_E_Pin */
   GPIO_InitStruct.Pin = OUT_S0_Pin|OUT_E_Pin;
@@ -1081,10 +1197,7 @@ void Start_START_Task(void *argument)
 //		Current_Status.ECT = 50;
 //		Current_Status.IAT = 50;
 //        Current_Status.RPM = Current_Status.RPM <= 8000 ? Current_Status.RPM + 25 : 0;
-
-		HAL_GPIO_TogglePin(LED_PJ13_GPIO_Port, LED_PJ13_Pin);
-		osDelay(250);
-
+		osDelay(10);
 	}
   /* USER CODE END 5 */
 }
@@ -1106,6 +1219,41 @@ __weak void TouchGFX_Task(void *argument)
   /* USER CODE END TouchGFX_Task */
 }
 
+/* USER CODE BEGIN Header_Start_SD_Task */
+/**
+ * @brief Function implementing the SD_Task thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_Start_SD_Task */
+void Start_SD_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_SD_Task */
+	/* Infinite loop */
+	for (;;) {
+		osDelay(1);
+	}
+  /* USER CODE END Start_SD_Task */
+}
+
+/* USER CODE BEGIN Header_Start_LED_Task */
+/**
+ * @brief Function implementing the LED_Task thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_Start_LED_Task */
+void Start_LED_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_LED_Task */
+	/* Infinite loop */
+	for (;;) {
+		osDelay(1);
+
+	}
+  /* USER CODE END Start_LED_Task */
+}
+
 /* USER CODE BEGIN Header_Start_CAN_Task */
 /**
  * @brief Function implementing the CAN_Task thread.
@@ -1117,222 +1265,395 @@ void Start_CAN_Task(void *argument)
 {
   /* USER CODE BEGIN Start_CAN_Task */
 	/* Infinite loop */
-	Current_Status.CAN_PROTOCOL = CAN_BMW_PHEV;
-	Current_Status.CAN_TICK = 0;
-	Current_Status.BMS_TICK = 0;
-	Current_Status.CAN_TIMEOUT = 100;
-
+	Current_Status.CAN_PROTOCOL = CAN_LINK;
+	Current_Status.PRES_UNIT = kPa;
+	Current_Status.TEMP_UNIT = C;
+	Current_Status.SPEED_UNIT = Kmh;
 	HAL_GPIO_WritePin(CAN1_SEL0_GPIO_Port, CAN1_SEL0_Pin, SET);
+
+	uint8_t countBlankMessages = 0;
 
 	for (;;) {
 		if (CAN_ENABLED) {
-			if (HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK) {
+
+			if (HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &RxHeader, RxData)
+					== HAL_OK) {
 				switch (Current_Status.CAN_PROTOCOL) {
-					case CAN_BMW_PHEV:
-						Current_Status.BMS_TICK = Current_Status.CAN_TICK + 1;
-						if (RxHeader.StdId > 0x99 && RxHeader.StdId < 0x180)//do BMS magic if ids are ones identified to be modules
-						  {
-							int Id = (RxHeader.StdId & 0x0F0);
-							int CMU = (RxHeader.StdId & 0x00F);
-							Current_Status.BATTERY_MODULES[CMU].ENABLED = true;
-							Current_Status.BATTERY_MODULES[CMU].TICK = Current_Status.BMS_TICK;
-							switch (Id)
-							  {
-							    case 0x000:
-							      Id = 0;
-							      break;
-							    case 0x020:
-							      Id = 1;
-							      break;
-							    case 0x030:
-							      Id = 2;
-							      break;
-
-							    case 0x040:
-							      Id = 3;
-							      break;
-
-							    case 0x050:
-							      Id = 4;
-							      break;
-
-							    case 0x060:
-							      Id = 5;
-							      break;
-
-							    case 0x070:
-							      Id = 6;
-							      break;
-							  }
-
-							switch (Id)
-							  {
-							    case 0:
-							    	Current_Status.BATTERY_MODULES[CMU].ERROR = RxData[0] + (RxData[1] << 8) + (RxData[2] << 16) + (RxData[3] << 24);
-							    	Current_Status.BATTERY_MODULES[CMU].BALANCE = (RxData[5]<< 8) + RxData[4];
-							      break;
-							    case 1:
-							      if (Current_Status.BATTERY_MODULES[CMU].BALANCE == 0 && Current_Status.BATTERY_MODULES[CMU].IGNORE == 0)
-							      {
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[0] = (uint16_t)(RxData[0] + (RxData[1] & 0x3F) * 256);
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[1] = (uint16_t)(RxData[2] + (RxData[3] & 0x3F) * 256);
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[2] = (uint16_t)(RxData[4] + (RxData[5] & 0x3F) * 256);
-							      }
-							      break;
-
-							    case 2:
-							      if (Current_Status.BATTERY_MODULES[CMU].BALANCE == 0 && Current_Status.BATTERY_MODULES[CMU].IGNORE == 0)
-							      {
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[3] = (uint16_t)(RxData[0] + (RxData[1] & 0x3F) * 256);
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[4] = (uint16_t)(RxData[2] + (RxData[3] & 0x3F) * 256);
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[5] = (uint16_t)(RxData[4] + (RxData[5] & 0x3F) * 256);
-							      }
-							      break;
-
-							    case 3:
-							      if (Current_Status.BATTERY_MODULES[CMU].BALANCE == 0 && Current_Status.BATTERY_MODULES[CMU].IGNORE == 0)
-							      {
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[6] = (uint16_t)(RxData[0] + (RxData[1] & 0x3F) * 256);
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[7] = (uint16_t)(RxData[2] + (RxData[3] & 0x3F) * 256);
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[8] = (uint16_t)(RxData[4] + (RxData[5] & 0x3F) * 256);
-							      }
-							      break;
-
-							    case 4:
-							      if (Current_Status.BATTERY_MODULES[CMU].BALANCE == 0 && Current_Status.BATTERY_MODULES[CMU].IGNORE == 0)
-							      {
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[9] = (uint16_t)(RxData[0] + (RxData[1] & 0x3F) * 256);
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[10] = (uint16_t)(RxData[2] + (RxData[3] & 0x3F) * 256);
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[11] = (uint16_t)(RxData[4] + (RxData[5] & 0x3F) * 256);
-							      }
-							      break;
-
-							    case 5:
-							      if (Current_Status.BATTERY_MODULES[CMU].BALANCE == 0 && Current_Status.BATTERY_MODULES[CMU].IGNORE == 0)
-							      {
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[12] = (uint16_t)(RxData[0] + (RxData[1] & 0x3F) * 256);
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[13] = (uint16_t)(RxData[2] + (RxData[3] & 0x3F) * 256);
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[14] = (uint16_t)(RxData[4] + (RxData[5] & 0x3F) * 256);
-							      }
-							      break;
-
-
-							    case 6:
-							      if (Current_Status.BATTERY_MODULES[CMU].BALANCE == 0 && Current_Status.BATTERY_MODULES[CMU].IGNORE == 0)
-							      {
-							        Current_Status.BATTERY_MODULES[CMU].CELLS[15] = (uint16_t)(RxData[0] + (RxData[1] & 0x3F) * 256);
-							      }
-							      break;
-							  }
-						  }
-						  if ((RxHeader.StdId & 0xFF0) == 0x180)    // Determine if ID is standard (11 bits) or extended (29 bits)
-						  {
-								int CMU = (RxHeader.StdId & 0x00F);
-							  	for (int i = 0; i < (sizeof Current_Status.BATTERY_MODULES[CMU].TEMPS / sizeof Current_Status.BATTERY_MODULES[CMU].TEMPS[0]) - 1; i++)
-								{
-									Current_Status.BATTERY_MODULES[CMU].TEMPS[i] = RxData[i] - 40;
-									if (Current_Status.BATTERY_MODULES[CMU].TEMPS[i] > -40)
-									{
-									  Current_Status.BATTERY_MODULES[CMU].TEMPS[i] = Current_Status.BATTERY_MODULES[CMU].TEMPS[i] + Current_Status.BATTERY_MODULES[CMU].TEMPOFF;
-									}
-								}
-						  }
+				case CAN_LINK:
+					switch (RxHeader.StdId) {
+					case 0x7E8:
+						switch (RxData[2]) {
+						case 0x05: //PID-0x05 Engine coolant temperature , range is -40 to 215 deg C , formula == A-40
+							Current_Status.ECT = RxData[3] - 40;
+							break;
+						case 0x0B: // PID-0x0B , MAP , range is 0 to 255 kPa , Formula == A
+							Current_Status.MAP = RxData[3];
+							break;
+						case 0x0C: // PID-0x0C , RPM  , range is 0 to 16383.75 rpm , Formula == 256A+B / 4
+							Current_Status.RPM = (uint16_t) ((RxData[4] << 8)
+									+ (RxData[3] & 0x00ff));
+							break;
+						case 0x0D: //PID-0x0D , Vehicle speed , range is 0 to 255 km/h , formula == A
+							Current_Status.LF_SPEED = RxData[3];
+							break;
+						case 0x0E: //PID-0x0E , Ignition Timing advance, range is -64 to 63.5 BTDC , formula == A/2 - 64
+							Current_Status.IGN_TIM = RxData[3] / 2 - 64;
+							break;
+						case 0x0F: //PID-0x0F , Inlet air temperature , range is -40 to 215 deg C, formula == A-40
+							Current_Status.IAT = RxData[3] - 40;
+							break;
+						case 0x11: // PID-0x11 , TPS percentage, range is 0 to 100 percent, formula == 100/256 A
+							Current_Status.TPS = 100 / 256 * RxData[3];
+							break;
+						case 0x13: //PID-0x13 , oxygen sensors present, A0-A3 == bank1 , A4-A7 == bank2
+							break;
+						case 0x1C: // PID-0x1C obd standard
+							break;
+						case 0x20: // PID-0x20 PIDs supported [21-40]
+							break;
+						case 0x22: // PID-0x22 Fuel /Pressure (Relative to manifold vacuum) , range is 0 to 5177.265 kPa , formula == 0.079(256A+B)
+							Current_Status.FUELP = 0.079
+									* (256 * (uint16_t) (RxData[4] << 8)
+											+ (RxData[3] & 0x00ff));
+							break;
+						case 0x24: // PID-0x24 O2 sensor2, AB: fuel/air equivalence ratio, CD: voltage ,  Formula == (2/65536)(256A +B) , 8/65536(256C+D) , Range is 0 to <2 and 0 to >8V
+							Current_Status.LAMBDA1 = (2 / 65536)
+									* (256 * (uint16_t) (RxData[4] << 8)
+											+ (RxData[3] & 0x00ff)); // , 8 / 65536 * (256 * (uint16_t)(RxData[5] << 8) + (RxData[6] & 0x00ff));
+							break;
+						case 0x25: // PID-0x25 O2 sensor2, AB fuel/air equivalence ratio, CD voltage ,  2/65536(256A +B) ,8/65536(256C+D) , range is 0 to <2 and 0 to >8V
+							Current_Status.LAMBDA2 = (2 / 65536)
+									* (256 * (uint16_t) (RxData[4] << 8)
+											+ (RxData[3] & 0x00ff)); // , 8 / 65536 * (256 * (uint16_t)(RxData[5] << 8) + (RxData[6] & 0x00ff));
+							break;
+						case 0x33: // PID-0x33 Absolute Barometric pressure , range is 0 to 255 kPa , formula == A
+							Current_Status.BARO = RxData[3];
+							break;
+						case 0x40: // PIDs supported [41-60]
+							break;
+						case 0x42: // PID-0x42 control module voltage, 256A+B / 1000 , range is 0 to 65.535v
+							Current_Status.BATT = 256
+									* (uint16_t) (RxData[4] << 8)
+									+ (RxData[3] & 0x00ff) / 1000;
+							break;
+						case 0x46: // PID-0x46 Ambient Air Temperature , range is -40 to 215 deg C , formula == A-40
+							break;
+						case 0x52: // PID-0x52 Ethanol fuel % , range is 0 to 100% , formula == (100/255)A
+							Current_Status.ETHANOL = 100 / 255 * RxData[3];
+							break;
+						case 0x5C: // PID-0x5C Engine oil temperature , range is -40 to 210 deg C , formula == A-40
+							Current_Status.OILT = RxData[3] - 40;
+							break;
+						case 0x60: // PIDs supported [61-80]
+							break;
+						default:
+							break;
+						}
 						break;
-				}
-
-
-				Current_Status.BATTERY_VOLTAGE = 0;
-				//Current_Status.CAN_TICK = Current_Status.CAN_TICK + 1;
-				for (int i = 0; i < (sizeof Current_Status.BATTERY_MODULES / sizeof Current_Status.BATTERY_MODULES[0]); i++)
-				{
-					Current_Status.BATTERY_MODULES[i].ENABLED = Current_Status.BMS_TICK <= Current_Status.BATTERY_MODULES[i].TICK + Current_Status.CAN_TIMEOUT;
-
-					if(Current_Status.BATTERY_MODULES[i].ENABLED)
-					{
-						Current_Status.BATTERY_MODULES[i].LOWEST_CELL_VOLTAGE = 5000;
-						Current_Status.BATTERY_MODULES[i].HIGHEST_CELL_VOLTAGE = 1;
-						Current_Status.BATTERY_MODULES[i].VOLTAGE = 0;
-						for (int y = 0; y < (sizeof Current_Status.BATTERY_MODULES[i].CELLS / sizeof Current_Status.BATTERY_MODULES[i].CELLS[0]); ++y) {
-
-							if (Current_Status.BATTERY_MODULES[i].LOWEST_CELL_VOLTAGE > Current_Status.BATTERY_MODULES[i].CELLS[y])
-							{
-								Current_Status.BATTERY_MODULES[i].LOWEST_CELL_VOLTAGE = Current_Status.BATTERY_MODULES[i].CELLS[y];
-								Current_Status.BATTERY_MODULES[i].LOWEST_CELL_ID = y;
-							}
-							if (Current_Status.BATTERY_MODULES[i].HIGHEST_CELL_VOLTAGE < Current_Status.BATTERY_MODULES[i].CELLS[y])
-							{
-								Current_Status.BATTERY_MODULES[i].HIGHEST_CELL_VOLTAGE = Current_Status.BATTERY_MODULES[i].CELLS[y];
-								Current_Status.BATTERY_MODULES[i].HIGHEST_CELL_ID = y;
-							}
-							Current_Status.BATTERY_MODULES[i].VOLTAGE = Current_Status.BATTERY_MODULES[i].VOLTAGE + Current_Status.BATTERY_MODULES[i].CELLS[y];
-							Current_Status.BATTERY_VOLTAGE = Current_Status.BATTERY_VOLTAGE + Current_Status.BATTERY_MODULES[i].CELLS[y];
+					case 0x3E8: //Link Dash
+						switch (RxData[0]) {
+						case 0:
+							Current_Status.RPM = (uint16_t) ((RxData[3] << 8)
+									+ (RxData[2] & 0x00ff));
+							Current_Status.MAP = (uint16_t) ((RxData[5] << 8)
+									+ (RxData[4] & 0x00ff));
+							Current_Status.MGP = (uint16_t) ((RxData[7] << 8)
+									+ (RxData[6] & 0x00ff));
+							break;
+						case 1:
+							Current_Status.BARO = (uint16_t) ((RxData[3] << 8)
+									+ (RxData[2] & 0x00ff));
+							Current_Status.TPS = (uint16_t) ((RxData[5] << 8)
+									+ (RxData[4] & 0x00ff));
+							Current_Status.INJ_DC = (uint16_t) ((RxData[7] << 8)
+									+ (RxData[6] & 0x00ff));
+							break;
+						case 2:
+							Current_Status.INJ_DC_ST = (uint16_t) ((RxData[3]
+									<< 8) + (RxData[2] & 0x00ff));
+							Current_Status.INJ_PULSE = (uint16_t) ((RxData[5]
+									<< 8) + (RxData[4] & 0x00ff));
+							Current_Status.ECT = (uint16_t) ((RxData[7] << 8)
+									+ (RxData[6] & 0x00ff));
+							break;
+						case 3:
+							Current_Status.IAT = (uint16_t) ((RxData[3] << 8)
+									+ (RxData[2] & 0x00ff));
+							Current_Status.BATT = (uint16_t) ((RxData[5] << 8)
+									+ (RxData[4] & 0x00ff));
+							Current_Status.MAF = (uint16_t) ((RxData[7] << 8)
+									+ (RxData[6] & 0x00ff));
+							break;
+						case 4:
+							Current_Status.GEAR = (uint16_t) ((RxData[3] << 8)
+									+ (RxData[2] & 0x00ff));
+							Current_Status.INJ_TIM =
+									(uint16_t) ((RxData[5] << 8)
+											+ (RxData[4] & 0x00ff));
+							Current_Status.IGN_TIM =
+									(uint16_t) ((RxData[7] << 8)
+											+ (RxData[6] & 0x00ff));
+							break;
+						case 5:
+							Current_Status.CAM_I_L =
+									(uint16_t) ((RxData[3] << 8)
+											+ (RxData[2] & 0x00ff));
+							Current_Status.CAM_I_R =
+									(uint16_t) ((RxData[5] << 8)
+											+ (RxData[4] & 0x00ff));
+							Current_Status.CAM_E_L =
+									(uint16_t) ((RxData[7] << 8)
+											+ (RxData[6] & 0x00ff));
+							break;
+						case 6:
+							Current_Status.CAM_E_R =
+									(uint16_t) ((RxData[3] << 8)
+											+ (RxData[2] & 0x00ff));
+							Current_Status.LAMBDA1 =
+									(uint16_t) ((RxData[5] << 8)
+											+ (RxData[4] & 0x00ff));
+							Current_Status.LAMBDA2 =
+									(uint16_t) ((RxData[7] << 8)
+											+ (RxData[6] & 0x00ff));
+							break;
+						case 7:
+							Current_Status.TRIG1_ERROR = (uint16_t) ((RxData[3]
+									<< 8) + (RxData[2] & 0x00ff));
+							Current_Status.FAULT_CODES = (uint16_t) ((RxData[5]
+									<< 8) + (RxData[4] & 0x00ff));
+							Current_Status.FUELP = (uint16_t) ((RxData[7] << 8)
+									+ (RxData[6] & 0x00ff));
+							break;
+						case 8:
+							Current_Status.OILT = (uint16_t) ((RxData[3] << 8)
+									+ (RxData[2] & 0x00ff));
+							Current_Status.OILP = (uint16_t) ((RxData[5] << 8)
+									+ (RxData[4] & 0x00ff));
+							Current_Status.LF_SPEED = (uint16_t) ((RxData[7]
+									<< 8) + (RxData[6] & 0x00ff));
+							break;
+						case 9:
+							Current_Status.LR_SPEED = (uint16_t) ((RxData[3]
+									<< 8) + (RxData[2] & 0x00ff));
+							Current_Status.RF_SPEED = (uint16_t) ((RxData[5]
+									<< 8) + (RxData[4] & 0x00ff));
+							Current_Status.RR_SPEED = (uint16_t) ((RxData[7]
+									<< 8) + (RxData[6] & 0x00ff));
+							break;
+						case 10:
+							Current_Status.KNOCK1 = (uint16_t) ((RxData[3] << 8)
+									+ (RxData[2] & 0x00ff));
+							Current_Status.KNOCK2 = (uint16_t) ((RxData[5] << 8)
+									+ (RxData[4] & 0x00ff));
+							Current_Status.KNOCK3 = (uint16_t) ((RxData[7] << 8)
+									+ (RxData[6] & 0x00ff));
+							break;
+						case 11:
+							Current_Status.KNOCK4 = (uint16_t) ((RxData[3] << 8)
+									+ (RxData[2] & 0x00ff));
+							Current_Status.KNOCK5 = (uint16_t) ((RxData[5] << 8)
+									+ (RxData[4] & 0x00ff));
+							Current_Status.KNOCK6 = (uint16_t) ((RxData[7] << 8)
+									+ (RxData[6] & 0x00ff));
+							break;
+						case 12:
+							Current_Status.KNOCK7 = (uint16_t) ((RxData[3] << 8)
+									+ (RxData[2] & 0x00ff));
+							Current_Status.KNOCK8 = (uint16_t) ((RxData[5] << 8)
+									+ (RxData[4] & 0x00ff));
+							Current_Status.LIMITS = (uint16_t) ((RxData[7] << 8)
+									+ (RxData[6] & 0x00ff));
+							break;
 						}
-					} else {
-						Current_Status.BATTERY_MODULES[i].LOWEST_CELL_ID = 99;
-						Current_Status.BATTERY_MODULES[i].HIGHEST_CELL_ID = 99;
-						Current_Status.BATTERY_MODULES[i].TICK = 0;
-						Current_Status.BATTERY_MODULES[i].VOLTAGE = 0;
-						for (int y = 0; y < (sizeof Current_Status.BATTERY_MODULES[i].CELLS / sizeof Current_Status.BATTERY_MODULES[i].CELLS[0]); ++y) {
-							Current_Status.BATTERY_MODULES[i].CELLS[y] = 0;
-						}
-						for (int y = 0; y < (sizeof Current_Status.BATTERY_MODULES[i].TEMPS / sizeof Current_Status.BATTERY_MODULES[i].TEMPS[0]); ++y) {
-							Current_Status.BATTERY_MODULES[i].TEMPS[y] = 0;
-						}
+						break;
 					}
+					break;
+				case CAN_MX5:
+					switch (RxHeader.StdId) {
+					case 0x05: //PID-0x05 Engine coolant temperature , range is -40 to 215 deg C , formula == A-40
+						Current_Status.ECT = RxData[3] - 40;
+						break;
+					case 0x0B: // PID-0x0B , MAP , range is 0 to 255 kPa , Formula == A
+						Current_Status.MAP = RxData[3];
+						break;
+					case 0x0C: // PID-0x0C , RPM  , range is 0 to 16383.75 rpm , Formula == 256A+B / 4
+						Current_Status.RPM = (uint16_t) ((RxData[4] << 8)
+								+ (RxData[3] & 0x00ff));
+						break;
+					case 0x0D: //PID-0x0D , Vehicle speed , range is 0 to 255 km/h , formula == A
+						Current_Status.LF_SPEED = RxData[3];
+						break;
+					case 0x0E: //PID-0x0E , Ignition Timing advance, range is -64 to 63.5 BTDC , formula == A/2 - 64
+						Current_Status.IGN_TIM = RxData[3] / 2 - 64;
+						break;
+					case 0x0F: //PID-0x0F , Inlet air temperature , range is -40 to 215 deg C, formula == A-40
+						Current_Status.IAT = RxData[3] - 40;
+						break;
+					case 0x11: // PID-0x11 , TPS percentage, range is 0 to 100 percent, formula == 100/256 A
+						Current_Status.TPS = 100 / 256 * RxData[3];
+						break;
+					case 0x13: //PID-0x13 , oxygen sensors present, A0-A3 == bank1 , A4-A7 == bank2
+						break;
+					case 0x1C: // PID-0x1C obd standard
+						break;
+					case 0x20: // PID-0x20 PIDs supported [21-40]
+						break;
+					case 0x22: // PID-0x22 Fuel /Pressure (Relative to manifold vacuum) , range is 0 to 5177.265 kPa , formula == 0.079(256A+B)
+						Current_Status.FUELP = 0.079
+								* (256 * (uint16_t) (RxData[4] << 8)
+										+ (RxData[3] & 0x00ff));
+						break;
+					case 0x25: // PID-0x25 O2 sensor2, AB fuel/air equivalence ratio, CD voltage ,  2/65536(256A +B) ,8/65536(256C+D) , range is 0 to <2 and 0 to >8V
+						Current_Status.LAMBDA2 = (2 / 65536)
+								* (256 * (uint16_t) (RxData[4] << 8)
+										+ (RxData[3] & 0x00ff)); // , 8 / 65536 * (256 * (uint16_t)(RxData[5] << 8) + (RxData[6] & 0x00ff));
+						break;
+					case 0x33: // PID-0x33 Absolute Barometric pressure , range is 0 to 255 kPa , formula == A
+						Current_Status.BARO = RxData[3];
+						break;
+					case 0x34: // PID-0x24 O2 sensor2, AB: fuel/air equivalence ratio, CD: voltage ,  Formula == (2/65536)(256A +B) , 8/65536(256C+D) , Range is 0 to <2 and 0 to >8V
+						Current_Status.LAMBDA1 = (2 / 65536)
+								* (256 * (uint16_t) (RxData[4] << 8)
+										+ (RxData[3] & 0x00ff)); // , 8 / 65536 * (256 * (uint16_t)(RxData[5] << 8) + (RxData[6] & 0x00ff));
+						break;
+					case 0x40: // PIDs supported [41-60]
+						break;
+					case 0x42: // PID-0x42 control module voltage, 256A+B / 1000 , range is 0 to 65.535v
+						Current_Status.BATT = 256 * (uint16_t) (RxData[4] << 8)
+								+ (RxData[3] & 0x00ff) / 1000;
+						break;
+					case 0x46: // PID-0x46 Ambient Air Temperature , range is -40 to 215 deg C , formula == A-40
+						break;
+					case 0x52: // PID-0x52 Ethanol fuel % , range is 0 to 100% , formula == (100/255)A
+						Current_Status.ETHANOL = 100 / 255 * RxData[3];
+						break;
+					case 0x5C: // PID-0x5C Engine oil temperature , range is -40 to 210 deg C , formula == A-40
+						Current_Status.OILT = RxData[3] - 40;
+						break;
+					case 0x60: // PIDs supported [61-80]
+						break;
+					default:
+						break;
+					}
+					break;
+				case CAN_AIM:
+					switch (RxHeader.StdId) {
+					case 0x5F0:
+						Current_Status.RPM = (uint16_t) ((RxData[1] << 8) + (RxData[0] & 0x00ff));
+						Current_Status.TPS = (uint16_t)((RxData[3] << 8) + (RxData[2] & 0x00ff)) / 65;
+						break;
+					case 0x5F2:
+						Current_Status.IAT = (uint16_t)((RxData[1] << 8) + (RxData[0] & 0x00ff)) / 19 - 450;
+						Current_Status.ECT = (uint16_t)((RxData[3] << 8) + (RxData[2] & 0x00ff)) / 19 - 450;
+						Current_Status.FUELT = (uint16_t)((RxData[5] << 8) + (RxData[4] & 0x00ff)) / 19 - 450;
+						Current_Status.OILT = (uint16_t)((RxData[7] << 8) + (RxData[6] & 0x00ff)) / 19 - 450;
+						break;
+					case 0x5F3:
+						Current_Status.MAP = (uint16_t)((RxData[1] << 8) + (RxData[0] & 0x00ff)) / 10;
+						Current_Status.BARO = (uint16_t)((RxData[3] << 8) + (RxData[2] & 0x00ff)) / 10;
+						Current_Status.OILP = (uint16_t)((RxData[5] << 8) + (RxData[4] & 0x00ff)) * 100 / 100;
+						Current_Status.FUELP = (uint16_t)((RxData[7] << 8) + (RxData[6] & 0x00ff)) * 100 / 2;
+						break;
+					case 0x5F4:
+						Current_Status.BATT = (uint16_t)((RxData[3] << 8) + (RxData[2] & 0x00ff)) / 32;
+						//Current_Status.GEAR = (uint16_t)((RxData[7] << 8) + (RxData[6] & 0x00ff));
+						break;
+					case 0x5F6:
+						Current_Status.LAMBDA1 = (uint16_t)((RxData[1] << 8) + (RxData[0] & 0x00ff)) / 2;
+						Current_Status.LAMBDA2 = (uint16_t)((RxData[3] << 8) + (RxData[2] & 0x00ff)) / 2;
+						break;
+					}
+					break;
+					case CAN_BMW_PHEV:
+						switch (RxHeader.StdId) {
+													case 0x120:
+														Current_Status.CELL[0] = (RxData[0] + (RxData[1] & 0x3F) * 256);
+														Current_Status.CELL[1] = (RxData[2] + (RxData[3] & 0x3F) * 256);
+														Current_Status.CELL[2] = (RxData[4] + (RxData[5] & 0x3F) * 256);
+														break;
+													case 0x130:
+														Current_Status.CELL[3] = (RxData[0] + (RxData[1] & 0x3F) * 256);
+														Current_Status.CELL[4] = (RxData[2] + (RxData[3] & 0x3F) * 256);
+														Current_Status.CELL[5] = (RxData[4] + (RxData[5] & 0x3F) * 256);
+														break;
+													case 0x140:
+														Current_Status.CELL[6] = (RxData[0] + (RxData[1] & 0x3F) * 256);
+														Current_Status.CELL[7] = (RxData[2] + (RxData[3] & 0x3F) * 256);
+														Current_Status.CELL[8] = (RxData[4] + (RxData[5] & 0x3F) * 256);
+														break;
+													case 0x150:
+														Current_Status.CELL[9] = (RxData[0] + (RxData[1] & 0x3F) * 256);
+														Current_Status.CELL[10] = (RxData[2] + (RxData[3] & 0x3F) * 256);
+														Current_Status.CELL[11] = (RxData[4] + (RxData[5] & 0x3F) * 256);
+														break;
+													case 0x160:
+														Current_Status.CELL[12] = (RxData[0] + (RxData[1] & 0x3F) * 256);
+														Current_Status.CELL[13] = (RxData[2] + (RxData[3] & 0x3F) * 256);
+														Current_Status.CELL[14] = (RxData[4] + (RxData[5] & 0x3F) * 256);
+														break;
+													case 0x170:
+														Current_Status.CELL[15] = (RxData[0] + (RxData[1] & 0x3F) * 256);
+														break;
+													default:
+														break;
+												}
+						break;
+				default:
+					break;
 				}
-
-
 				HAL_GPIO_TogglePin(LED_PJ15_GPIO_Port, LED_PJ15_Pin);
-//
-//				Current_Status.RPM_100 = mapInt(Current_Status.RPM, 0,
-//				LCD_RPM_HIGH, 0, 100);
-//				Current_Status.RPM_100 =
-//						Current_Status.RPM_100 >= 100 ?
-//								100 : Current_Status.RPM_100;
-//				Current_Status.RPM_180 = mapInt(Current_Status.RPM, 0,
-//				LCD_RPM_HIGH, 0, 180);
-//				Current_Status.RPM_180 =
-//						Current_Status.RPM_180 >= 180 ?
-//								810 : Current_Status.RPM_180;
-//				Current_Status.RPM_270 = mapInt(Current_Status.RPM, 0,
-//				LCD_RPM_HIGH, 0, 270);
-//				Current_Status.RPM_270 =
-//						Current_Status.RPM_270 >= 270 ?
-//								270 : Current_Status.RPM_270;
-//				Current_Status.RPM_240 = mapInt(Current_Status.RPM, 0,
-//				LCD_RPM_HIGH, 0, 240);
-//				Current_Status.RPM_240 =
-//						Current_Status.RPM_240 >= 240 ?
-//								240 : Current_Status.RPM_240;
-//				Current_Status.RPM_360 = mapInt(Current_Status.RPM, 0,
-//				LCD_RPM_HIGH, 0, 360);
-//				Current_Status.RPM_360 =
-//						Current_Status.RPM_360 >= 360 ?
-//								360 : Current_Status.RPM_360;
+
+				Current_Status.RPM_100 = mapInt(Current_Status.RPM, 0,
+				LCD_RPM_HIGH, 0, 100);
+				Current_Status.RPM_100 =
+						Current_Status.RPM_100 >= 100 ?
+								100 : Current_Status.RPM_100;
+				Current_Status.RPM_180 = mapInt(Current_Status.RPM, 0,
+				LCD_RPM_HIGH, 0, 180);
+				Current_Status.RPM_180 =
+						Current_Status.RPM_180 >= 180 ?
+								810 : Current_Status.RPM_180;
+				Current_Status.RPM_270 = mapInt(Current_Status.RPM, 0,
+				LCD_RPM_HIGH, 0, 270);
+				Current_Status.RPM_270 =
+						Current_Status.RPM_270 >= 270 ?
+								270 : Current_Status.RPM_270;
+				Current_Status.RPM_240 = mapInt(Current_Status.RPM, 0,
+				LCD_RPM_HIGH, 0, 240);
+				Current_Status.RPM_240 =
+						Current_Status.RPM_240 >= 240 ?
+								240 : Current_Status.RPM_240;
+				Current_Status.RPM_360 = mapInt(Current_Status.RPM, 0,
+				LCD_RPM_HIGH, 0, 360);
+				Current_Status.RPM_360 =
+						Current_Status.RPM_360 >= 360 ?
+								360 : Current_Status.RPM_360;
 
 			}
-			Current_Status.CAN_TICK = Current_Status.CAN_TICK == 4294967200 ? 0 : Current_Status.CAN_TICK + 1;
-			if(Current_Status.BMS_TICK + Current_Status.CAN_TIMEOUT <= Current_Status.CAN_TICK)
-			{
-				Current_Status.BATTERY_VOLTAGE = 0;
-				for (int i = 0; i < (sizeof Current_Status.BATTERY_MODULES / sizeof Current_Status.BATTERY_MODULES[0]); i++)
-				{
-					Current_Status.BATTERY_MODULES[i].ENABLED = false;
-					Current_Status.BATTERY_MODULES[i].LOWEST_CELL_ID = 99;
-					Current_Status.BATTERY_MODULES[i].HIGHEST_CELL_ID = 99;
-					Current_Status.BATTERY_MODULES[i].TICK = 0;
-					Current_Status.BATTERY_MODULES[i].VOLTAGE = 0;
-					for (int y = 0; y < (sizeof Current_Status.BATTERY_MODULES[i].CELLS / sizeof Current_Status.BATTERY_MODULES[i].CELLS[0]); ++y) {
-						Current_Status.BATTERY_MODULES[i].CELLS[y] = 0;
-					}
-					for (int y = 0; y < (sizeof Current_Status.BATTERY_MODULES[i].TEMPS / sizeof Current_Status.BATTERY_MODULES[i].TEMPS[0]); ++y) {
-						Current_Status.BATTERY_MODULES[i].TEMPS[y] = 0;
-					}
-				}
+			else {
+//				countBlankMessages ++;
+//				if(countBlankMessages == 100)
+//				{
+//					countBlankMessages = 0;
+//					Current_Status.BARO = 0;
+//					Current_Status.BATT = 0;
+//					Current_Status.FUELP = 0;
+//					Current_Status.FUELT = 0;
+//					Current_Status.GEAR = 0;
+//					Current_Status.IAT = 0;
+//					Current_Status.OILP = 0;
+//					Current_Status.OILT = 0;
+//					Current_Status.LAMBDA1 = 0;
+//					Current_Status.LAMBDA2 = 0;
+//					Current_Status.TPS = 0;
+//					Current_Status.MAP = 0;
+//					Current_Status.RPM_100 = 0;
+//					Current_Status.RPM_180 = 0;
+//					Current_Status.RPM_270 = 0;
+//					Current_Status.RPM_240 = 0;
+//					Current_Status.RPM_360 = 0;
+//				}
 			}
-
-
-			osDelay(1);
 		} else {
 			osDelay(60000);
 		}
@@ -1387,31 +1708,31 @@ void Start_BTN_Task(void *argument)
 		//Current_Status.IND_LEFT = Current_Status.BTN_TOP_LEFT;
 		//Current_Status.IND_RIGHT = Current_Status.BTN_TOP_RIGHT;
 
-		Current_Status.BTN_BOTTOM_RIGHT = HAL_GPIO_ReadPin(BTN_2_GPIO_Port,
-		BTN_2_Pin);
-		Current_Status.BTN_BOTTOM_LEFT = HAL_GPIO_ReadPin(BTN_4_GPIO_Port,
-		BTN_4_Pin);
-
-		if (Current_Status.BTN_BOTTOM_LEFT == 1
-				&& Current_Status.LCD_BRIGHTNESS_CHANGED == 0) {
-			Current_Status.LCD_BRIGHTNESS =
-					Current_Status.LCD_BRIGHTNESS >= 50 ?
-							Current_Status.LCD_BRIGHTNESS - 50 :
-							Current_Status.LCD_BRIGHTNESS;
-			Current_Status.LCD_BRIGHTNESS_CHANGED = 1;
-		} else if (Current_Status.BTN_BOTTOM_RIGHT == 1
-				&& Current_Status.LCD_BRIGHTNESS_CHANGED == 0) {
-			Current_Status.LCD_BRIGHTNESS =
-					Current_Status.LCD_BRIGHTNESS <= 1000 ?
-							Current_Status.LCD_BRIGHTNESS + 50 :
-							Current_Status.LCD_BRIGHTNESS;
-			Current_Status.LCD_BRIGHTNESS_CHANGED = 1;
-		} else {
-			Current_Status.LCD_BRIGHTNESS_CHANGED = 0;
-		}
-
-		uint8_t in16 = HAL_GPIO_ReadPin(HALL_OUT_1_PI12_GPIO_Port,
-		HALL_OUT_1_PI12_Pin);
+//		Current_Status.BTN_BOTTOM_RIGHT = HAL_GPIO_ReadPin(BTN_2_GPIO_Port,
+//		BTN_2_Pin);
+//		Current_Status.BTN_BOTTOM_LEFT = HAL_GPIO_ReadPin(BTN_4_GPIO_Port,
+//		BTN_4_Pin);
+//
+//		if (Current_Status.BTN_BOTTOM_LEFT == 1
+//				&& Current_Status.LCD_BRIGHTNESS_CHANGED == 0) {
+//			Current_Status.LCD_BRIGHTNESS =
+//					Current_Status.LCD_BRIGHTNESS >= 50 ?
+//							Current_Status.LCD_BRIGHTNESS - 50 :
+//							Current_Status.LCD_BRIGHTNESS;
+//			Current_Status.LCD_BRIGHTNESS_CHANGED = 1;
+//		} else if (Current_Status.BTN_BOTTOM_RIGHT == 1
+//				&& Current_Status.LCD_BRIGHTNESS_CHANGED == 0) {
+//			Current_Status.LCD_BRIGHTNESS =
+//					Current_Status.LCD_BRIGHTNESS <= 1000 ?
+//							Current_Status.LCD_BRIGHTNESS + 50 :
+//							Current_Status.LCD_BRIGHTNESS;
+//			Current_Status.LCD_BRIGHTNESS_CHANGED = 1;
+//		} else {
+//			Current_Status.LCD_BRIGHTNESS_CHANGED = 0;
+//		}
+//
+//		uint8_t in16 = HAL_GPIO_ReadPin(HALL_OUT_1_PI12_GPIO_Port,
+//		HALL_OUT_1_PI12_Pin);
 
 		//htim9.Instance->CCR1 = Current_Status.BTN_TOP_LEFT == 1 ? crr1 - 1 : 0;
 		//htim9.Instance->CCR2 = in16 == 0 ? crr2 - 1 : 0;
@@ -1429,6 +1750,25 @@ void Start_BTN_Task(void *argument)
   /* USER CODE END Start_BTN_Task */
 }
 
+/* USER CODE BEGIN Header_Start_BARO_Task */
+/**
+ * @brief Function implementing the BARO_Task thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_Start_BARO_Task */
+void Start_BARO_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_BARO_Task */
+	/* Infinite loop */
+	for (;;) {
+
+		HAL_GPIO_TogglePin(LED_PJ12_GPIO_Port, LED_PJ12_Pin);
+		osDelay(1000);
+	}
+  /* USER CODE END Start_BARO_Task */
+}
+
 /* USER CODE BEGIN Header_Start_RGB_Task */
 /**
  * @brief Function implementing the RGB_Task thread.
@@ -1440,248 +1780,270 @@ void Start_RGB_Task(void *argument)
 {
   /* USER CODE BEGIN Start_RGB_Task */
 
+	Current_Status.LED_BRIGHTNESS = LED_DEFAULT_BRIGHTNESS;
+
 	/* Infinite loop */
 	for (;;) {
-		if (RGB_ENABLED) {
-			WS2812_Clear(0);
-			uint8_t RPMLED = 24;
+		Current_Status.ENGINE_PROTECTION = Current_Status.RPM >= PROTECTION_RPM_HIGH ? 1 : 0;
 
-			uint16_t lowRange = mapInt(Current_Status.RPM, PROTECTION_RPM_LOW,
-					0, RPMLED - PROTECTION_RPM_LED, 1);
-			lowRange =
-					lowRange > RPMLED - PROTECTION_RPM_LED ?
-							RPMLED - PROTECTION_RPM_LED : lowRange;
-			lowRange = lowRange < 1 ? 1 : lowRange;
+			if (RGB_ENABLED) {
 
-			for (int i = 1; i <= lowRange; i++) {
-				WS2812_RGB_t color;
-				if (Current_Status.ENGINE_PROTECTION == 1) {
-					color.red = 255;
-					color.green = 0;
-					color.blue = 0;
-				} else {
-					color.red = (int) (0 * Current_Status.LED_BRIGHTNESS / 100);
-					color.green = (int) (255 * Current_Status.LED_BRIGHTNESS
-							/ 100);
-					color.blue =
-							(int) (0 * Current_Status.LED_BRIGHTNESS / 100);
-				}
-				WS2812_One_RGB((RPMLED - i) + (LED_NUMBER - RPMLED), color, 0);
-			}
+				WS2812_Clear(0);
+				uint8_t RPMLED = LED_NUMBER;
 
-			if (Current_Status.RPM > PROTECTION_RPM_LOW) {
-				uint16_t highRange = mapInt(Current_Status.RPM,
-				PROTECTION_RPM_HIGH, PROTECTION_RPM_LOW,
-				PROTECTION_RPM_LED, 1);
+				uint16_t lowRange = mapInt(Current_Status.RPM, PROTECTION_RPM_LOW, 0, RPMLED - PROTECTION_RPM_LED, 1);
+				lowRange = lowRange > RPMLED - PROTECTION_RPM_LED ? RPMLED - PROTECTION_RPM_LED : lowRange;
+				lowRange = lowRange < 1 ? 1 : lowRange;
 
-				Current_Status.GPS_SATTELITES = highRange;
-				for (int i = 1; i <= highRange; i++) {
+				for (int i = 1; i <= lowRange; i++) {
 					WS2812_RGB_t color;
-					color.red = (int) (255
-							* (Current_Status.ENGINE_PROTECTION == 1 ?
-									100 : Current_Status.LED_BRIGHTNESS) / 100);
-					color.green = (int) (0
-							* (Current_Status.ENGINE_PROTECTION == 1 ?
-									100 : Current_Status.LED_BRIGHTNESS) / 100);
-					color.blue = (int) (0
-							* (Current_Status.ENGINE_PROTECTION == 1 ?
-									100 : Current_Status.LED_BRIGHTNESS) / 100);
-
-					WS2812_One_RGB(
-							(PROTECTION_RPM_LED - i) + (LED_NUMBER - RPMLED),
-							color, 0);
+					if (Current_Status.ENGINE_PROTECTION == 1) {
+						color.red = 255;
+						color.green = 0;
+						color.blue = 0;
+					} else {
+						color.red = 0;
+						color.green = 255;
+						color.blue = 0;
+					}
+					WS2812_One_RGB((RPMLED - i) + (LED_NUMBER - RPMLED), color, 0);
 				}
 
-			}
+				if (Current_Status.RPM > PROTECTION_RPM_LOW) {
+					uint16_t highRange = mapInt(Current_Status.RPM, PROTECTION_RPM_HIGH, PROTECTION_RPM_LOW, PROTECTION_RPM_LED, 1);
+					for (int i = 1; i <= highRange; i++) {
+						WS2812_RGB_t color;
+						color.red = 255;
+						color.green = 0;
+						color.blue = 0;
 
-			//		WS2812_One_RGB(0, (WS2812_RGB_t){(0 * Current_Status.LED_BRIGHTNESS / 100), (0 * Current_Status.LED_BRIGHTNESS / 100), (255 * Current_Status.LED_BRIGHTNESS / 100)}, 0); //red
-			//		WS2812_One_RGB(1, (WS2812_RGB_t){(0 * Current_Status.LED_BRIGHTNESS / 100), (0 * Current_Status.LED_BRIGHTNESS / 100), (255 * Current_Status.LED_BRIGHTNESS / 100)}, 0); //orange
-			//		WS2812_One_RGB(2, (WS2812_RGB_t){(0 * Current_Status.LED_BRIGHTNESS / 100), (0 * Current_Status.LED_BRIGHTNESS / 100), (255 * Current_Status.LED_BRIGHTNESS / 100)}, 0);//green
-			//
-			//		WS2812_One_RGB(3, (WS2812_RGB_t){(255 * Current_Status.LED_BRIGHTNESS / 100), (0 * Current_Status.LED_BRIGHTNESS / 100), (0 * Current_Status.LED_BRIGHTNESS / 100)}, 0); //red
-			//		WS2812_One_RGB(4, (WS2812_RGB_t){(255 * Current_Status.LED_BRIGHTNESS / 100), (255 * Current_Status.LED_BRIGHTNESS / 100), (0 * Current_Status.LED_BRIGHTNESS / 100)}, 0); //orange
-			//		WS2812_One_RGB(5, (WS2812_RGB_t){(0 * Current_Status.LED_BRIGHTNESS / 100), (255 * Current_Status.LED_BRIGHTNESS / 100), (0 * Current_Status.LED_BRIGHTNESS / 100)}, 0);//green
-			//
-			//		WS2812_One_RGB(18, (WS2812_RGB_t){(0 * Current_Status.LED_BRIGHTNESS / 100), (0 * Current_Status.LED_BRIGHTNESS / 100), (255 * Current_Status.LED_BRIGHTNESS / 100)}, 0); //red
-			//		WS2812_One_RGB(20, (WS2812_RGB_t){(0 * Current_Status.LED_BRIGHTNESS / 100), (0 * Current_Status.LED_BRIGHTNESS / 100), (255 * Current_Status.LED_BRIGHTNESS / 100)}, 0); //orange
-			if (Current_Status.IND_LEFT) {
-				WS2812_One_RGB(21,
-						(WS2812_RGB_t ) { (0
-										* Current_Status.LED_BRIGHTNESS / 100),
-										(255 * Current_Status.LED_BRIGHTNESS
-												/ 100), (0
-												* Current_Status.LED_BRIGHTNESS
-												/ 100) }, 0);	  //green
-			}
-			if (Current_Status.IND_RIGHT) {
-				WS2812_One_RGB(0,
-						(WS2812_RGB_t ) { (0
-										* Current_Status.LED_BRIGHTNESS / 100),
-										(255 * Current_Status.LED_BRIGHTNESS
-												/ 100), (0
-												* Current_Status.LED_BRIGHTNESS
-												/ 100) }, 0);	  //green
-			}
+						WS2812_One_RGB((PROTECTION_RPM_LED - i) + (LED_NUMBER - RPMLED), color, 0);
+					}
+				}
 
-			WS2812_Refresh();
-			osDelay(84);
+				WS2812_Refresh();
+				osDelay(100);
+			}
 		}
-	}
   /* USER CODE END Start_RGB_Task */
 }
 
-/* USER CODE BEGIN Header_Start_BMS_Task */
+/* USER CODE BEGIN Header_Start_BH1750_Task */
 /**
-* @brief Function implementing the BMS_Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_Start_BMS_Task */
-void Start_BMS_Task(void *argument)
+ * @brief Function implementing the BH1750_Task thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_Start_BH1750_Task */
+void Start_BH1750_Task(void *argument)
 {
-  /* USER CODE BEGIN Start_BMS_Task */
-  /* Infinite loop */
-
-	CAN_TxHeaderTypeDef   TxHeader;
-	uint8_t               TxData[8];
-	uint32_t              TxMailbox;
-	uint8_t               mescycle = 0;
-	uint8_t               nextmes = 0;
-	uint8_t               testcycle = 0;
-	uint8_t               balancecells;
-	uint8_t               balancepauze = 0;
-	const uint8_t finalxor [12] = {0xCF, 0xF5, 0xBB, 0x81, 0x27, 0x1D, 0x53, 0x69, 0x02, 0x38, 0x76, 0x4C};
-
-	#define POLYNOMIAL 0x1D
-	#define WIDTH  (8 * sizeof(uint8_t))
-	#define TOPBIT (1 << (WIDTH - 1))
-
-	uint8_t crcTable[256];
-
-	uint8_t  remainder;
-
-
-
-	for (int dividend = 0; dividend < 256; ++dividend)
-	{
-		remainder = dividend << (WIDTH - 8);
-
-		for (uint8_t bit = 8; bit > 0; --bit)
-		{
-			if (remainder & TOPBIT)
-			{
-				remainder = (remainder << 1) ^ POLYNOMIAL;
+  /* USER CODE BEGIN Start_BH1750_Task */
+	uint8_t changInProgress = 0;
+	/* Infinite loop */
+	for (;;) {
+		if (BH1750_ENABLED) {
+			BH1750_sensor->poll(BH1750_sensor);
+			Current_Status.BH1750_LUX = BH1750_sensor->value;
+			Current_Status.LCD_BRIGHTNESS = mapInt(Current_Status.BH1750_LUX, 0,
+					100, 0, 100);
+			Current_Status.LCD_BRIGHTNESS =
+					Current_Status.LCD_BRIGHTNESS > 100 ?
+							100 : Current_Status.LCD_BRIGHTNESS;
+			Current_Status.LCD_BRIGHTNESS =
+					Current_Status.LCD_BRIGHTNESS <= 1 ?
+							1 : Current_Status.LCD_BRIGHTNESS;
+			Current_Status.LCD_BRIGHTNESS_CHANGED = 1;
+			if (Current_Status.LCD_BRIGHTNESS_CHANGED == 1
+					&& !changInProgress) {
+				changInProgress = 1;
+				Current_Status.LED_BRIGHTNESS =
+						(int) (Current_Status.LCD_BRIGHTNESS / 5);
+				Current_Status.LED_BRIGHTNESS =
+						Current_Status.LED_BRIGHTNESS <= 1 ?
+								1 : Current_Status.LED_BRIGHTNESS;
+				Current_Status.LCD_BRIGHTNESS_CHANGED = 0;
+				changInProgress = 0;
 			}
-			else
-			{
-				remainder = (remainder << 1);
-			}
+			//Current_Status.RPM = Current_Status.BH1750_LUX;
+			osDelay(200);
+		} else {
+			osDelay(60000);
 		}
-		crcTable[dividend] = remainder;
 	}
+  /* USER CODE END Start_BH1750_Task */
+}
 
-	for (int i = 0; i < (sizeof Current_Status.BATTERY_MODULES / sizeof Current_Status.BATTERY_MODULES[0]); ++i) {
-		Current_Status.BATTERY_MODULES[i].LOWEST_CELL_ID = 99;
-		Current_Status.BATTERY_MODULES[i].HIGHEST_CELL_ID = 99;
-		Current_Status.BATTERY_MODULES[i].TICK = 0;
-
+/* USER CODE BEGIN Header_Start_LPS22_Task */
+/**
+ * @brief Function implementing the LPS22_Task thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_Start_LPS22_Task */
+void Start_LPS22_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_LPS22_Task */
+	/* Infinite loop */
+	for (;;) {
+		osDelay(1);
 	}
+  /* USER CODE END Start_LPS22_Task */
+}
 
+/* USER CODE BEGIN Header_Start_INPUT_Task */
+/**
+ * @brief Function implementing the INPUT_Task thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_Start_INPUT_Task */
+void Start_INPUT_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_INPUT_Task */
+	/* Infinite loop */
 
-  for(;;)
-  {
-	  if(Current_Status.CAN_PROTOCOL == CAN_BMW_PHEV)
-	  {
-		if (nextmes == 6)
-		{
-			mescycle ++;
-			nextmes = 0;
+	for (;;) {
 
-			if (testcycle < 4)
-			{
-				testcycle++;
-			}
-			if (mescycle == 0xF)
-			{
-				mescycle = 0;
-			}
+		//PIN SETUP
+		HAL_GPIO_WritePin(IN_E_GPIO_Port, IN_E_Pin, 0);
+		HAL_GPIO_WritePin(IN_S0_GPIO_Port, IN_S0_Pin, 1);
+		HAL_GPIO_WritePin(IN_S1_GPIO_Port, IN_S1_Pin, 1);
+		HAL_GPIO_WritePin(IN_S2_GPIO_Port, IN_S2_Pin, 1);
+		HAL_GPIO_WritePin(IN_S3_GPIO_Port, IN_S3_Pin, 1);
+
+		//PULL SETUP
+		HAL_GPIO_WritePin(PUD_E_GPIO_Port, PUD_E_Pin, 0);
+		HAL_GPIO_WritePin(PUD_S0_GPIO_Port, PUD_S0_Pin, 1);
+		HAL_GPIO_WritePin(PUD_S1_GPIO_Port, PUD_S1_Pin, 1);
+		HAL_GPIO_WritePin(PUD_S2_GPIO_Port, PUD_S2_Pin, 1);
+
+		//OUTPUT SETUP
+		HAL_GPIO_WritePin(OUT_E_GPIO_Port, OUT_E_Pin, 0);
+		HAL_GPIO_WritePin(OUT_S0_GPIO_Port, OUT_S0_Pin, 1);
+		//HAL_GPIO_WritePin(PUD_S1_GPIO_Port, PUD_S1_Pin, 1);
+		//HAL_GPIO_WritePin(PUD_S2_GPIO_Port, PUD_S2_Pin, 1);
+		//HAL_GPIO_WritePin(HALL_OUT_1_PI12_GPIO_Port, HALL_OUT_1_PI12_Pin, 0);
+
+		osDelay(1);
+	}
+  /* USER CODE END Start_INPUT_Task */
+}
+
+/* USER CODE BEGIN Header_Start_OUTPUT_Task */
+/**
+ * @brief Function implementing the OUTPUT_Task thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_Start_OUTPUT_Task */
+void Start_OUTPUT_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_OUTPUT_Task */
+	/* Infinite loop */
+	for (;;) {
+		ADC_ChannelConfTypeDef sConfig = { 0 };
+		//sConfig.Channel = ADC_CHANNEL_1; //IN
+		sConfig.Channel = ADC_CHANNEL_2; //BATT
+		//sConfig.Channel = ADC_CHANNEL_11; //MULTISENSE
+		sConfig.Rank = 1;
+		sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+		if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
+			Error_Handler();
 		}
 
-		if (balancepauze == 1)
-		{
-			balancecells = 0;
-		}
+		//uint32_t ADCValue = 0;
+		HAL_ADC_Start(&hadc1);
+		HAL_ADC_PollForConversion(&hadc1, 1000);
+		//ADCValue = HAL_ADC_GetValue(&hadc1);
+		HAL_ADC_Stop(&hadc1);
+		//Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096) / 100;
+		Current_Status.IND_BATT = Current_Status.BATT < 11.98 ? true : false;
+		//Current_Status.ECT = (ADCValue * 749) * (3.3 / 4096);
+		osDelay(1000);
+//		HAL_GPIO_TogglePin(LED_PJ12_GPIO_Port, LED_PJ12_Pin);
+//		HAL_GPIO_TogglePin(LED_PJ13_GPIO_Port, LED_PJ13_Pin);
+//		HAL_GPIO_TogglePin(LED_PJ14_GPIO_Port, LED_PJ14_Pin);
+//		HAL_GPIO_TogglePin(LED_PJ15_GPIO_Port, LED_PJ15_Pin);
+		//RESET all outputs
+//	  HAL_GPIO_WritePin(MULTISENSE_RST_GPIO_Port, MULTISENSE_RST_Pin, 0);
+//	  HAL_GPIO_WritePin(MULTISENSE_EN5_GPIO_Port, MULTISENSE_EN5_Pin, 0);
+//
+//	  osDelay(10);
+//
+//	  HAL_GPIO_WritePin(MULTISENSE_EN5_GPIO_Port, MULTISENSE_EN5_Pin, 1);
+//
+//	  //Channel 0 diagnostic
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 0);
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 0);
+//
+//
+//	  HAL_ADC_Start(&hadc1);
+//	  HAL_ADC_PollForConversion (&hadc1, 1000);
+//	  ADCValue = HAL_ADC_GetValue(&hadc1);
+//	  HAL_ADC_Stop(&hadc1);
+//	  Current_Status.TPS = 10;
+//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+//	    osDelay(1000);
+//
+//	  //Channel 1 diagnostic
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 0);
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 1);
+//
+//
+//	  HAL_ADC_Start(&hadc1);
+//	  HAL_ADC_PollForConversion (&hadc1, 1000);
+//	  ADCValue = HAL_ADC_GetValue(&hadc1);
+//	  HAL_ADC_Stop(&hadc1);
+//
+//	  Current_Status.TPS = 20;
+//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+//	    osDelay(1000);
+//
+//	  //TCHIP Sense
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 1);
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 0);
+//
+//
+//	  HAL_ADC_Start(&hadc1);
+//	  HAL_ADC_PollForConversion (&hadc1, 1000);
+//	  ADCValue = HAL_ADC_GetValue(&hadc1);
+//	  HAL_ADC_Stop(&hadc1);
+//
+//	  Current_Status.TPS = 30;
+//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+//	    osDelay(1000);
+//
+//	  //VCC Sense
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 1);
+//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 1);
+//
+//	  HAL_ADC_Start(&hadc1);
+//	  HAL_ADC_PollForConversion (&hadc1, 1000);
+//	  ADCValue = HAL_ADC_GetValue(&hadc1);
+//	  HAL_ADC_Stop(&hadc1);
+//
+//	  Current_Status.TPS = 40;
+//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
+//	    osDelay(1000);
+	}
+  /* USER CODE END Start_OUTPUT_Task */
+}
 
-		TxHeader.IDE = CAN_ID_STD;
-		TxHeader.RTR = CAN_RTR_DATA;
-		TxHeader.DLC = 8;
-
-		TxHeader.StdId = 0x080 | (nextmes);
-		TxData[0] = 0xC7;
-		TxData[1] = 0x10;
-		TxData[2] = 0x00;
-		TxData[3] = 0x00;
-
-		if (testcycle < 3)
-		{
-			TxData[4] = 0x20;
-			TxData[5] = 0x00;
-		}
-		else
-		{
-			if (balancecells == 1)
-			{
-				TxData[4] = 0x48;
-			}
-			else
-			{
-				TxData[4] = 0x40;
-			}
-			TxData[5] = 0x01;
-		}
-
-		TxData[6] = mescycle << 4;
-		if (testcycle == 2)
-		{
-			TxData[6] = TxData[6] + 0x04;
-		}
-
-
-		//CALCULATE NEXT CRC
-
-
-
-		unsigned char canmes [11];
-		int meslen = TxHeader.DLC + 1; //remove one for crc and add two for id bytes
-		canmes [1] = TxHeader.StdId;
-		canmes [0] = TxHeader.StdId >> 8;
-
-		for (int i = 0; i < (TxHeader.DLC - 1); i++)
-		{
-			canmes[i + 2] = TxData[i];
-		}
-
-		uint8_t crcData;
-		uint8_t crcRemainder = 0xFF;
-
-		for (int i = 0; i < meslen; ++i)
-		{
-			crcData = canmes[i] ^ (crcRemainder >> (WIDTH - 8));
-			crcRemainder = crcTable[crcData] ^ (crcRemainder << 8);
-		}
-		crcRemainder = crcRemainder^(finalxor[nextmes]);
-		TxData[7] = crcRemainder;
-		osDelay(2);
-		if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK)
-		{
-		 Error_Handler ();
-		}
-		//
-		nextmes ++;
-		osDelay(5);
-	  }
-  }
-  /* USER CODE END Start_BMS_Task */
+/* USER CODE BEGIN Header_Start_ADC_Task */
+/**
+ * @brief Function implementing the ADC_Task thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_Start_ADC_Task */
+void Start_ADC_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_ADC_Task */
+	/* Infinite loop */
+	for (;;) {
+		osDelay(1);
+	}
+  /* USER CODE END Start_ADC_Task */
 }
 
 /**

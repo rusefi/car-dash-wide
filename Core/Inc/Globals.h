@@ -14,13 +14,13 @@ extern "C" {
 #define CAN_ENABLED				1
 #define RGB_ENABLED				1
 #define UART_ENABLED			0
-#define IND_ENABLED 			1
-#define ALERT_ENABLED  			1
+#define IND_ENABLED 			0
+#define ALERT_ENABLED  			0
 
-#define LED_NUMBER				46
-#define LED_DEFAULT_BRIGHTNESS		5
+#define LED_NUMBER				24
+#define LED_DEFAULT_BRIGHTNESS		2
 
-#define LCD_DEFAULT_BRIGHTNESS	1000
+#define LCD_DEFAULT_BRIGHTNESS	400
 
 #define LCD_RPM_HIGH 			8000
 
@@ -220,29 +220,12 @@ typedef struct {
 	uint16_t DefaultValue;
 } FieldDef;
 
-
-
-typedef struct {
-	bool ENABLED;
-	uint32_t TICK;
-	bool BALANCE;
-	bool IGNORE;
-	uint32_t ERROR;
-	uint16_t CELLS[16];
-	uint16_t TEMPS[4];
-	uint16_t TEMPOFF;
-	uint16_t VOLTAGE;
-	uint16_t LOWEST_CELL_VOLTAGE;
-	uint8_t LOWEST_CELL_ID;
-	uint16_t HIGHEST_CELL_VOLTAGE;
-	uint8_t HIGHEST_CELL_ID;
-} ModuleDef;
-
 typedef struct {
 
 	uint8_t PRES_UNIT;
 	uint8_t TEMP_UNIT;
 	uint8_t SPEED_UNIT;
+
 
 	uint16_t RPM;
 	uint16_t RPM_100;
@@ -321,12 +304,10 @@ typedef struct {
 	char * SYSTEM_DEBUG_MESSAGE[SYSTEM_DEBUG_COUNT];
 
 	uint16_t LED_BRIGHTNESS;
+	uint8_t LED_BRIGHTNESS_CHANGED;
 	uint16_t LCD_BRIGHTNESS;
 	uint8_t LCD_BRIGHTNESS_CHANGED;
 	uint8_t CAN_PROTOCOL;
-	uint8_t CAN_TIMEOUT;
-	uint32_t CAN_TICK;
-	uint32_t BMS_TICK;
 
 	//BTN
 	uint8_t BTN_TOP_RIGHT;
@@ -334,8 +315,8 @@ typedef struct {
 	uint8_t BTN_BOTTOM_RIGHT;
 	uint8_t BTN_BOTTOM_LEFT;
 
-	ModuleDef BATTERY_MODULES[6];
-	uint16_t BATTERY_VOLTAGE;
+
+	uint8_t CELL[16];
 
 } Statuses;
 

@@ -146,6 +146,16 @@ void TouchGFXHAL::enableLCDControllerInterrupt()
     TouchGFXGeneratedHAL::enableLCDControllerInterrupt();
 }
 
+bool TouchGFXHAL::beginFrame()
+{
+    return TouchGFXGeneratedHAL::beginFrame();
+}
+
+void TouchGFXHAL::endFrame()
+{
+    TouchGFXGeneratedHAL::endFrame();
+}
+
 /* USER CODE END TouchGFXHAL.cpp */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

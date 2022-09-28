@@ -13,14 +13,11 @@ touchgfx::Font* ApplicationFontProvider::getFont(touchgfx::FontId typography)
         // bahnschrift_25_2bpp
         return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[0]);
     case Typography::SENSOR_UNIT:
-        // bahnschrift_40_2bpp
-        return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[1]);
+        // bahnschrift_25_2bpp
+        return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[0]);
     case Typography::SENSOR_VALUES:
         // bahnschrift_80_2bpp
-        return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[2]);
-    case Typography::SENSOR_VALUE_SMALL:
-        // bahnschrift_20_4bpp
-        return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[3]);
+        return const_cast<touchgfx::Font*>(TypedTextDatabase::getFonts()[1]);
     default:
         return 0;
     }

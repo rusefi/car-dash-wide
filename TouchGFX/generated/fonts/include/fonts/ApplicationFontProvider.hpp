@@ -16,16 +16,14 @@ struct Typography
     static const touchgfx::FontId SENSOR_LABEL = 0;
     static const touchgfx::FontId SENSOR_UNIT = 1;
     static const touchgfx::FontId SENSOR_VALUES = 2;
-    static const touchgfx::FontId SENSOR_VALUE_SMALL = 3;
 };
 
 struct TypographyFontIndex
 {
-    static const touchgfx::FontId SENSOR_LABEL = 0;       // bahnschrift_25_2bpp
-    static const touchgfx::FontId SENSOR_UNIT = 1;        // bahnschrift_40_2bpp
-    static const touchgfx::FontId SENSOR_VALUES = 2;      // bahnschrift_80_2bpp
-    static const touchgfx::FontId SENSOR_VALUE_SMALL = 3; // bahnschrift_20_4bpp
-    static const uint16_t NUMBER_OF_FONTS = 4;
+    static const touchgfx::FontId SENSOR_LABEL = 0;  // bahnschrift_25_2bpp
+    static const touchgfx::FontId SENSOR_UNIT = 0;   // bahnschrift_25_2bpp
+    static const touchgfx::FontId SENSOR_VALUES = 1; // bahnschrift_80_2bpp
+    static const uint16_t NUMBER_OF_FONTS = 2;
 };
 
 class ApplicationFontProvider : public touchgfx::FontProvider

@@ -11,14 +11,12 @@ RM := rm -rf
 -include sources.mk
 -include TouchGFX/target/generated/subdir.mk
 -include TouchGFX/target/subdir.mk
--include TouchGFX/gui/src/screen2_screen/subdir.mk
+-include TouchGFX/gui/src/screen1_screen/subdir.mk
 -include TouchGFX/gui/src/model/subdir.mk
--include TouchGFX/gui/src/containers/subdir.mk
 -include TouchGFX/gui/src/common/subdir.mk
 -include TouchGFX/generated/texts/src/subdir.mk
 -include TouchGFX/generated/images/src/subdir.mk
--include TouchGFX/generated/gui_generated/src/screen2_screen/subdir.mk
--include TouchGFX/generated/gui_generated/src/containers/subdir.mk
+-include TouchGFX/generated/gui_generated/src/screen1_screen/subdir.mk
 -include TouchGFX/generated/gui_generated/src/common/subdir.mk
 -include TouchGFX/generated/fonts/src/subdir.mk
 -include TouchGFX/build/MINGW32_NT-6.2/gui/src/screen1_screen/subdir.mk
@@ -80,34 +78,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := LCD_EV
+BUILD_ARTIFACT_NAME := LCD_CAR
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-LCD_EV.elf \
+LCD_CAR.elf \
 
 MAP_FILES += \
-LCD_EV.map \
+LCD_CAR.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-LCD_EV.list \
+LCD_CAR.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: LCD_EV.elf secondary-outputs
+main-build: LCD_CAR.elf secondary-outputs
 
 # Tool invocations
-LCD_EV.elf LCD_EV.map: $(OBJS) $(USER_OBJS) E:\Code\Personal\STM32\LCD_EV\STM32F429BITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "LCD_EV.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\Code\Personal\STM32\LCD_EV\STM32F429BITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LCD_EV.map" -Wl,--gc-sections -static -L"E:\Code\Personal\STM32\LCD_EV\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+LCD_CAR.elf LCD_CAR.map: $(OBJS) $(USER_OBJS) E:\Code\Personal\STM32\LCD_CAR\STM32F429BITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "LCD_CAR.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\Code\Personal\STM32\LCD_CAR\STM32F429BITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LCD_CAR.map" -Wl,--gc-sections -static -L"E:\Code\Personal\STM32\LCD_CAR\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -116,14 +114,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-LCD_EV.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "LCD_EV.list"
+LCD_CAR.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "LCD_CAR.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) LCD_EV.elf LCD_EV.list LCD_EV.map default.size.stdout
+	-$(RM) LCD_CAR.elf LCD_CAR.list LCD_CAR.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

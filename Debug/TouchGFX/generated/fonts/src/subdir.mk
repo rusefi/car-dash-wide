@@ -8,18 +8,12 @@ CPP_SRCS += \
 ../TouchGFX/generated/fonts/src/ApplicationFontProvider.cpp \
 ../TouchGFX/generated/fonts/src/CachedFont.cpp \
 ../TouchGFX/generated/fonts/src/FontCache.cpp \
-../TouchGFX/generated/fonts/src/Font_bahnschrift_20_4bpp_0.cpp \
 ../TouchGFX/generated/fonts/src/Font_bahnschrift_25_2bpp_0.cpp \
-../TouchGFX/generated/fonts/src/Font_bahnschrift_40_2bpp_0.cpp \
 ../TouchGFX/generated/fonts/src/Font_bahnschrift_80_2bpp_0.cpp \
 ../TouchGFX/generated/fonts/src/GeneratedFont.cpp \
-../TouchGFX/generated/fonts/src/Kerning_bahnschrift_20_4bpp.cpp \
 ../TouchGFX/generated/fonts/src/Kerning_bahnschrift_25_2bpp.cpp \
-../TouchGFX/generated/fonts/src/Kerning_bahnschrift_40_2bpp.cpp \
 ../TouchGFX/generated/fonts/src/Kerning_bahnschrift_80_2bpp.cpp \
-../TouchGFX/generated/fonts/src/Table_bahnschrift_20_4bpp.cpp \
 ../TouchGFX/generated/fonts/src/Table_bahnschrift_25_2bpp.cpp \
-../TouchGFX/generated/fonts/src/Table_bahnschrift_40_2bpp.cpp \
 ../TouchGFX/generated/fonts/src/Table_bahnschrift_80_2bpp.cpp \
 ../TouchGFX/generated/fonts/src/UnmappedDataFont.cpp 
 
@@ -27,18 +21,12 @@ OBJS += \
 ./TouchGFX/generated/fonts/src/ApplicationFontProvider.o \
 ./TouchGFX/generated/fonts/src/CachedFont.o \
 ./TouchGFX/generated/fonts/src/FontCache.o \
-./TouchGFX/generated/fonts/src/Font_bahnschrift_20_4bpp_0.o \
 ./TouchGFX/generated/fonts/src/Font_bahnschrift_25_2bpp_0.o \
-./TouchGFX/generated/fonts/src/Font_bahnschrift_40_2bpp_0.o \
 ./TouchGFX/generated/fonts/src/Font_bahnschrift_80_2bpp_0.o \
 ./TouchGFX/generated/fonts/src/GeneratedFont.o \
-./TouchGFX/generated/fonts/src/Kerning_bahnschrift_20_4bpp.o \
 ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_25_2bpp.o \
-./TouchGFX/generated/fonts/src/Kerning_bahnschrift_40_2bpp.o \
 ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_80_2bpp.o \
-./TouchGFX/generated/fonts/src/Table_bahnschrift_20_4bpp.o \
 ./TouchGFX/generated/fonts/src/Table_bahnschrift_25_2bpp.o \
-./TouchGFX/generated/fonts/src/Table_bahnschrift_40_2bpp.o \
 ./TouchGFX/generated/fonts/src/Table_bahnschrift_80_2bpp.o \
 ./TouchGFX/generated/fonts/src/UnmappedDataFont.o 
 
@@ -46,18 +34,12 @@ CPP_DEPS += \
 ./TouchGFX/generated/fonts/src/ApplicationFontProvider.d \
 ./TouchGFX/generated/fonts/src/CachedFont.d \
 ./TouchGFX/generated/fonts/src/FontCache.d \
-./TouchGFX/generated/fonts/src/Font_bahnschrift_20_4bpp_0.d \
 ./TouchGFX/generated/fonts/src/Font_bahnschrift_25_2bpp_0.d \
-./TouchGFX/generated/fonts/src/Font_bahnschrift_40_2bpp_0.d \
 ./TouchGFX/generated/fonts/src/Font_bahnschrift_80_2bpp_0.d \
 ./TouchGFX/generated/fonts/src/GeneratedFont.d \
-./TouchGFX/generated/fonts/src/Kerning_bahnschrift_20_4bpp.d \
 ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_25_2bpp.d \
-./TouchGFX/generated/fonts/src/Kerning_bahnschrift_40_2bpp.d \
 ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_80_2bpp.d \
-./TouchGFX/generated/fonts/src/Table_bahnschrift_20_4bpp.d \
 ./TouchGFX/generated/fonts/src/Table_bahnschrift_25_2bpp.d \
-./TouchGFX/generated/fonts/src/Table_bahnschrift_40_2bpp.d \
 ./TouchGFX/generated/fonts/src/Table_bahnschrift_80_2bpp.d \
 ./TouchGFX/generated/fonts/src/UnmappedDataFont.d 
 
@@ -69,7 +51,7 @@ TouchGFX/generated/fonts/src/%.o TouchGFX/generated/fonts/src/%.su: ../TouchGFX/
 clean: clean-TouchGFX-2f-generated-2f-fonts-2f-src
 
 clean-TouchGFX-2f-generated-2f-fonts-2f-src:
-	-$(RM) ./TouchGFX/generated/fonts/src/ApplicationFontProvider.d ./TouchGFX/generated/fonts/src/ApplicationFontProvider.o ./TouchGFX/generated/fonts/src/ApplicationFontProvider.su ./TouchGFX/generated/fonts/src/CachedFont.d ./TouchGFX/generated/fonts/src/CachedFont.o ./TouchGFX/generated/fonts/src/CachedFont.su ./TouchGFX/generated/fonts/src/FontCache.d ./TouchGFX/generated/fonts/src/FontCache.o ./TouchGFX/generated/fonts/src/FontCache.su ./TouchGFX/generated/fonts/src/Font_bahnschrift_20_4bpp_0.d ./TouchGFX/generated/fonts/src/Font_bahnschrift_20_4bpp_0.o ./TouchGFX/generated/fonts/src/Font_bahnschrift_20_4bpp_0.su ./TouchGFX/generated/fonts/src/Font_bahnschrift_25_2bpp_0.d ./TouchGFX/generated/fonts/src/Font_bahnschrift_25_2bpp_0.o ./TouchGFX/generated/fonts/src/Font_bahnschrift_25_2bpp_0.su ./TouchGFX/generated/fonts/src/Font_bahnschrift_40_2bpp_0.d ./TouchGFX/generated/fonts/src/Font_bahnschrift_40_2bpp_0.o ./TouchGFX/generated/fonts/src/Font_bahnschrift_40_2bpp_0.su ./TouchGFX/generated/fonts/src/Font_bahnschrift_80_2bpp_0.d ./TouchGFX/generated/fonts/src/Font_bahnschrift_80_2bpp_0.o ./TouchGFX/generated/fonts/src/Font_bahnschrift_80_2bpp_0.su ./TouchGFX/generated/fonts/src/GeneratedFont.d ./TouchGFX/generated/fonts/src/GeneratedFont.o ./TouchGFX/generated/fonts/src/GeneratedFont.su ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_20_4bpp.d ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_20_4bpp.o ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_20_4bpp.su ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_25_2bpp.d ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_25_2bpp.o ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_25_2bpp.su ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_40_2bpp.d ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_40_2bpp.o ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_40_2bpp.su ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_80_2bpp.d ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_80_2bpp.o ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_80_2bpp.su ./TouchGFX/generated/fonts/src/Table_bahnschrift_20_4bpp.d ./TouchGFX/generated/fonts/src/Table_bahnschrift_20_4bpp.o ./TouchGFX/generated/fonts/src/Table_bahnschrift_20_4bpp.su ./TouchGFX/generated/fonts/src/Table_bahnschrift_25_2bpp.d ./TouchGFX/generated/fonts/src/Table_bahnschrift_25_2bpp.o ./TouchGFX/generated/fonts/src/Table_bahnschrift_25_2bpp.su ./TouchGFX/generated/fonts/src/Table_bahnschrift_40_2bpp.d ./TouchGFX/generated/fonts/src/Table_bahnschrift_40_2bpp.o ./TouchGFX/generated/fonts/src/Table_bahnschrift_40_2bpp.su ./TouchGFX/generated/fonts/src/Table_bahnschrift_80_2bpp.d ./TouchGFX/generated/fonts/src/Table_bahnschrift_80_2bpp.o ./TouchGFX/generated/fonts/src/Table_bahnschrift_80_2bpp.su ./TouchGFX/generated/fonts/src/UnmappedDataFont.d ./TouchGFX/generated/fonts/src/UnmappedDataFont.o ./TouchGFX/generated/fonts/src/UnmappedDataFont.su
+	-$(RM) ./TouchGFX/generated/fonts/src/ApplicationFontProvider.d ./TouchGFX/generated/fonts/src/ApplicationFontProvider.o ./TouchGFX/generated/fonts/src/ApplicationFontProvider.su ./TouchGFX/generated/fonts/src/CachedFont.d ./TouchGFX/generated/fonts/src/CachedFont.o ./TouchGFX/generated/fonts/src/CachedFont.su ./TouchGFX/generated/fonts/src/FontCache.d ./TouchGFX/generated/fonts/src/FontCache.o ./TouchGFX/generated/fonts/src/FontCache.su ./TouchGFX/generated/fonts/src/Font_bahnschrift_25_2bpp_0.d ./TouchGFX/generated/fonts/src/Font_bahnschrift_25_2bpp_0.o ./TouchGFX/generated/fonts/src/Font_bahnschrift_25_2bpp_0.su ./TouchGFX/generated/fonts/src/Font_bahnschrift_80_2bpp_0.d ./TouchGFX/generated/fonts/src/Font_bahnschrift_80_2bpp_0.o ./TouchGFX/generated/fonts/src/Font_bahnschrift_80_2bpp_0.su ./TouchGFX/generated/fonts/src/GeneratedFont.d ./TouchGFX/generated/fonts/src/GeneratedFont.o ./TouchGFX/generated/fonts/src/GeneratedFont.su ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_25_2bpp.d ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_25_2bpp.o ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_25_2bpp.su ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_80_2bpp.d ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_80_2bpp.o ./TouchGFX/generated/fonts/src/Kerning_bahnschrift_80_2bpp.su ./TouchGFX/generated/fonts/src/Table_bahnschrift_25_2bpp.d ./TouchGFX/generated/fonts/src/Table_bahnschrift_25_2bpp.o ./TouchGFX/generated/fonts/src/Table_bahnschrift_25_2bpp.su ./TouchGFX/generated/fonts/src/Table_bahnschrift_80_2bpp.d ./TouchGFX/generated/fonts/src/Table_bahnschrift_80_2bpp.o ./TouchGFX/generated/fonts/src/Table_bahnschrift_80_2bpp.su ./TouchGFX/generated/fonts/src/UnmappedDataFont.d ./TouchGFX/generated/fonts/src/UnmappedDataFont.o ./TouchGFX/generated/fonts/src/UnmappedDataFont.su
 
 .PHONY: clean-TouchGFX-2f-generated-2f-fonts-2f-src
 
