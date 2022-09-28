@@ -21,10 +21,6 @@
 /* USER CODE BEGIN STM32TouchController */
 
 #include <STM32TouchController.hpp>
-extern "C" {
-#include <TargetTouch.h>
-#include <Globals.h>
-}
 
 void STM32TouchController::init()
 {
@@ -32,7 +28,6 @@ void STM32TouchController::init()
      * Initialize touch controller and driver
      *
      */
-	TOUCH_Init();
 }
 
 bool STM32TouchController::sampleTouch(int32_t& x, int32_t& y)
@@ -47,21 +42,7 @@ bool STM32TouchController::sampleTouch(int32_t& x, int32_t& y)
      * By default sampleTouch is called every tick, this can be adjusted by HAL::setTouchSampleRate(int8_t);
      *
      */
-
-	if(TOUCH_IsPressed())	//can be omitted -> controller continuously read touch data via i2c
-	{
-		TOUCH_Reset();		//can be omitted
-		TOUCH_Data td=TOUCH_GetData();
-
-		x=td.x;
-		y=td.y;
-
-		return true;
-//		if(td.p>TP_MIN_PRESSURE)
-//		{
-//		}
-	}
-	return false;
+    return false;
 }
 
 /* USER CODE END STM32TouchController */

@@ -8,8 +8,11 @@
 #include <mvp/View.hpp>
 #include <gui/screen2_screen/Screen2Presenter.hpp>
 #include <touchgfx/widgets/Box.hpp>
-#include <touchgfx/widgets/Button.hpp>
-#include <touchgfx/widgets/Image.hpp>
+#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
+#include <gui/containers/cell.hpp>
+#include <touchgfx/widgets/TextArea.hpp>
+#include <touchgfx/widgets/canvas/Line.hpp>
+#include <touchgfx/widgets/canvas/PainterRGB565.hpp>
 
 class Screen2ViewBase : public touchgfx::View<Screen2Presenter>
 {
@@ -27,25 +30,48 @@ protected:
      * Member Declarations
      */
     touchgfx::Box __background;
-    touchgfx::Box box1;
-    touchgfx::Button button1;
-    touchgfx::Image image2;
-    touchgfx::Image image3;
-    touchgfx::Image image4;
-    touchgfx::Image image5;
+    touchgfx::TextAreaWithOneWildcard battery_voltage;
+    cell cell_0;
+    cell cell_1;
+    cell cell_2;
+    cell cell_3;
+    cell cell_4;
+    cell cell_5;
+    touchgfx::TextArea battery_voltage_label;
+    touchgfx::Line line1_2;
+    touchgfx::PainterRGB565 line1_2Painter;
+    touchgfx::Line line1_2_1;
+    touchgfx::PainterRGB565 line1_2_1Painter;
+    touchgfx::Line line1_2_2;
+    touchgfx::PainterRGB565 line1_2_2Painter;
+    touchgfx::Line line1_2_3;
+    touchgfx::PainterRGB565 line1_2_3Painter;
+    touchgfx::Line line1_2_4;
+    touchgfx::PainterRGB565 line1_2_4Painter;
+    touchgfx::Line line1_2_5;
+    touchgfx::PainterRGB565 line1_2_5Painter;
+    touchgfx::Line line1_1_1;
+    touchgfx::PainterRGB565 line1_1_1Painter;
+    touchgfx::Line line1_1_1_1;
+    touchgfx::PainterRGB565 line1_1_1_1Painter;
+    touchgfx::Line line1_1_1_1_1;
+    touchgfx::PainterRGB565 line1_1_1_1_1Painter;
+    touchgfx::Line line1_1_1_2;
+    touchgfx::PainterRGB565 line1_1_1_2Painter;
+
+    /*
+     * Wildcard Buffers
+     */
+    static const uint16_t BATTERY_VOLTAGE_SIZE = 10;
+    touchgfx::Unicode::UnicodeChar battery_voltageBuffer[BATTERY_VOLTAGE_SIZE];
 
 private:
 
     /*
-     * Callback Declarations
+     * Canvas Buffer Size
      */
-    touchgfx::Callback<Screen2ViewBase, const touchgfx::AbstractButton&> buttonCallback;
-
-    /*
-     * Callback Handler Declarations
-     */
-    void buttonCallbackHandler(const touchgfx::AbstractButton& src);
-
+    static const uint16_t CANVAS_BUFFER_SIZE = 12000;
+    uint8_t canvasBuffer[CANVAS_BUFFER_SIZE];
 };
 
 #endif // SCREEN2VIEWBASE_HPP

@@ -9,15 +9,16 @@ extern "C" {
 #include <stdbool.h>
 
 
-#define GPS_ENABLED				0
+#define BH1750_ENABLED			0
+#define GPS_ENABLED				1
 #define CAN_ENABLED				1
 #define RGB_ENABLED				1
 #define UART_ENABLED			0
-#define IND_ENABLED 			0
-#define ALERT_ENABLED  			0
+#define IND_ENABLED 			1
+#define ALERT_ENABLED  			1
 
-#define LED_NUMBER				14
-#define LED_DEFAULT_BRIGHTNESS		2
+#define LED_NUMBER				46
+#define LED_DEFAULT_BRIGHTNESS		5
 
 #define LCD_DEFAULT_BRIGHTNESS	1000
 
@@ -219,6 +220,8 @@ typedef struct {
 	uint16_t DefaultValue;
 } FieldDef;
 
+
+
 typedef struct {
 	bool ENABLED;
 	uint32_t TICK;
@@ -240,7 +243,6 @@ typedef struct {
 	uint8_t PRES_UNIT;
 	uint8_t TEMP_UNIT;
 	uint8_t SPEED_UNIT;
-
 
 	uint16_t RPM;
 	uint16_t RPM_100;
@@ -319,17 +321,18 @@ typedef struct {
 	char * SYSTEM_DEBUG_MESSAGE[SYSTEM_DEBUG_COUNT];
 
 	uint16_t LED_BRIGHTNESS;
-	uint8_t LED_BRIGHTNESS_CHANGED;
 	uint16_t LCD_BRIGHTNESS;
 	uint8_t LCD_BRIGHTNESS_CHANGED;
 	uint8_t CAN_PROTOCOL;
+	uint8_t CAN_TIMEOUT;
+	uint32_t CAN_TICK;
+	uint32_t BMS_TICK;
 
 	//BTN
 	uint8_t BTN_TOP_RIGHT;
 	uint8_t BTN_TOP_LEFT;
 	uint8_t BTN_BOTTOM_RIGHT;
 	uint8_t BTN_BOTTOM_LEFT;
-
 
 	ModuleDef BATTERY_MODULES[6];
 	uint16_t BATTERY_VOLTAGE;

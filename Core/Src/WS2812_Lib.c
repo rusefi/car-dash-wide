@@ -4,6 +4,7 @@
  *
  * @Author: Nicolas Dammin, 2016
  */
+#include "stm32f4xx_hal.h"
 #include "WS2812_Lib.h"
 
 uint16_t WS2812_TIM_BUF[WS2812_BUFLEN];
@@ -20,27 +21,12 @@ void calcBuf(void)
 {
   uint32_t n;
   uint32_t pos;
+  WS2812_RGB_t led;
 
   pos=0;
   // set timings for all LEDs
   for(n=0;n<WS2812_NUM_LEDS_CH1;n++) {
-
-	WS2812_RGB_t led = WS2812_LED_BUF_CH1[n];
-	float brightness = Current_Status.LED_BRIGHTNESS / 100.0;
-
-    led.red = (uint8_t)(led.red * brightness);
-    led.green = (uint8_t)(led.green * brightness);
-    led.blue = (uint8_t)(led.blue * brightness);
-
-    // Col:Red , Bit:7..0
-    WS2812_TIM_BUF[pos++]=((led.red&0x80) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
-	WS2812_TIM_BUF[pos++]=((led.red&0x40) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
-	WS2812_TIM_BUF[pos++]=((led.red&0x20) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
-	WS2812_TIM_BUF[pos++]=((led.red&0x10) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
-	WS2812_TIM_BUF[pos++]=((led.red&0x08) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
-	WS2812_TIM_BUF[pos++]=((led.red&0x04) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
-	WS2812_TIM_BUF[pos++]=((led.red&0x02) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
-	WS2812_TIM_BUF[pos++]=((led.red&0x01) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
+    led=WS2812_LED_BUF_CH1[n];
 
     // Col:Green , Bit:7..0
     WS2812_TIM_BUF[pos++]=((led.green&0x80) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
@@ -51,6 +37,16 @@ void calcBuf(void)
     WS2812_TIM_BUF[pos++]=((led.green&0x04) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
     WS2812_TIM_BUF[pos++]=((led.green&0x02) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
     WS2812_TIM_BUF[pos++]=((led.green&0x01) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
+
+    // Col:Red , Bit:7..0
+    WS2812_TIM_BUF[pos++]=((led.red&0x80) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
+	WS2812_TIM_BUF[pos++]=((led.red&0x40) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
+	WS2812_TIM_BUF[pos++]=((led.red&0x20) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
+	WS2812_TIM_BUF[pos++]=((led.red&0x10) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
+	WS2812_TIM_BUF[pos++]=((led.red&0x08) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
+	WS2812_TIM_BUF[pos++]=((led.red&0x04) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
+	WS2812_TIM_BUF[pos++]=((led.red&0x02) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
+	WS2812_TIM_BUF[pos++]=((led.red&0x01) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
 
 	// Col:Blue , Bit:7..0
 	WS2812_TIM_BUF[pos++]=((led.blue&0x80) != 0)?WS2812_HI_TIME:WS2812_LO_TIME;
@@ -64,24 +60,18 @@ void calcBuf(void)
   }
 
   // short pause after all LEDs have been updated
-//  for(n=0;n<(WS2812_NUM_LEDS_CH1+2);n++) {
-//    WS2812_TIM_BUF[pos++]=0;
-//  }
+  for(n=0;n<48;n++) {
+    WS2812_TIM_BUF[pos++]=0;
+  }
 }
 
 /**
  * Internal function; start DMA transfer
  */
 void startDMA(void) {
+	//uint8_t test[8] = {10};
 	dma_ready = 0;
-	  if (HAL_TIM_PWM_Start_DMA(&htim2, TIM_CHANNEL_2, (uint32_t *)WS2812_TIM_BUF, WS2812_BUFLEN) != HAL_OK)
-	  {
-
-	  }
-	  if (HAL_TIM_PWM_Start_DMA(&htim2, TIM_CHANNEL_3, (uint32_t *)WS2812_TIM_BUF, WS2812_BUFLEN) != HAL_OK)
-	  {
-
-	  }
+	HAL_TIM_PWM_Start_DMA(&htim2, TIM_CHANNEL_2, (uint32_t *)WS2812_TIM_BUF, WS2812_BUFLEN);
 }
 
 void WS2812_Refresh(void) {

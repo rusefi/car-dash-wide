@@ -1,5 +1,4 @@
-Core/Src/WS2812_Lib.o: ../Core/Src/WS2812_Lib.c ../Core/Inc/WS2812_Lib.h \
- ../Core/Inc/extern.h ../Core/Inc/Globals.h \
+Core/Src/WS2812_Lib.o: ../Core/Src/WS2812_Lib.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -44,10 +43,8 @@ Core/Src/WS2812_Lib.o: ../Core/Src/WS2812_Lib.c ../Core/Inc/WS2812_Lib.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
-../Core/Inc/WS2812_Lib.h:
-../Core/Inc/extern.h:
-../Core/Inc/Globals.h:
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
+ ../Core/Inc/WS2812_Lib.h ../Core/Inc/Globals.h
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
@@ -93,3 +90,5 @@ Core/Src/WS2812_Lib.o: ../Core/Src/WS2812_Lib.c ../Core/Inc/WS2812_Lib.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
+../Core/Inc/WS2812_Lib.h:
+../Core/Inc/Globals.h:

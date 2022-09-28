@@ -6,14 +6,147 @@
   <Texts>
     <TextGroup Id="Group1" />
     <TextGroup Id="Unsorted">
-      <Text Id="__SingleUse_WIRK" Alignment="Center" TypographyId="Sensor_Label">
+      <Text Id="__SingleUse_9KPV" Alignment="Left" TypographyId="Sensor_Label">
         <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_KQ94" Alignment="Center" TypographyId="Sensor_Value_Small">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_Q55Z" Alignment="Left" TypographyId="Sensor_Unit">
+        <Translation Language="GB">Battery Voltage</Translation>
+      </Text>
+      <Text Id="__SingleUse_DXR1" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_7PZ9" Alignment="Center" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_8VXS" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_FQWM" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_QFR3" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_ADFX" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_A6EV" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_7316" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_RWDK" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_6D6R" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_7IKM" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_LCW4" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_NE2M" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_NDTC" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_DAE8" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_0I2W" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_PVPV" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_7728" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_09I4" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_VFBT" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_F2SH" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_5MPS" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_PJUS" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_ME84" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_991B" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_E4KI" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_P3W7" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_I8VP" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_0B4T" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_USJE" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_204P" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_XU47" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_RMPX" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_IQZJ" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_AO6J" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_I019" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_OJHN" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_O11V" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_YYII" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_MBDT" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_LUOG" Alignment="Left" TypographyId="Sensor_Label">
+        <Translation Language="GB">New Text</Translation>
+      </Text>
+      <Text Id="__SingleUse_3ICU" Alignment="Center" TypographyId="Sensor_Values">
+        <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
     </TextGroup>
   </Texts>
   <Typographies>
     <Typography Id="Sensor_Label" Font="bahnschrift.ttf" Size="25" Bpp="2" Direction="LTR" WildcardCharacters="0-9." WildcardCharacterRanges="0-9,A-Z,a-z,0x20,0x24,0x2C,0x2A,0x25,0xB0" />
-    <Typography Id="Sensor_Unit" Font="bahnschrift.ttf" Size="25" Bpp="2" Direction="LTR" WildcardCharacters="0-9." WildcardCharacterRanges="0-9,A-Z,a-z,0x20,0x24,0x2C,0x2A,0x25,0xB0" />
+    <Typography Id="Sensor_Unit" Font="bahnschrift.ttf" Size="40" Bpp="2" Direction="LTR" WildcardCharacters="0-9." WildcardCharacterRanges="0-9,A-Z,a-z,0x20,0x24,0x2C,0x2A,0x25,0xB0" />
     <Typography Id="Sensor_Values" Font="bahnschrift.ttf" Size="80" Bpp="2" Direction="LTR" WildcardCharacters="0-9." WildcardCharacterRanges="0-9,A-Z,a-z,0x20,0x24,0x2C,0x2A,0x25,0xB0" />
+    <Typography Id="Sensor_Value_Small" Font="bahnschrift.ttf" Size="20" Bpp="4" Direction="LTR" WildcardCharacters="0-9." WildcardCharacterRanges="0-9,A-Z,a-z,0x20,0x24,0x2C,0x2A,0x25,0xB0" />
   </Typographies>
 </TextDatabase>

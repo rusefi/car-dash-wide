@@ -3,55 +3,150 @@
 /*********************************************************************************/
 #include <gui_generated/screen2_screen/Screen2ViewBase.hpp>
 #include <touchgfx/Color.hpp>
-#include <BitmapDatabase.hpp>
+#include <texts/TextKeysAndLanguages.hpp>
+#include <touchgfx/canvas_widget_renderer/CanvasWidgetRenderer.hpp>
 
-Screen2ViewBase::Screen2ViewBase() :
-    buttonCallback(this, &Screen2ViewBase::buttonCallbackHandler)
+
+Screen2ViewBase::Screen2ViewBase()
 {
 
-    __background.setPosition(0, 0, 480, 800);
+    touchgfx::CanvasWidgetRenderer::setupBuffer(canvasBuffer, CANVAS_BUFFER_SIZE);
+
+    __background.setPosition(0, 0, 800, 480);
     __background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
 
-    box1.setPosition(0, 0, 480, 800);
-    box1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    battery_voltage.setXY(696, 37);
+    battery_voltage.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    battery_voltage.setLinespacing(0);
+    Unicode::snprintf(battery_voltageBuffer, BATTERY_VOLTAGE_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_LUOG).getText());
+    battery_voltage.setWildcard(battery_voltageBuffer);
+    battery_voltage.resizeToCurrentText();
+    battery_voltage.setTypedText(touchgfx::TypedText(T___SINGLEUSE_3ICU));
 
-    button1.setXY(155, 370);
-    button1.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
-    button1.setAction(buttonCallback);
+    cell_0.setXY(0, 0);
 
-    image2.setXY(0, 0);
-    image2.setBitmap(touchgfx::Bitmap(BITMAP_GREEN_100X100_ID));
+    cell_1.setXY(116, 0);
 
-    image3.setXY(160, 20);
-    image3.setBitmap(touchgfx::Bitmap(BITMAP_GRAY_100X100PNG_ID));
+    cell_2.setXY(232, 0);
 
-    image4.setXY(260, 188);
-    image4.setBitmap(touchgfx::Bitmap(BITMAP_BLUE_100X100_ID));
+    cell_3.setXY(348, 0);
 
-    image5.setXY(200, 507);
-    image5.setBitmap(touchgfx::Bitmap(BITMAP_INVERTER_ID));
+    cell_4.setXY(464, 0);
+
+    cell_5.setXY(580, 0);
+
+    battery_voltage_label.setXY(721, 0);
+    battery_voltage_label.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    battery_voltage_label.setLinespacing(0);
+    battery_voltage_label.setTypedText(touchgfx::TypedText(T___SINGLEUSE_Q55Z));
+
+    line1_2.setPosition(689, 0, 15, 600);
+    line1_2Painter.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    line1_2.setPainter(line1_2Painter);
+    line1_2.setStart(7, 0);
+    line1_2.setEnd(7, 800);
+    line1_2.setLineWidth(2);
+    line1_2.setLineEndingStyle(touchgfx::Line::ROUND_CAP_ENDING);
+
+    line1_2_1.setPosition(114, 0, 15, 600);
+    line1_2_1Painter.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    line1_2_1.setPainter(line1_2_1Painter);
+    line1_2_1.setStart(1, 0);
+    line1_2_1.setEnd(1, 800);
+    line1_2_1.setLineWidth(2);
+    line1_2_1.setLineEndingStyle(touchgfx::Line::ROUND_CAP_ENDING);
+
+    line1_2_2.setPosition(230, 0, 15, 600);
+    line1_2_2Painter.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    line1_2_2.setPainter(line1_2_2Painter);
+    line1_2_2.setStart(1, 0);
+    line1_2_2.setEnd(1, 800);
+    line1_2_2.setLineWidth(2);
+    line1_2_2.setLineEndingStyle(touchgfx::Line::ROUND_CAP_ENDING);
+
+    line1_2_3.setPosition(346, 0, 15, 600);
+    line1_2_3Painter.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    line1_2_3.setPainter(line1_2_3Painter);
+    line1_2_3.setStart(1, 0);
+    line1_2_3.setEnd(1, 800);
+    line1_2_3.setLineWidth(2);
+    line1_2_3.setLineEndingStyle(touchgfx::Line::ROUND_CAP_ENDING);
+
+    line1_2_4.setPosition(462, 0, 15, 600);
+    line1_2_4Painter.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    line1_2_4.setPainter(line1_2_4Painter);
+    line1_2_4.setStart(1, 0);
+    line1_2_4.setEnd(1, 800);
+    line1_2_4.setLineWidth(2);
+    line1_2_4.setLineEndingStyle(touchgfx::Line::ROUND_CAP_ENDING);
+
+    line1_2_5.setPosition(578, 0, 15, 600);
+    line1_2_5Painter.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    line1_2_5.setPainter(line1_2_5Painter);
+    line1_2_5.setStart(1, 0);
+    line1_2_5.setEnd(1, 800);
+    line1_2_5.setLineWidth(2);
+    line1_2_5.setLineEndingStyle(touchgfx::Line::ROUND_CAP_ENDING);
+
+    line1_1_1.setPosition(0, 62, 697, 18);
+    line1_1_1Painter.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    line1_1_1.setPainter(line1_1_1Painter);
+    line1_1_1.setStart(0, 1);
+    line1_1_1.setEnd(700, 1);
+    line1_1_1.setLineWidth(2);
+    line1_1_1.setLineEndingStyle(touchgfx::Line::ROUND_CAP_ENDING);
+
+    line1_1_1_1.setPosition(0, 144, 697, 15);
+    line1_1_1_1Painter.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    line1_1_1_1.setPainter(line1_1_1_1Painter);
+    line1_1_1_1.setStart(0, 1);
+    line1_1_1_1.setEnd(700, 1);
+    line1_1_1_1.setLineWidth(2);
+    line1_1_1_1.setLineEndingStyle(touchgfx::Line::ROUND_CAP_ENDING);
+
+    line1_1_1_1_1.setPosition(0, 586, 697, 15);
+    line1_1_1_1_1Painter.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    line1_1_1_1_1.setPainter(line1_1_1_1_1Painter);
+    line1_1_1_1_1.setStart(0, 13);
+    line1_1_1_1_1.setEnd(700, 13);
+    line1_1_1_1_1.setLineWidth(2);
+    line1_1_1_1_1.setLineEndingStyle(touchgfx::Line::ROUND_CAP_ENDING);
+
+    line1_1_1_2.setPosition(0, -1, 697, 18);
+    line1_1_1_2Painter.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    line1_1_1_2.setPainter(line1_1_1_2Painter);
+    line1_1_1_2.setStart(0, 2);
+    line1_1_1_2.setEnd(700, 2);
+    line1_1_1_2.setLineWidth(2);
+    line1_1_1_2.setLineEndingStyle(touchgfx::Line::ROUND_CAP_ENDING);
 
     add(__background);
-    add(box1);
-    add(button1);
-    add(image2);
-    add(image3);
-    add(image4);
-    add(image5);
+    add(battery_voltage);
+    add(cell_0);
+    add(cell_1);
+    add(cell_2);
+    add(cell_3);
+    add(cell_4);
+    add(cell_5);
+    add(battery_voltage_label);
+    add(line1_2);
+    add(line1_2_1);
+    add(line1_2_2);
+    add(line1_2_3);
+    add(line1_2_4);
+    add(line1_2_5);
+    add(line1_1_1);
+    add(line1_1_1_1);
+    add(line1_1_1_1_1);
+    add(line1_1_1_2);
 }
 
 void Screen2ViewBase::setupScreen()
 {
-
-}
-
-void Screen2ViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
-{
-    if (&src == &button1)
-    {
-        //Interaction1
-        //When button1 clicked change screen to Screen1
-        //Go to Screen1 with screen transition towards West
-        application().gotoScreen1ScreenWipeTransitionWest();
-    }
+    cell_0.initialize();
+    cell_1.initialize();
+    cell_2.initialize();
+    cell_3.initialize();
+    cell_4.initialize();
+    cell_5.initialize();
 }
