@@ -1,7 +1,7 @@
 
 {
   "Application": {
-    "Name": "LCD_CAR",
+    "Name": "LCD_SOLAR",
     "TouchGfxPath": "../Middlewares/ST/touchgfx",
     "AvailableColorDepths": [ 16 ],
     "AvailableLCDs":
@@ -10,15 +10,15 @@
     },
     "AvailableResolutions": [
       {
-        "Width": 1024,
-        "Height": 600
+        "Width": 800,
+        "Height": 480
       }
     ],
     "PostGenerateTargetCommand": "touchgfx update_project",
     "Family": "STM32F4",
     "SubFamily": "STM32F429/439",
     "Platform": "m4",
-    "ProjectFile": "../LCD_CAR.ioc",
+    "ProjectFile": "../LCD_SOLAR.ioc",
     "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
     "OptionalComponents": [
     ]

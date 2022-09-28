@@ -1,7 +1,7 @@
 ../Core/Src/WS2812_Lib.c:12:6:DMA_Callback	4	static
 ../Core/Src/WS2812_Lib.c:19:6:calcBuf	32	static
 ../Core/Src/WS2812_Lib.c:75:6:startDMA	8	static
-../Core/Src/WS2812_Lib.c:83:6:WS2812_Refresh	8	static
-../Core/Src/WS2812_Lib.c:92:6:WS2812_Clear	24	static
-../Core/Src/WS2812_Lib.c:105:6:WS2812_One_RGB	24	static
-../Core/Src/WS2812_Lib.c:117:6:WS2812_All_RGB	24	static
+../Core/Src/WS2812_Lib.c:87:6:WS2812_Refresh	8	static
+../Core/Src/WS2812_Lib.c:96:6:WS2812_Clear	24	static
+../Core/Src/WS2812_Lib.c:109:6:WS2812_One_RGB	24	static
+../Core/Src/WS2812_Lib.c:121:6:WS2812_All_RGB	24	static

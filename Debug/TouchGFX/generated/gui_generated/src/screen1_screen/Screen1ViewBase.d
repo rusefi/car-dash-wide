@@ -42,25 +42,15 @@ TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.o: \
  ../TouchGFX/gui/include/gui/model/ModelListener.hpp \
  ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Box.hpp \
  ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Widget.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Image.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp \
+ ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Button.hpp \
+ ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/AbstractButton.hpp \
+ ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ToggleButton.hpp \
+ ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/RadioButton.hpp \
+ ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ButtonWithLabel.hpp \
  ../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp \
  ../Middlewares/ST/touchgfx/framework/include/touchgfx/Texts.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Gauge.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/progress_indicators/AbstractProgressIndicator.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/EasingEquations.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextureMapper.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/Circle.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/CWRUtil.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/Utils.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/canvas_widget_renderer/Rasterizer.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/canvas_widget_renderer/Outline.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/canvas_widget_renderer/Cell.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/AbstractPainter.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/transforms/DisplayTransformation.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/Canvas.hpp \
- ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/CanvasWidget.hpp \
+ ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Image.hpp \
+ ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/RadioButtonGroup.hpp \
  ../Middlewares/ST/touchgfx/framework/include/touchgfx/Color.hpp \
  ../TouchGFX/generated/images/include/BitmapDatabase.hpp \
  ../TouchGFX/generated/texts/include/texts/TextKeysAndLanguages.hpp
@@ -106,25 +96,15 @@ TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.o: \
 ../TouchGFX/gui/include/gui/model/ModelListener.hpp:
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Box.hpp:
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Widget.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Image.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:
+../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Button.hpp:
+../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/AbstractButton.hpp:
+../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ToggleButton.hpp:
+../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/RadioButton.hpp:
+../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ButtonWithLabel.hpp:
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp:
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/Texts.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Gauge.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/progress_indicators/AbstractProgressIndicator.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/EasingEquations.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextureMapper.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/Circle.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/CWRUtil.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/Utils.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/canvas_widget_renderer/Rasterizer.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/canvas_widget_renderer/Outline.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/canvas_widget_renderer/Cell.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/AbstractPainter.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/transforms/DisplayTransformation.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/Canvas.hpp:
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/CanvasWidget.hpp:
+../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Image.hpp:
+../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/RadioButtonGroup.hpp:
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/Color.hpp:
 ../TouchGFX/generated/images/include/BitmapDatabase.hpp:
 ../TouchGFX/generated/texts/include/texts/TextKeysAndLanguages.hpp:

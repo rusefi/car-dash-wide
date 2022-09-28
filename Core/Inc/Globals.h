@@ -9,18 +9,17 @@ extern "C" {
 #include <stdbool.h>
 
 
-#define BH1750_ENABLED			0
-#define GPS_ENABLED				1
+#define GPS_ENABLED				0
 #define CAN_ENABLED				1
 #define RGB_ENABLED				1
 #define UART_ENABLED			0
 #define IND_ENABLED 			0
 #define ALERT_ENABLED  			0
 
-#define LED_NUMBER				24
+#define LED_NUMBER				14
 #define LED_DEFAULT_BRIGHTNESS		2
 
-#define LCD_DEFAULT_BRIGHTNESS	400
+#define LCD_DEFAULT_BRIGHTNESS	1000
 
 #define LCD_RPM_HIGH 			8000
 
@@ -221,6 +220,22 @@ typedef struct {
 } FieldDef;
 
 typedef struct {
+	bool ENABLED;
+	uint32_t TICK;
+	bool BALANCE;
+	bool IGNORE;
+	uint32_t ERROR;
+	uint16_t CELLS[16];
+	uint16_t TEMPS[4];
+	uint16_t TEMPOFF;
+	uint16_t VOLTAGE;
+	uint16_t LOWEST_CELL_VOLTAGE;
+	uint8_t LOWEST_CELL_ID;
+	uint16_t HIGHEST_CELL_VOLTAGE;
+	uint8_t HIGHEST_CELL_ID;
+} ModuleDef;
+
+typedef struct {
 
 	uint8_t PRES_UNIT;
 	uint8_t TEMP_UNIT;
@@ -316,7 +331,8 @@ typedef struct {
 	uint8_t BTN_BOTTOM_LEFT;
 
 
-	uint8_t CELL[16];
+	ModuleDef BATTERY_MODULES[6];
+	uint16_t BATTERY_VOLTAGE;
 
 } Statuses;
 

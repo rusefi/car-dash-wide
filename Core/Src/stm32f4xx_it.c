@@ -61,7 +61,8 @@ extern CAN_HandleTypeDef hcan2;
 extern DMA2D_HandleTypeDef hdma2d;
 extern SDRAM_HandleTypeDef hsdram1;
 extern LTDC_HandleTypeDef hltdc;
-extern DMA_HandleTypeDef hdma_tim1_ch1;
+extern DMA_HandleTypeDef hdma_tim2_ch2_ch4;
+extern DMA_HandleTypeDef hdma_tim2_up_ch3;
 extern TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN EV */
@@ -167,6 +168,34 @@ void DebugMon_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles DMA1 stream1 global interrupt.
+  */
+void DMA1_Stream1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
+	DMA_Callback();
+  /* USER CODE END DMA1_Stream1_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_tim2_up_ch3);
+  /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 stream6 global interrupt.
+  */
+void DMA1_Stream6_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream6_IRQn 0 */
+	DMA_Callback();
+  /* USER CODE END DMA1_Stream6_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_tim2_ch2_ch4);
+  /* USER CODE BEGIN DMA1_Stream6_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream6_IRQn 1 */
+}
+
+/**
   * @brief This function handles CAN1 RX0 interrupts.
   */
 void CAN1_RX0_IRQHandler(void)
@@ -178,6 +207,20 @@ void CAN1_RX0_IRQHandler(void)
   /* USER CODE BEGIN CAN1_RX0_IRQn 1 */
 
   /* USER CODE END CAN1_RX0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line[15:10] interrupts.
+  */
+void EXTI15_10_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI15_10_IRQn 0 */
+
+  /* USER CODE END EXTI15_10_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(TOUCH_EN_Pin);
+  /* USER CODE BEGIN EXTI15_10_IRQn 1 */
+
+  /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
 /**
@@ -206,20 +249,6 @@ void TIM6_DAC_IRQHandler(void)
   /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
 
   /* USER CODE END TIM6_DAC_IRQn 1 */
-}
-
-/**
-  * @brief This function handles DMA2 stream1 global interrupt.
-  */
-void DMA2_Stream1_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA2_Stream1_IRQn 0 */
-	DMA_Callback();
-  /* USER CODE END DMA2_Stream1_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_tim1_ch1);
-  /* USER CODE BEGIN DMA2_Stream1_IRQn 1 */
-
-  /* USER CODE END DMA2_Stream1_IRQn 1 */
 }
 
 /**

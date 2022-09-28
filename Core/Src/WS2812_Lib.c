@@ -74,7 +74,11 @@ void calcBuf(void)
  */
 void startDMA(void) {
 	dma_ready = 0;
-	  if (HAL_TIM_PWM_Start_DMA(&htim1, TIM_CHANNEL_1, (uint32_t *)WS2812_TIM_BUF, WS2812_BUFLEN) != HAL_OK)
+	  if (HAL_TIM_PWM_Start_DMA(&htim2, TIM_CHANNEL_2, (uint32_t *)WS2812_TIM_BUF, WS2812_BUFLEN) != HAL_OK)
+	  {
+
+	  }
+	  if (HAL_TIM_PWM_Start_DMA(&htim2, TIM_CHANNEL_3, (uint32_t *)WS2812_TIM_BUF, WS2812_BUFLEN) != HAL_OK)
 	  {
 
 	  }
