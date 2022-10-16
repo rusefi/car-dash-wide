@@ -1989,6 +1989,28 @@ void Start_OUTPUT_Task(void *argument)
 	/* Infinite loop */
 	for (;;) {
 
+
+		TxHeader.IDE = CAN_ID_STD;
+		TxHeader.RTR = CAN_RTR_DATA;
+		TxHeader.DLC = 8;
+
+		TxHeader.StdId = 0x080 | (nextmes);
+		TxData[0] = 0xC7;
+		TxData[1] = 0x10;
+		TxData[2] = 0x00;
+		TxData[3] = 0x00;
+		TxData[4] = 0x20;
+		TxData[5] = 0x00;
+		TxData[6] = mescycle << 4;
+		TxData[7] = crcRemainder;
+
+		if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+		{
+		 Error_Handler ();
+		}
+
+		osDelay(200);
+
 	}
   /* USER CODE END Start_OUTPUT_Task */
 }
