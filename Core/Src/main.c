@@ -1271,7 +1271,6 @@ void Start_CAN_Task(void *argument)
 	Current_Status.SPEED_UNIT = Kmh;
 	HAL_GPIO_WritePin(CAN1_SEL0_GPIO_Port, CAN1_SEL0_Pin, SET);
 
-	uint8_t countBlankMessages = 0;
 
 	for (;;) {
 		if (CAN_ENABLED) {
