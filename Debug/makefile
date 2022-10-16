@@ -104,8 +104,8 @@ all: main-build
 main-build: LCD_CAR.elf secondary-outputs
 
 # Tool invocations
-LCD_CAR.elf LCD_CAR.map: $(OBJS) $(USER_OBJS) E:\Code\Personal\STM32\LCD_CAR\STM32F429BITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "LCD_CAR.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\Code\Personal\STM32\LCD_CAR\STM32F429BITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LCD_CAR.map" -Wl,--gc-sections -static -L"E:\Code\Personal\STM32\LCD_CAR\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+LCD_CAR.elf LCD_CAR.map: $(OBJS) $(USER_OBJS) E:\Code\Personal\STM32\LCD_DASH\STM32F429BITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "LCD_CAR.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\Code\Personal\STM32\LCD_DASH\STM32F429BITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LCD_CAR.map" -Wl,--gc-sections -static -L"E:\Code\Personal\STM32\LCD_DASH\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

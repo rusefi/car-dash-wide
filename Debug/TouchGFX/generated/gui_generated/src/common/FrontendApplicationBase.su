@@ -1,4 +1,4 @@
-c:\st\stm32cubeide_1.3.0\stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.0.202111181127\tools\arm-none-eabi\include\c++\10.3.1\new:174:33:void* operator new(std::size_t, void*)	16	static
+c:\st\stm32cubeide_1.8.0\stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.0.202111181127\tools\arm-none-eabi\include\c++\10.3.1\new:174:33:void* operator new(std::size_t, void*)	16	static
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/UIEventListener.hpp:44:18:virtual void touchgfx::UIEventListener::handleClickEvent(const touchgfx::ClickEvent&)	16	static
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/UIEventListener.hpp:54:18:virtual void touchgfx::UIEventListener::handleDragEvent(const touchgfx::DragEvent&)	16	static
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/UIEventListener.hpp:64:18:virtual void touchgfx::UIEventListener::handleGestureEvent(const touchgfx::GestureEvent&)	16	static
