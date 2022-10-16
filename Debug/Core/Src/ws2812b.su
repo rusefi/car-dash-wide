@@ -1,3 +1,0 @@
-ws2812b.c:19:6:Neopixel_setup	4	static
-ws2812b.c:43:6:show_neopixels	4	static
-ws2812b.c:53:9:neopoxel_transmitting	4	static
