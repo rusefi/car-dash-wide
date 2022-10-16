@@ -177,8 +177,6 @@ uint8_t TxData[8];
 uint8_t RxData[8];
 uint32_t TxMailbox;
 
-FieldDef Fields[64];
-
 FILE *File;
 
 FILE *FileBuffer;
@@ -1938,6 +1936,73 @@ void Start_INPUT_Task(void *argument)
 void Start_OUTPUT_Task(void *argument)
 {
   /* USER CODE BEGIN Start_OUTPUT_Task */
+
+	//MESSAGE
+	CAN_Message msg;
+	//msg.Label = "";
+	msg.Type = CAN_ENUM_MESSAGE_FORMAT_NORMAL;
+	msg.BaseIdType = CAN_ENUM_MESSAGE_ID_STANDARD;
+	msg.BaseId = 0x18;
+	msg.Bus = CAN_ENUM_BUS_0;
+	msg.Size = CAN_ENUM_MESSAGE_SIZE_1FRAME;
+	msg.Timeout = 100;
+
+	//SIGNAL IN
+	CAN_Input signal_IN;
+	//Message Object
+	//signal_IN.Label = "";
+	signal_IN.Message = msg;
+	signal_IN.MessageOffset = 0;
+	//Type
+	signal_IN.Type = CAN_ENUM_DATA_TYPE_UNSIGNED;
+	signal_IN.Format = CAN_ENUM_DATA_FORMAT_BIT8;
+	signal_IN.Endian = CAN_ENUM_DATA_ENDIAN_LITTLE;
+	signal_IN.ByteOffset = 0;
+	//Data
+	signal_IN.Multiplier = 1;
+	signal_IN.Divider = 0;
+	signal_IN.Offset = 0;
+	signal_IN.DecimalPlaces = 0;
+	signal_IN.Default = 0;
+	//On Timeout
+	signal_IN.TimeoutAction = CAN_ENUM_DATA_TIMEOUT_SET_VALUE;
+	signal_IN.TimeoutValue = 0;
+
+	//SIGNAL OUT
+	CAN_Output signal_OUT;
+	//signal_OUT.Label = "";
+	signal_OUT.Bus = CAN_ENUM_BUS_0;
+	signal_OUT.BaseIdType = CAN_ENUM_MESSAGE_ID_STANDARD;
+	signal_OUT.BaseId = 0x18;
+	signal_OUT.Frequency = 10;
+
+
+	signal_OUT.Data[0] = 1;
+	signal_OUT.Data[1] = 1;
+	signal_OUT.Data[2] = 1;
+	signal_OUT.Data[3] = 1;
+	signal_OUT.Data[4] = 1;
+	signal_OUT.Data[5] = 1;
+	signal_OUT.Data[6] = 1;
+	signal_OUT.Data[7] = 1;
+
+	/* Infinite loop */
+	for (;;) {
+
+	}
+  /* USER CODE END Start_OUTPUT_Task */
+}
+
+/* USER CODE BEGIN Header_Start_ADC_Task */
+/**
+ * @brief Function implementing the ADC_Task thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_Start_ADC_Task */
+void Start_ADC_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_ADC_Task */
 	/* Infinite loop */
 	for (;;) {
 		ADC_ChannelConfTypeDef sConfig = { 0 };
@@ -1959,88 +2024,6 @@ void Start_OUTPUT_Task(void *argument)
 		Current_Status.IND_BATT = Current_Status.BATT < 11.98 ? true : false;
 		//Current_Status.ECT = (ADCValue * 749) * (3.3 / 4096);
 		osDelay(1000);
-//		HAL_GPIO_TogglePin(LED_PJ12_GPIO_Port, LED_PJ12_Pin);
-//		HAL_GPIO_TogglePin(LED_PJ13_GPIO_Port, LED_PJ13_Pin);
-//		HAL_GPIO_TogglePin(LED_PJ14_GPIO_Port, LED_PJ14_Pin);
-//		HAL_GPIO_TogglePin(LED_PJ15_GPIO_Port, LED_PJ15_Pin);
-		//RESET all outputs
-//	  HAL_GPIO_WritePin(MULTISENSE_RST_GPIO_Port, MULTISENSE_RST_Pin, 0);
-//	  HAL_GPIO_WritePin(MULTISENSE_EN5_GPIO_Port, MULTISENSE_EN5_Pin, 0);
-//
-//	  osDelay(10);
-//
-//	  HAL_GPIO_WritePin(MULTISENSE_EN5_GPIO_Port, MULTISENSE_EN5_Pin, 1);
-//
-//	  //Channel 0 diagnostic
-//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 0);
-//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 0);
-//
-//
-//	  HAL_ADC_Start(&hadc1);
-//	  HAL_ADC_PollForConversion (&hadc1, 1000);
-//	  ADCValue = HAL_ADC_GetValue(&hadc1);
-//	  HAL_ADC_Stop(&hadc1);
-//	  Current_Status.TPS = 10;
-//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
-//	    osDelay(1000);
-//
-//	  //Channel 1 diagnostic
-//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 0);
-//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 1);
-//
-//
-//	  HAL_ADC_Start(&hadc1);
-//	  HAL_ADC_PollForConversion (&hadc1, 1000);
-//	  ADCValue = HAL_ADC_GetValue(&hadc1);
-//	  HAL_ADC_Stop(&hadc1);
-//
-//	  Current_Status.TPS = 20;
-//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
-//	    osDelay(1000);
-//
-//	  //TCHIP Sense
-//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 1);
-//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 0);
-//
-//
-//	  HAL_ADC_Start(&hadc1);
-//	  HAL_ADC_PollForConversion (&hadc1, 1000);
-//	  ADCValue = HAL_ADC_GetValue(&hadc1);
-//	  HAL_ADC_Stop(&hadc1);
-//
-//	  Current_Status.TPS = 30;
-//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
-//	    osDelay(1000);
-//
-//	  //VCC Sense
-//	  HAL_GPIO_WritePin(MULTISENSE_SEL0_GPIO_Port, MULTISENSE_SEL0_Pin, 1);
-//	  HAL_GPIO_WritePin(MULTISENSE_SEL1_GPIO_Port, MULTISENSE_SEL1_Pin, 1);
-//
-//	  HAL_ADC_Start(&hadc1);
-//	  HAL_ADC_PollForConversion (&hadc1, 1000);
-//	  ADCValue = HAL_ADC_GetValue(&hadc1);
-//	  HAL_ADC_Stop(&hadc1);
-//
-//	  Current_Status.TPS = 40;
-//	  Current_Status.BATT = (ADCValue * 749) * (3.3 / 4096);
-//	    osDelay(1000);
-	}
-  /* USER CODE END Start_OUTPUT_Task */
-}
-
-/* USER CODE BEGIN Header_Start_ADC_Task */
-/**
- * @brief Function implementing the ADC_Task thread.
- * @param argument: Not used
- * @retval None
- */
-/* USER CODE END Header_Start_ADC_Task */
-void Start_ADC_Task(void *argument)
-{
-  /* USER CODE BEGIN Start_ADC_Task */
-	/* Infinite loop */
-	for (;;) {
-		osDelay(1);
 	}
   /* USER CODE END Start_ADC_Task */
 }

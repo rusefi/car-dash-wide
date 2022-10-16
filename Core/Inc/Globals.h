@@ -7,6 +7,8 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <CAN_Def.h>
+#include <UNIT_Def.h>
 
 
 #define BH1750_ENABLED			0
@@ -41,28 +43,16 @@ extern "C" {
 
 #define AFR_TO_LAMBDA 			0.06802721088f
 
-#define SYSTEM_DEBUG_COUNT 		4
-#define SYSTEM_DEBUG_LENGTH 	64
-
-
 #define USE_1024x600
+//#define USE_800x480
+
 #ifdef USE_1024x600
 	#define LCD_RES_X  1024
 	#define LCD_RES_Y  600
+#else
+	#define LCD_RES_X  800
+	#define LCD_RES_Y  480
 #endif
-
-typedef enum {
-	kPa = 0,
-	BAR,
-	PSI,
-	C,
-	F,
-	Kmh,
-	Mph,
-	Lambda,
-	Afr
-} UnitDefEnum;
-
 
 typedef enum {
 	CAN_LINK = 0,
@@ -125,7 +115,7 @@ typedef enum {
 	ACTIVE_HIGH,
 	ACTIVE_HIGH_LINEAR, // 2x2 map
 	ACTIVE_HIGH_CALIBRATED //2x16 map
-} InputTypeEnum;
+} Input_Type;
 
 typedef enum {
 	UP_1M = 0,
@@ -136,36 +126,37 @@ typedef enum {
 	DOWN_1K,
 	DOWN_10K,
 	DOWN_2K49, //TEMP
-} InputPullEnum;
+} Input_Pull;
 
 
 typedef enum {
 	ON_OFF = 0,
 	PWM
-} OutputTypeEnum;
+} Output_Type;
 
 typedef enum {
 	SINGLE = 0,
 	DOUBLE,
 	TRIPLE,
 	QUADRUPLE
-} OutputPinTypeEnum;
+} Output_Group_Type;
 
 typedef enum {
 	CAN = 0,
 	INPUT,
 	SCREEN
-} OutputTriggerTypeEnum;
+} Output_Trigger_Type;
+
 
 typedef struct {
 	uint8_t Id;
 	char Label[10];
 	char Unit[10];
 	bool Enabled;
-	InputTypeEnum Type;
-	InputPullEnum PullValue;
+	Input_Type Type;
+	Input_Pull PullValue;
 	uint16_t CalibratedRange[2][16];
-} InputDef;
+} Input_Def;
 
 
 typedef struct {
@@ -173,11 +164,11 @@ typedef struct {
 	char Label[10];
 	char Unit[10];
 	bool Enabled;
-	OutputTypeEnum Type;
-	OutputPinTypeEnum PinType;
+	Input_Type Type;
+	Output_Group_Type PinType;
 	uint16_t PinRange[4];
 
-	OutputTriggerTypeEnum TriggerType;
+	Output_Trigger_Type TriggerType;
 	uint8_t TriggerId;
 
 	uint16_t InrushCurrent;
@@ -194,31 +185,7 @@ typedef struct {
 	uint8_t SoftStartTime;
 
 	bool DefaultValue;
-} OutputDef;
-
-
-
-typedef struct {
-	uint8_t Id;
-	char Label[10];
-	char Unit[10];
-	bool Enabled;
-	uint8_t CanId;
-	uint8_t StartByte;
-	uint8_t EndByte;
-} CANDef;
-
-typedef struct {
-	uint8_t Id;
-	char Label[10];
-	char Unit[10];
-	bool Enabled;
-	uint16_t Offset;
-	uint16_t Multiplier;
-	uint16_t Divider;
-	uint16_t DecimalPlaces;
-	uint16_t DefaultValue;
-} FieldDef;
+} Output_Def;
 
 typedef struct {
 
@@ -300,8 +267,6 @@ typedef struct {
 	uint16_t IND_LOW;
 	uint16_t IND_RIGHT;
 
-
-	char * SYSTEM_DEBUG_MESSAGE[SYSTEM_DEBUG_COUNT];
 
 	uint16_t LED_BRIGHTNESS;
 	uint8_t LED_BRIGHTNESS_CHANGED;
