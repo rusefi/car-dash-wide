@@ -7,8 +7,10 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdbool.h>
-#include <CAN_Def.h>
-#include <UNIT_Def.h>
+#include <Def/CAN_Def.h>
+#include <Def/UNIT_Def.h>
+#include <Def/IO_Def.h>
+#include <Def/STORAGE_Def.h>
 
 
 #define BH1750_ENABLED			0
@@ -109,83 +111,6 @@ struct RGBLED {
 };
 
 
-typedef enum {
-	ACTIVE_LOW = 0,
-	ACTIVE_LOW_ROTARY,
-	ACTIVE_HIGH,
-	ACTIVE_HIGH_LINEAR, // 2x2 map
-	ACTIVE_HIGH_CALIBRATED //2x16 map
-} Input_Type;
-
-typedef enum {
-	UP_1M = 0,
-	UP_1K,
-	UP_10K,
-	UP_2K49, //TEMP
-	DOWN_1M,
-	DOWN_1K,
-	DOWN_10K,
-	DOWN_2K49, //TEMP
-} Input_Pull;
-
-
-typedef enum {
-	ON_OFF = 0,
-	PWM
-} Output_Type;
-
-typedef enum {
-	SINGLE = 0,
-	DOUBLE,
-	TRIPLE,
-	QUADRUPLE
-} Output_Group_Type;
-
-typedef enum {
-	CAN = 0,
-	INPUT,
-	SCREEN
-} Output_Trigger_Type;
-
-
-typedef struct {
-	uint8_t Id;
-	char Label[10];
-	char Unit[10];
-	bool Enabled;
-	Input_Type Type;
-	Input_Pull PullValue;
-	uint16_t CalibratedRange[2][16];
-} Input_Def;
-
-
-typedef struct {
-	uint8_t Id;
-	char Label[10];
-	char Unit[10];
-	bool Enabled;
-	Input_Type Type;
-	Output_Group_Type PinType;
-	uint16_t PinRange[4];
-
-	Output_Trigger_Type TriggerType;
-	uint8_t TriggerId;
-
-	uint16_t InrushCurrent;
-	uint16_t InrushTime;
-	uint16_t MaxCurrent;
-	uint16_t MinCurrent;
-
-	uint16_t RetryCount;
-	uint16_t RetryEvery;
-	uint16_t RetryForever;
-
-	uint8_t Frequency;
-	uint8_t DutyCycle;
-	uint8_t SoftStartTime;
-
-	bool DefaultValue;
-} Output_Def;
 
 typedef struct {
 

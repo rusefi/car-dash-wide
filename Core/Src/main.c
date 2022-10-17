@@ -22,6 +22,7 @@
 #include "cmsis_os.h"
 #include "fatfs.h"
 #include "app_touchgfx.h"
+#include "usb_device.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -31,6 +32,8 @@
 #include "sdram.h"
 #include "WS2812_Lib.h"
 #include "BH1750.h"
+#include "spi_flash.h"
+#include "mcu_flash.h"
 
 /* USER CODE END Includes */
 
@@ -65,13 +68,13 @@ LTDC_HandleTypeDef hltdc;
 
 SD_HandleTypeDef hsd;
 
+SPI_HandleTypeDef hspi1;
+
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim13;
 DMA_HandleTypeDef hdma_tim1_ch1;
 
 UART_HandleTypeDef huart1;
-
-PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 SDRAM_HandleTypeDef hsdram1;
 
@@ -200,9 +203,9 @@ static void MX_CAN2_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_SDIO_SD_Init(void);
 static void MX_ADC1_Init(void);
-static void MX_USB_OTG_FS_PCD_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_TIM1_Init(void);
+static void MX_SPI1_Init(void);
+static void MX_USART1_UART_Init(void);
 void Start_START_Task(void *argument);
 void TouchGFX_Task(void *argument);
 void Start_SD_Task(void *argument);
@@ -266,9 +269,9 @@ int main(void)
   MX_SDIO_SD_Init();
   MX_FATFS_Init();
   MX_ADC1_Init();
-  MX_USB_OTG_FS_PCD_Init();
-  MX_USART1_UART_Init();
   MX_TIM1_Init();
+  MX_SPI1_Init();
+  MX_USART1_UART_Init();
   MX_TouchGFX_Init();
   /* Call PreOsInit function */
   MX_TouchGFX_PreOSInit();
@@ -386,7 +389,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 4;
+  RCC_OscInitStruct.PLL.PLLM = 6;
   RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 7;
@@ -771,6 +774,44 @@ static void MX_SDIO_SD_Init(void)
 }
 
 /**
+  * @brief SPI1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI1_Init(void)
+{
+
+  /* USER CODE BEGIN SPI1_Init 0 */
+
+  /* USER CODE END SPI1_Init 0 */
+
+  /* USER CODE BEGIN SPI1_Init 1 */
+
+  /* USER CODE END SPI1_Init 1 */
+  /* SPI1 parameter configuration*/
+  hspi1.Instance = SPI1;
+  hspi1.Init.Mode = SPI_MODE_MASTER;
+  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
+  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi1.Init.CRCPolynomial = 10;
+  if (HAL_SPI_Init(&hspi1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI1_Init 2 */
+
+  /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
   * @brief TIM1 Initialization Function
   * @param None
   * @retval None
@@ -925,41 +966,6 @@ static void MX_USART1_UART_Init(void)
 }
 
 /**
-  * @brief USB_OTG_FS Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USB_OTG_FS_PCD_Init(void)
-{
-
-  /* USER CODE BEGIN USB_OTG_FS_Init 0 */
-
-  /* USER CODE END USB_OTG_FS_Init 0 */
-
-  /* USER CODE BEGIN USB_OTG_FS_Init 1 */
-
-  /* USER CODE END USB_OTG_FS_Init 1 */
-  hpcd_USB_OTG_FS.Instance = USB_OTG_FS;
-  hpcd_USB_OTG_FS.Init.dev_endpoints = 4;
-  hpcd_USB_OTG_FS.Init.speed = PCD_SPEED_FULL;
-  hpcd_USB_OTG_FS.Init.dma_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
-  hpcd_USB_OTG_FS.Init.Sof_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.low_power_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.lpm_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.vbus_sensing_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.use_dedicated_ep1 = DISABLE;
-  if (HAL_PCD_Init(&hpcd_USB_OTG_FS) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USB_OTG_FS_Init 2 */
-
-  /* USER CODE END USB_OTG_FS_Init 2 */
-
-}
-
-/**
   * Enable DMA controller clock
   */
 static void MX_DMA_Init(void)
@@ -1068,6 +1074,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOG, IN_E_Pin|IN_S0_Pin|IN_S1_Pin|IN_S2_Pin
                           |IN_S3_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(SPI1_FLASH_GPIO_Port, SPI1_FLASH_Pin, GPIO_PIN_RESET);
+
   /*Configure GPIO pins : BTN_1_Pin BTN_2_Pin */
   GPIO_InitStruct.Pin = BTN_1_Pin|BTN_2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
@@ -1148,13 +1157,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB3 PB4 PB5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  /*Configure GPIO pin : SPI1_FLASH_Pin */
+  GPIO_InitStruct.Pin = SPI1_FLASH_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(SPI1_FLASH_GPIO_Port, &GPIO_InitStruct);
 
 }
 
@@ -1181,6 +1189,8 @@ long mapInt(float x, float in_min, float in_max, int out_min, int out_max) {
 /* USER CODE END Header_Start_START_Task */
 void Start_START_Task(void *argument)
 {
+  /* init code for USB_DEVICE */
+  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 5 */
 	//htim13.Instance->CCR1 = (htim13.Instance->ARR) * 0.99;
 	Current_Status.LED_BRIGHTNESS = LED_DEFAULT_BRIGHTNESS;
@@ -1882,7 +1892,7 @@ void Start_LPS22_Task(void *argument)
   /* USER CODE BEGIN Start_LPS22_Task */
 	/* Infinite loop */
 	for (;;) {
-		osDelay(1);
+		osDelay(1000);
 	}
   /* USER CODE END Start_LPS22_Task */
 }
@@ -1936,13 +1946,42 @@ void Start_INPUT_Task(void *argument)
 void Start_OUTPUT_Task(void *argument)
 {
   /* USER CODE BEGIN Start_OUTPUT_Task */
+//
+//
+	uint32_t Address = 0x081E0000;
+	uint8_t txData[8] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77};
+	uint8_t rxData[8];
+//
+//	FLASH_SetSectorAddrs(23, 0x081E0000);
+//
+//	FLASH_WriteN(0, txData, 8, DATA_TYPE_8);
+//	FLASH_ReadN(0, rxData, 8, DATA_TYPE_8);
+//
+
+	#define PAGE(_x) _x* 0x100;
+	#define SEC(_x)  _x* 0x1000;
+	#define BLK(_x)  _x* 0x10000;
+	uint32_t  StartAddress = SEC(7);
+
+	W25qxx_Init();
+
+//	w25q128.PageSize=256;
+//	w25q128.SectorSize=4096;
+//	w25q128.SectorCount=4096;
+//	w25q128.PageCount=65536;
+//	w25q128.BlockSize=65536;
+//	w25q128.CapacityInBytes=16384;
+	uint8_t rBuff[16];
+	W25qxx_EraseSector(0); // erase page 0~15;
+	W25qxx_WritePage("0123456789", 0, 0, 10);
+	W25qxx_ReadPage(rBuff, 0,0,10);
 
 	//MESSAGE
 	CAN_Message msg;
-	//msg.Label = "";
+	strcpy(msg.Label, "MESSAGE");
 	msg.Type = CAN_ENUM_MESSAGE_FORMAT_NORMAL;
-	msg.BaseIdType = CAN_ENUM_MESSAGE_ID_STANDARD;
-	msg.BaseId = 0x18;
+	msg.IdType = CAN_ENUM_MESSAGE_ID_STANDARD;
+	msg.Id = 0x18;
 	msg.Bus = CAN_ENUM_BUS_0;
 	msg.Size = CAN_ENUM_MESSAGE_SIZE_1FRAME;
 	msg.Timeout = 100;
@@ -1950,7 +1989,7 @@ void Start_OUTPUT_Task(void *argument)
 	//SIGNAL IN
 	CAN_Input signal_IN;
 	//Message Object
-	//signal_IN.Label = "";
+	strcpy(signal_IN.Label, "Signal IN");
 	signal_IN.Message = msg;
 	signal_IN.MessageOffset = 0;
 	//Type
@@ -1970,10 +2009,10 @@ void Start_OUTPUT_Task(void *argument)
 
 	//SIGNAL OUT
 	CAN_Output signal_OUT;
-	//signal_OUT.Label = "";
+	strcpy(signal_OUT.Label, "Signal OUT");
 	signal_OUT.Bus = CAN_ENUM_BUS_0;
-	signal_OUT.BaseIdType = CAN_ENUM_MESSAGE_ID_STANDARD;
-	signal_OUT.BaseId = 0x18;
+	signal_OUT.IdType = CAN_ENUM_MESSAGE_ID_STANDARD;
+	signal_OUT.Id = 0x080;
 	signal_OUT.Frequency = 10;
 
 
@@ -1986,30 +2025,42 @@ void Start_OUTPUT_Task(void *argument)
 	signal_OUT.Data[6] = 1;
 	signal_OUT.Data[7] = 1;
 
+
+	CAN_TxHeaderTypeDef   TxHeader;
+	uint32_t              TxMailbox;
+
 	/* Infinite loop */
 	for (;;) {
 
 
-		TxHeader.IDE = CAN_ID_STD;
+		TxHeader.IDE = signal_OUT.IdType == CAN_ENUM_MESSAGE_ID_STANDARD ? CAN_ID_STD : CAN_ID_EXT;
 		TxHeader.RTR = CAN_RTR_DATA;
 		TxHeader.DLC = 8;
+		TxHeader.StdId = signal_OUT.Id;
 
-		TxHeader.StdId = 0x080 | (nextmes);
-		TxData[0] = 0xC7;
-		TxData[1] = 0x10;
-		TxData[2] = 0x00;
-		TxData[3] = 0x00;
-		TxData[4] = 0x20;
-		TxData[5] = 0x00;
-		TxData[6] = mescycle << 4;
-		TxData[7] = crcRemainder;
-
-		if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK)
-		{
-		 Error_Handler ();
+		switch (signal_OUT.Bus) {
+			case CAN_ENUM_BUS_0:
+				if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, signal_OUT.Data, &TxMailbox) != HAL_OK)
+				{
+				 Error_Handler ();
+				}
+				break;
+			case CAN_ENUM_BUS_1:
+				if (HAL_CAN_AddTxMessage(&hcan2, &TxHeader, signal_OUT.Data, &TxMailbox) != HAL_OK)
+				{
+				 Error_Handler ();
+				}
+				break;
+			case CAN_ENUM_BUS_2:
+//				if (HAL_CAN_AddTxMessage(&hcan3, &TxHeader, signal_OUT.Data, &TxMailbox) != HAL_OK)
+//				{
+//				 Error_Handler ();
+//				}
+				break;
 		}
 
-		osDelay(200);
+
+		osDelay(100);
 
 	}
   /* USER CODE END Start_OUTPUT_Task */
@@ -2027,6 +2078,10 @@ void Start_ADC_Task(void *argument)
   /* USER CODE BEGIN Start_ADC_Task */
 	/* Infinite loop */
 	for (;;) {
+		uint8_t buffer[] = "Hello, World!\r\n";
+		CDC_Transmit_FS(buffer, sizeof(buffer));
+		osDelay(1000);
+
 		ADC_ChannelConfTypeDef sConfig = { 0 };
 		//sConfig.Channel = ADC_CHANNEL_1; //IN
 		sConfig.Channel = ADC_CHANNEL_2; //BATT
