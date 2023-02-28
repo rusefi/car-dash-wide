@@ -5,3 +5,6 @@
 Build on STM32CubeIDE 1.11.2 and TouchGFX 4.21.1
 
 
+# Initial Programming
+
+[TC2030](https://github.com/rusefi/rusefi/wiki/Tag-Connect-TC2030) 
