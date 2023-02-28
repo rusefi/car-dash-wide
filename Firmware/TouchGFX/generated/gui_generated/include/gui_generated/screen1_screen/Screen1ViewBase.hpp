@@ -16,7 +16,7 @@ class Screen1ViewBase : public touchgfx::View<Screen1Presenter>
 {
 public:
     Screen1ViewBase();
-    virtual ~Screen1ViewBase() {}
+    virtual ~Screen1ViewBase();
     virtual void setupScreen();
 
 protected:

@@ -220,7 +220,7 @@
             "X": 1209,
             "Y": 20,
             "Width": 44,
-            "Height": 96,
+            "Height": 97,
             "TextId": "__SingleUse_LQYM",
             "TextRotation": "0",
             "Color": {
@@ -241,7 +241,7 @@
             "X": 873,
             "Y": 28,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_W2NZ",
             "TextRotation": "0",
             "Color": {
@@ -262,7 +262,7 @@
             "X": 873,
             "Y": 76,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_G76O",
             "TextRotation": "0",
             "Color": {
@@ -283,7 +283,7 @@
             "X": 1209,
             "Y": 137,
             "Width": 44,
-            "Height": 96,
+            "Height": 97,
             "TextId": "__SingleUse_391O",
             "TextRotation": "0",
             "Color": {
@@ -304,7 +304,7 @@
             "X": 873,
             "Y": 147,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_4QE0",
             "TextRotation": "0",
             "Color": {
@@ -325,7 +325,7 @@
             "X": 873,
             "Y": 189,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_6YBF",
             "TextRotation": "0",
             "Color": {
@@ -346,7 +346,7 @@
             "X": 1209,
             "Y": 253,
             "Width": 44,
-            "Height": 96,
+            "Height": 97,
             "TextId": "__SingleUse_MP7X",
             "TextRotation": "0",
             "Color": {
@@ -367,7 +367,7 @@
             "X": 873,
             "Y": 263,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_L5WH",
             "TextRotation": "0",
             "Color": {
@@ -388,7 +388,7 @@
             "X": 873,
             "Y": 313,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_RPXE",
             "TextRotation": "0",
             "Color": {
@@ -409,7 +409,7 @@
             "X": 1209,
             "Y": 368,
             "Width": 44,
-            "Height": 96,
+            "Height": 97,
             "TextId": "__SingleUse_TLZY",
             "TextRotation": "0",
             "Color": {
@@ -430,7 +430,7 @@
             "X": 873,
             "Y": 376,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_RLOQ",
             "TextRotation": "0",
             "Color": {
@@ -451,7 +451,7 @@
             "X": 873,
             "Y": 424,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_KCKH",
             "TextRotation": "0",
             "Color": {
@@ -472,7 +472,7 @@
             "X": 23,
             "Y": 19,
             "Width": 44,
-            "Height": 96,
+            "Height": 97,
             "TextId": "__SingleUse_LD25",
             "TextRotation": "0",
             "Color": {
@@ -493,7 +493,7 @@
             "X": 279,
             "Y": 28,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_4T7D",
             "TextRotation": "0",
             "Color": {
@@ -514,7 +514,7 @@
             "X": 279,
             "Y": 83,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_ERKY",
             "TextRotation": "0",
             "Color": {
@@ -535,7 +535,7 @@
             "X": 23,
             "Y": 134,
             "Width": 44,
-            "Height": 96,
+            "Height": 97,
             "TextId": "__SingleUse_Z15X",
             "TextRotation": "0",
             "Color": {
@@ -556,7 +556,7 @@
             "X": 279,
             "Y": 141,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_S5UQ",
             "TextRotation": "0",
             "Color": {
@@ -577,7 +577,7 @@
             "X": 279,
             "Y": 195,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_XBZK",
             "TextRotation": "0",
             "Color": {
@@ -598,7 +598,7 @@
             "X": 23,
             "Y": 254,
             "Width": 44,
-            "Height": 96,
+            "Height": 97,
             "TextId": "__SingleUse_GFHB",
             "TextRotation": "0",
             "Color": {
@@ -619,7 +619,7 @@
             "X": 279,
             "Y": 259,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_BVOP",
             "TextRotation": "0",
             "Color": {
@@ -640,7 +640,7 @@
             "X": 279,
             "Y": 313,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_R7A4",
             "TextRotation": "0",
             "Color": {
@@ -661,7 +661,7 @@
             "X": 23,
             "Y": 367,
             "Width": 44,
-            "Height": 96,
+            "Height": 97,
             "TextId": "__SingleUse_0AFA",
             "TextRotation": "0",
             "Color": {
@@ -682,7 +682,7 @@
             "X": 279,
             "Y": 376,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_MPLH",
             "TextRotation": "0",
             "Color": {
@@ -703,7 +703,7 @@
             "X": 279,
             "Y": 430,
             "Width": 101,
-            "Height": 30,
+            "Height": 31,
             "TextId": "__SingleUse_INAE",
             "TextRotation": "0",
             "Color": {
@@ -756,7 +756,6 @@
     "SelectedColorDepth": 16,
     "StartupScreenName": "Screen1",
     "SelectedStartupLanguage": "GB",
-    "Skin": "Blue",
     "TouchGfxPath": "../Middlewares/ST/touchgfx",
     "UIPath": ".",
     "AvailableColorDepths": [
@@ -793,10 +792,11 @@
     "PortraitSkinY": 0,
     "DisplayOrientation": "Landscape",
     "Family": "STM32F4",
+    "SubFamily": "STM32F429/439",
     "Platform": "m4",
     "ProjectFile": "../LCD_CAR_WIDE.ioc",
     "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
     "OptionalComponents": []
   },
-  "Version": "4.20.0"
+  "Version": "4.21.1"
 }

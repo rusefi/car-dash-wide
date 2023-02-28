@@ -1,8 +1,8 @@
 /******************************************************************************
-* Copyright (c) 2018(-2022) STMicroelectronics.
+* Copyright (c) 2018(-2023) STMicroelectronics.
 * All rights reserved.
 *
-* This file is part of the TouchGFX 4.20.0 distribution.
+* This file is part of the TouchGFX 4.21.1 distribution.
 *
 * This software is licensed under terms that can be found in the LICENSE file in
 * the root directory of this software component.
@@ -40,7 +40,10 @@ public:
 
     virtual void draw(const Rect& area) const;
 
-    virtual void invalidateContent() const;
+    virtual void invalidateContent() const
+    {
+        Widget::invalidateContent();
+    }
 
 protected:
     virtual TextArea::BoundingArea calculateBoundingArea() const

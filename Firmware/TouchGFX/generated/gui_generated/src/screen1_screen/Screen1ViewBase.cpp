@@ -3,74 +3,94 @@
 /*********************************************************************************/
 #include <gui_generated/screen1_screen/Screen1ViewBase.hpp>
 #include <touchgfx/Color.hpp>
-#include <BitmapDatabase.hpp>
+#include <images/BitmapDatabase.hpp>
 #include <texts/TextKeysAndLanguages.hpp>
 
 Screen1ViewBase::Screen1ViewBase()
 {
-
     __background.setPosition(0, 0, 1280, 480);
     __background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    add(__background);
 
     Background.setPosition(-1, -1, 1282, 482);
     Background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    add(Background);
 
     alert_L4.setPosition(8, 368, 563, 95);
     alert_L4.setColor(touchgfx::Color::getColorFromRGB(230, 18, 18));
+    add(alert_L4);
 
     alert_L3.setPosition(8, 252, 563, 95);
     alert_L3.setColor(touchgfx::Color::getColorFromRGB(230, 18, 18));
+    add(alert_L3);
 
     alert_L2.setPosition(8, 134, 563, 95);
     alert_L2.setColor(touchgfx::Color::getColorFromRGB(230, 18, 18));
+    add(alert_L2);
 
     alert_L1.setPosition(8, 18, 563, 95);
     alert_L1.setColor(touchgfx::Color::getColorFromRGB(230, 18, 18));
+    add(alert_L1);
 
     alert_R4.setPosition(709, 368, 563, 95);
     alert_R4.setColor(touchgfx::Color::getColorFromRGB(230, 18, 18));
+    add(alert_R4);
 
     alert_R3.setPosition(709, 252, 563, 95);
     alert_R3.setColor(touchgfx::Color::getColorFromRGB(230, 18, 18));
+    add(alert_R3);
 
     alert_R2.setPosition(709, 134, 563, 95);
     alert_R2.setColor(touchgfx::Color::getColorFromRGB(230, 18, 18));
+    add(alert_R2);
 
     alert_R1.setPosition(709, 18, 563, 95);
     alert_R1.setColor(touchgfx::Color::getColorFromRGB(230, 18, 18));
+    add(alert_R1);
 
     image1.setXY(1, 0);
     image1.setBitmap(touchgfx::Bitmap(BITMAP_RACE_DASH_WIDE_ID));
+    add(image1);
 
     indLeft.setXY(415, 31);
     indLeft.setBitmap(touchgfx::Bitmap(BITMAP_INDLEFT_ID));
+    add(indLeft);
 
     indRight.setXY(771, 31);
     indRight.setBitmap(touchgfx::Bitmap(BITMAP_INDRIGHT_ID));
+    add(indRight);
 
     indHigh.setXY(490, 225);
     indHigh.setBitmap(touchgfx::Bitmap(BITMAP_INDHIGH_ID));
+    add(indHigh);
 
     indFuel.setXY(659, 155);
     indFuel.setBitmap(touchgfx::Bitmap(BITMAP_INDFUEL_ID));
+    add(indFuel);
 
     indOil.setXY(509, 283);
     indOil.setBitmap(touchgfx::Bitmap(BITMAP_INDOIL_ID));
+    add(indOil);
 
     indBatt.setXY(521, 156);
     indBatt.setBitmap(touchgfx::Bitmap(BITMAP_INDBATT_ID));
+    add(indBatt);
 
     indPark.setXY(597, 125);
     indPark.setBitmap(touchgfx::Bitmap(BITMAP_INDPARK_ID));
+    add(indPark);
 
     indDTC.setXY(597, 173);
     indDTC.setBitmap(touchgfx::Bitmap(BITMAP_INDDTC_ID));
+    add(indDTC);
 
     indECT.setXY(552, 317);
     indECT.setBitmap(touchgfx::Bitmap(BITMAP_INDECT_ID));
+    add(indECT);
 
     indLow.setXY(552, 225);
     indLow.setBitmap(touchgfx::Bitmap(BITMAP_INDLOW_ID));
+    add(indLow);
 
     value_4.setXY(1209, 20);
     value_4.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -79,6 +99,7 @@ Screen1ViewBase::Screen1ViewBase()
     value_4.setWildcard(value_4Buffer);
     value_4.resizeToCurrentText();
     value_4.setTypedText(touchgfx::TypedText(T___SINGLEUSE_LQYM));
+    add(value_4);
 
     label_4.setXY(873, 28);
     label_4.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -87,6 +108,7 @@ Screen1ViewBase::Screen1ViewBase()
     label_4.setWildcard(label_4Buffer);
     label_4.resizeToCurrentText();
     label_4.setTypedText(touchgfx::TypedText(T___SINGLEUSE_W2NZ));
+    add(label_4);
 
     unit_4.setXY(873, 76);
     unit_4.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -95,6 +117,7 @@ Screen1ViewBase::Screen1ViewBase()
     unit_4.setWildcard(unit_4Buffer);
     unit_4.resizeToCurrentText();
     unit_4.setTypedText(touchgfx::TypedText(T___SINGLEUSE_G76O));
+    add(unit_4);
 
     value_5.setXY(1209, 137);
     value_5.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -103,6 +126,7 @@ Screen1ViewBase::Screen1ViewBase()
     value_5.setWildcard(value_5Buffer);
     value_5.resizeToCurrentText();
     value_5.setTypedText(touchgfx::TypedText(T___SINGLEUSE_391O));
+    add(value_5);
 
     label_5.setXY(873, 147);
     label_5.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -111,6 +135,7 @@ Screen1ViewBase::Screen1ViewBase()
     label_5.setWildcard(label_5Buffer);
     label_5.resizeToCurrentText();
     label_5.setTypedText(touchgfx::TypedText(T___SINGLEUSE_4QE0));
+    add(label_5);
 
     unit_5.setXY(873, 189);
     unit_5.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -119,6 +144,7 @@ Screen1ViewBase::Screen1ViewBase()
     unit_5.setWildcard(unit_5Buffer);
     unit_5.resizeToCurrentText();
     unit_5.setTypedText(touchgfx::TypedText(T___SINGLEUSE_6YBF));
+    add(unit_5);
 
     value_6.setXY(1209, 253);
     value_6.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -127,6 +153,7 @@ Screen1ViewBase::Screen1ViewBase()
     value_6.setWildcard(value_6Buffer);
     value_6.resizeToCurrentText();
     value_6.setTypedText(touchgfx::TypedText(T___SINGLEUSE_MP7X));
+    add(value_6);
 
     label_6.setXY(873, 263);
     label_6.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -135,6 +162,7 @@ Screen1ViewBase::Screen1ViewBase()
     label_6.setWildcard(label_6Buffer);
     label_6.resizeToCurrentText();
     label_6.setTypedText(touchgfx::TypedText(T___SINGLEUSE_L5WH));
+    add(label_6);
 
     unit_6.setXY(873, 313);
     unit_6.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -143,6 +171,7 @@ Screen1ViewBase::Screen1ViewBase()
     unit_6.setWildcard(unit_6Buffer);
     unit_6.resizeToCurrentText();
     unit_6.setTypedText(touchgfx::TypedText(T___SINGLEUSE_RPXE));
+    add(unit_6);
 
     value_7.setXY(1209, 368);
     value_7.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -151,6 +180,7 @@ Screen1ViewBase::Screen1ViewBase()
     value_7.setWildcard(value_7Buffer);
     value_7.resizeToCurrentText();
     value_7.setTypedText(touchgfx::TypedText(T___SINGLEUSE_TLZY));
+    add(value_7);
 
     label_7.setXY(873, 376);
     label_7.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -159,6 +189,7 @@ Screen1ViewBase::Screen1ViewBase()
     label_7.setWildcard(label_7Buffer);
     label_7.resizeToCurrentText();
     label_7.setTypedText(touchgfx::TypedText(T___SINGLEUSE_RLOQ));
+    add(label_7);
 
     unit_7.setXY(873, 424);
     unit_7.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -167,6 +198,7 @@ Screen1ViewBase::Screen1ViewBase()
     unit_7.setWildcard(unit_7Buffer);
     unit_7.resizeToCurrentText();
     unit_7.setTypedText(touchgfx::TypedText(T___SINGLEUSE_KCKH));
+    add(unit_7);
 
     value_0.setXY(23, 19);
     value_0.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -175,6 +207,7 @@ Screen1ViewBase::Screen1ViewBase()
     value_0.setWildcard(value_0Buffer);
     value_0.resizeToCurrentText();
     value_0.setTypedText(touchgfx::TypedText(T___SINGLEUSE_LD25));
+    add(value_0);
 
     label_0.setXY(279, 28);
     label_0.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -183,6 +216,7 @@ Screen1ViewBase::Screen1ViewBase()
     label_0.setWildcard(label_0Buffer);
     label_0.resizeToCurrentText();
     label_0.setTypedText(touchgfx::TypedText(T___SINGLEUSE_4T7D));
+    add(label_0);
 
     unit_0.setXY(279, 83);
     unit_0.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -191,6 +225,7 @@ Screen1ViewBase::Screen1ViewBase()
     unit_0.setWildcard(unit_0Buffer);
     unit_0.resizeToCurrentText();
     unit_0.setTypedText(touchgfx::TypedText(T___SINGLEUSE_ERKY));
+    add(unit_0);
 
     value_1.setXY(23, 134);
     value_1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -199,6 +234,7 @@ Screen1ViewBase::Screen1ViewBase()
     value_1.setWildcard(value_1Buffer);
     value_1.resizeToCurrentText();
     value_1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_Z15X));
+    add(value_1);
 
     label_1.setXY(279, 141);
     label_1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -207,6 +243,7 @@ Screen1ViewBase::Screen1ViewBase()
     label_1.setWildcard(label_1Buffer);
     label_1.resizeToCurrentText();
     label_1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_S5UQ));
+    add(label_1);
 
     unit_1.setXY(279, 195);
     unit_1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -215,6 +252,7 @@ Screen1ViewBase::Screen1ViewBase()
     unit_1.setWildcard(unit_1Buffer);
     unit_1.resizeToCurrentText();
     unit_1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_XBZK));
+    add(unit_1);
 
     value_2.setXY(23, 254);
     value_2.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -223,6 +261,7 @@ Screen1ViewBase::Screen1ViewBase()
     value_2.setWildcard(value_2Buffer);
     value_2.resizeToCurrentText();
     value_2.setTypedText(touchgfx::TypedText(T___SINGLEUSE_GFHB));
+    add(value_2);
 
     label_2.setXY(279, 259);
     label_2.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -231,6 +270,7 @@ Screen1ViewBase::Screen1ViewBase()
     label_2.setWildcard(label_2Buffer);
     label_2.resizeToCurrentText();
     label_2.setTypedText(touchgfx::TypedText(T___SINGLEUSE_BVOP));
+    add(label_2);
 
     unit_2.setXY(279, 313);
     unit_2.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -239,6 +279,7 @@ Screen1ViewBase::Screen1ViewBase()
     unit_2.setWildcard(unit_2Buffer);
     unit_2.resizeToCurrentText();
     unit_2.setTypedText(touchgfx::TypedText(T___SINGLEUSE_R7A4));
+    add(unit_2);
 
     value_3.setXY(23, 367);
     value_3.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -247,6 +288,7 @@ Screen1ViewBase::Screen1ViewBase()
     value_3.setWildcard(value_3Buffer);
     value_3.resizeToCurrentText();
     value_3.setTypedText(touchgfx::TypedText(T___SINGLEUSE_0AFA));
+    add(value_3);
 
     label_3.setXY(279, 376);
     label_3.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -255,6 +297,7 @@ Screen1ViewBase::Screen1ViewBase()
     label_3.setWildcard(label_3Buffer);
     label_3.resizeToCurrentText();
     label_3.setTypedText(touchgfx::TypedText(T___SINGLEUSE_MPLH));
+    add(label_3);
 
     unit_3.setXY(279, 430);
     unit_3.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -263,6 +306,7 @@ Screen1ViewBase::Screen1ViewBase()
     unit_3.setWildcard(unit_3Buffer);
     unit_3.resizeToCurrentText();
     unit_3.setTypedText(touchgfx::TypedText(T___SINGLEUSE_INAE));
+    add(unit_3);
 
     gauge1.setPosition(386, 0, 480, 480);
     gauge1.setCenter(240, 240);
@@ -272,53 +316,12 @@ Screen1ViewBase::Screen1ViewBase()
     gauge1.setNeedle(BITMAP_NEEDEL_ID, 13, 13);
     gauge1.setMovingNeedleRenderingAlgorithm(touchgfx::TextureMapper::BILINEAR_INTERPOLATION);
     gauge1.setSteadyNeedleRenderingAlgorithm(touchgfx::TextureMapper::BILINEAR_INTERPOLATION);
-
-    add(__background);
-    add(Background);
-    add(alert_L4);
-    add(alert_L3);
-    add(alert_L2);
-    add(alert_L1);
-    add(alert_R4);
-    add(alert_R3);
-    add(alert_R2);
-    add(alert_R1);
-    add(image1);
-    add(indLeft);
-    add(indRight);
-    add(indHigh);
-    add(indFuel);
-    add(indOil);
-    add(indBatt);
-    add(indPark);
-    add(indDTC);
-    add(indECT);
-    add(indLow);
-    add(value_4);
-    add(label_4);
-    add(unit_4);
-    add(value_5);
-    add(label_5);
-    add(unit_5);
-    add(value_6);
-    add(label_6);
-    add(unit_6);
-    add(value_7);
-    add(label_7);
-    add(unit_7);
-    add(value_0);
-    add(label_0);
-    add(unit_0);
-    add(value_1);
-    add(label_1);
-    add(unit_1);
-    add(value_2);
-    add(label_2);
-    add(unit_2);
-    add(value_3);
-    add(label_3);
-    add(unit_3);
     add(gauge1);
+}
+
+Screen1ViewBase::~Screen1ViewBase()
+{
+
 }
 
 void Screen1ViewBase::setupScreen()
