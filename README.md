@@ -5,6 +5,18 @@
 Build on STM32CubeIDE 1.11.2 and TouchGFX 4.21.1
 
 
+# Hardware
+
+* STM32f429II
+* SDRAM W9825G6KH-6I
+* 2 CANBUS
+* GPS ATGM336H-5N31
+* ESP32-S3
+* SD card
+* 4 user buttons
+* W2812 RGB LED connector
+* on-board USB for debugging
+
 # Initial Programming
 
 [TC2030](https://github.com/rusefi/rusefi/wiki/Tag-Connect-TC2030) 
