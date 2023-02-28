@@ -11,6 +11,7 @@ extern "C" {
 #include <Def/UNIT_Def.h>
 #include <Def/IO_Def.h>
 #include <Def/STORAGE_Def.h>
+#include <Def/SCREEN_Def.h>
 
 
 #define BH1750_ENABLED			0
@@ -63,54 +64,11 @@ typedef enum {
 	CAN_BMW_PHEV
 } CANDefEnum;
 
-typedef enum {
-	CH_MGP = 0,
-	CH_INJ_DC,
-	CH_INJ_DC_ST,
-	CH_INJ_PULSE,
-	CH_MAF,
-	CH_INJ_TIM,
-	CH_IGN_TIM,
-	CH_CAM_I_L,
-	CH_CAM_I_R,
-	CH_CAM_E_L,
-	CH_CAM_E_R,
-	CH_LAMBDA1,
-	CH_LAMBDA2,
-	CH_TRIG1_ERROR,
-	CH_FAULT_CODES,
-	CH_LF_SPEED,
-	CH_LR_SPEED,
-	CH_RF_SPEED,
-	CH_RR_SPEED,
-	CH_KNOCK1,
-	CH_KNOCK2,
-	CH_KNOCK3,
-	CH_KNOCK4,
-	CH_KNOCK5,
-	CH_KNOCK6,
-	CH_KNOCK7,
-	CH_KNOCK8,
-	CH_LIMITS,
-	CH_TPS,
-	CH_ECT,
-	CH_IAT,
-	CH_ETHANOL,
-	CH_MAP,
-	CH_BARO,
-	CH_BATT,
-	CH_FUELP,
-	CH_OILP,
-	CH_FUELT,
-	CH_OILT
-} ChannelEnum;
 
 struct RGBLED {
 	uint8_t enabled;
 	int color;
 };
-
-
 
 typedef struct {
 
@@ -193,6 +151,37 @@ typedef struct {
 	uint16_t IND_RIGHT;
 
 
+	bool OK_R1;
+	bool OK_R2;
+	bool OK_R3;
+	bool OK_R4;
+
+	bool OK_L1;
+	bool OK_L2;
+	bool OK_L3;
+	bool OK_L4;
+
+	bool WARNING_R1;
+	bool WARNING_R2;
+	bool WARNING_R3;
+	bool WARNING_R4;
+
+	bool WARNING_L1;
+	bool WARNING_L2;
+	bool WARNING_L3;
+	bool WARNING_L4;
+
+	bool ALERT_R1;
+	bool ALERT_R2;
+	bool ALERT_R3;
+	bool ALERT_R4;
+
+	bool ALERT_L1;
+	bool ALERT_L2;
+	bool ALERT_L3;
+	bool ALERT_L4;
+
+
 	uint16_t LED_BRIGHTNESS;
 	uint8_t LED_BRIGHTNESS_CHANGED;
 	uint16_t LCD_BRIGHTNESS;
@@ -208,7 +197,13 @@ typedef struct {
 
 	uint8_t CELL[16];
 
+	SCREEN_Channel SCREEN_FIELDS[8];
+	uint8_t SCREEN_FIELDS_CHANGED;
+
 } Statuses;
+
+uint8_t uartTransmitBufferSize;
+uint8_t uartTransmitBuffer[128];
 
 #ifdef __cplusplus
 }

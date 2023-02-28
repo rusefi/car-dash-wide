@@ -692,7 +692,7 @@
     "DisplayOrientation": "Landscape",
     "Family": "STM32F4",
     "Platform": "m4",
-    "ProjectFile": "../LCD_CAR.ioc",
+    "ProjectFile": "../LCD_CAR_WIDE.ioc",
     "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
     "OptionalComponents": []
   },

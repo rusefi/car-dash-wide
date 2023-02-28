@@ -1,7 +1,7 @@
 
 {
   "Application": {
-    "Name": "LCD_CAR",
+    "Name": "LCD_CAR_WIDE",
     "TouchGfxPath": "../Middlewares/ST/touchgfx",
     "AvailableColorDepths": [ 16 ],
     "AvailableLCDs":
@@ -18,7 +18,7 @@
     "Family": "STM32F4",
     "SubFamily": "STM32F429/439",
     "Platform": "m4",
-    "ProjectFile": "../LCD_CAR.ioc",
+    "ProjectFile": "../LCD_CAR_WIDE.ioc",
     "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
     "OptionalComponents": [
     ]

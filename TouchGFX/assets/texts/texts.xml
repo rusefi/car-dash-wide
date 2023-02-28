@@ -8,13 +8,13 @@
       <Text Id="__SingleUse_4T7D" Alignment="Left" TypographyId="Sensor_Label">
         <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
-      <Text Id="__SingleUse_ERKY" Alignment="Right" TypographyId="Sensor_Unit">
+      <Text Id="__SingleUse_ERKY" Alignment="Left" TypographyId="Sensor_Unit">
         <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
       <Text Id="__SingleUse_Z15X" Alignment="Left" TypographyId="Sensor_Values">
         <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
-      <Text Id="__SingleUse_XBZK" Alignment="Right" TypographyId="Sensor_Unit">
+      <Text Id="__SingleUse_XBZK" Alignment="Left" TypographyId="Sensor_Unit">
         <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
       <Text Id="__SingleUse_S5UQ" Alignment="Left" TypographyId="Sensor_Label">
@@ -23,7 +23,7 @@
       <Text Id="__SingleUse_GFHB" Alignment="Left" TypographyId="Sensor_Values">
         <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
-      <Text Id="__SingleUse_R7A4" Alignment="Right" TypographyId="Sensor_Unit">
+      <Text Id="__SingleUse_R7A4" Alignment="Left" TypographyId="Sensor_Unit">
         <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
       <Text Id="__SingleUse_BVOP" Alignment="Left" TypographyId="Sensor_Label">
@@ -32,7 +32,7 @@
       <Text Id="__SingleUse_0AFA" Alignment="Left" TypographyId="Sensor_Values">
         <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
-      <Text Id="__SingleUse_INAE" Alignment="Right" TypographyId="Sensor_Unit">
+      <Text Id="__SingleUse_INAE" Alignment="Left" TypographyId="Sensor_Unit">
         <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
       <Text Id="__SingleUse_MPLH" Alignment="Left" TypographyId="Sensor_Label">

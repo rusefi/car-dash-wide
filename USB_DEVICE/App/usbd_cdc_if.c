@@ -22,7 +22,8 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+#include "Globals.h"
+extern uint8_t uartTransmitBuffer[128];
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -263,6 +264,13 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   /* USER CODE BEGIN 6 */
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+
+  memset (uartTransmitBuffer, '\0', 128);  // clear the buffer
+  uint8_t len = (uint8_t)*Len;
+  uartTransmitBufferSize = len;
+  memcpy(uartTransmitBuffer, Buf, len);  // copy the data to the buffer
+  memset(Buf, '\0', len);   // clear the Buf also
+
   return (USBD_OK);
   /* USER CODE END 6 */
 }
