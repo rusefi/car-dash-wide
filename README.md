@@ -20,3 +20,12 @@ Build on STM32CubeIDE 1.11.2 and TouchGFX 4.21.1
 # Initial Programming
 
 [TC2030](https://github.com/rusefi/rusefi/wiki/Tag-Connect-TC2030) 
+
+# Connector Part Numbers
+
+https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=776262&DocType=Customer+Drawing&DocLang=English&PartCntxt=1-776262-1&DocFormat=pdf
+
+* TE Connectivity 776262-1, 14 Contacts,  Male
+https://www.mouser.co.uk/ProductDetail/TE-Connectivity/1-776262-1?qs=ZBKI5jzASZpOtA7SzySydw%3D%3D
+* TE Connectivity 776273-1, 14 Contacts,  Female
+https://www.mouser.co.uk/ProductDetail/TE-Connectivity/776273-1?qs=VZ9FDhhp7SmYiN6cNJ9wsw%3D%3D
