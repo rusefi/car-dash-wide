@@ -11,13 +11,13 @@ pins:
     type: in
     function: 0-5V Analogue or GND Digital Input (selectable through FW)
     
-  - pin: 4    
-    type: in
-    function: 0-5V Analogue or GND Digital Input (selectable through FW)
+  - pin: 4
+    type: can
+    function: CAN 2 bus high
     
-  - pin: 5    
-    type: in
-    function: 0-5V Analogue or GND Digital Input (selectable through FW)
+  - pin: 5
+    type: can
+    function: CAN 2 bus low
     
   - pin: 6    
     type: in
@@ -31,33 +31,29 @@ pins:
     type: in
     function: 0-5V Analogue or GND Digital Input (selectable through FW)
     
-  - pin: 9
-    type: can
-    function: CAN 1 bus low
+  - pin: 9    
+    type: in
+    function: 0-5V Analogue or GND Digital Input (selectable through FW)
     
   - pin: 10
-    type: can
-    function: CAN 1 bus high
-    
+    function: Power GND
+    type: gnd
+
   - pin: 11
-    type: can
-    function: CAN 2 bus low
-    
-  - pin: 12
-    type: can
-    function: CAN 2 bus high
-    
-  - pin: 13
     function: "Analog Voltage +5 supply"
     type: 5v
     
-  - pin: 14
-    function: Power GND
-    type: gnd
-    
-  - pin: 15
+  - pin: 12
     function: Power supply from bintery.
     type: 12v
+    
+  - pin: 13
+    type: can
+    function: CAN 1 bus high
+
+  - pin: 14
+    type: can
+    function: CAN 1 bus low
     
 info:
   title: 6.86" Dashboard
@@ -69,44 +65,44 @@ info:
   directory: pinout
   pins:
     - pin: 1
-      x: 239
-      y: 312
+      x: 250
+      y: 185
     - pin: 2
-      x: 343
-      y: 312
+      x: 309
+      y: 185
     - pin: 3
-      x: 447
-      y: 312
+      x: 371
+      y: 185
     - pin: 4
-      x: 551
-      y: 312
+      x: 433
+      y: 185
     - pin: 5
-      x: 655
-      y: 312
+      x: 492
+      y: 185
     - pin: 6
-      x: 759
-      y: 312
+      x: 280
+      y: 245
     - pin: 7
-      x: 863
-      y: 312
+      x: 339
+      y: 245
     - pin: 8
-      x: 967
-      y: 312
+      x: 401
+      y: 245
     - pin: 9
-      x: 291
-      y: 412
+      x: 462
+      y: 245
     - pin: 10
-      x: 395
-      y: 412
+      x: 250
+      y: 305
     - pin: 11
-      x: 499
-      y: 412
+      x: 309
+      y: 305
     - pin: 12
-      x: 603
-      y: 412
+      x: 371
+      y: 305
     - pin: 13
-      x: 707
-      y: 412
+      x: 433
+      y: 305
     - pin: 14
-      x: 811
-      y: 412
+      x: 492
+      y: 305
