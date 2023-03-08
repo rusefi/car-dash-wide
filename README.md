@@ -29,3 +29,12 @@ Build on STM32CubeIDE 1.11.2 and TouchGFX 4.21.1
 
 [Datasheet](https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=776262&DocType=Customer+Drawing&DocLang=English&PartCntxt=1-776262-1&DocFormat=pdf
 )
+
+# Connector pinout
+
+Looking from the back of the dash
+
+![back](https://user-images.githubusercontent.com/12942077/223684612-05eea069-cdf9-4aa5-8930-e2bc4113996d.png)
+
+[Connector](https://opelpanfan.github.io/car-dash-wide/pinout/)
+
