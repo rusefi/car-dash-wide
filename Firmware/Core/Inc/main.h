@@ -197,10 +197,6 @@ void show_neopixels();
 #define BTN_4_PE5_GPIO_Port GPIOC
 #define BTN_3_PE4_Pin GPIO_PIN_9
 #define BTN_3_PE4_GPIO_Port GPIOC
-#define GPS_UART1_RX_Pin GPIO_PIN_9
-#define GPS_UART1_RX_GPIO_Port GPIOA
-#define GPS_UART1_TX_Pin GPIO_PIN_10
-#define GPS_UART1_TX_GPIO_Port GPIOA
 #define USB_OTG__Pin GPIO_PIN_11
 #define USB_OTG__GPIO_Port GPIOA
 #define USB_OTG_A12_Pin GPIO_PIN_12

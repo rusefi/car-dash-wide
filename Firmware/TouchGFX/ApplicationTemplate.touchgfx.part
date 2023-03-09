@@ -18,10 +18,13 @@
     "Family": "STM32F4",
     "SubFamily": "STM32F429/439",
     "Platform": "m4",
+    "Toolchain": "STM32CubeIDE",
     "ProjectFile": "../LCD_CAR_WIDE.ioc",
     "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
     "OptionalComponents": [
-    ]
+    ],
+    "AdditionalFeatures": [
+    ],
   },
-  "Version": "4.20.0"
+  "Version": "4.21.1"
 }

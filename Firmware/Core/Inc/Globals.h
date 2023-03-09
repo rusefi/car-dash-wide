@@ -21,6 +21,7 @@ extern "C" {
 #define UART_ENABLED			0
 #define IND_ENABLED 			0
 #define ALERT_ENABLED  			0
+#define DEMO		  			0
 
 #define LED_NUMBER				24
 #define LED_DEFAULT_BRIGHTNESS		2

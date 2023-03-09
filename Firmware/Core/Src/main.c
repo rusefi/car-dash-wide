@@ -30,9 +30,6 @@
 #include "Globals.h"
 #include "extern.h"
 #include "sdram.h"
-#include "WS2812_Lib.h"
-#include "spi_flash.h"
-#include "mcu_flash.h"
 
 /* USER CODE END Includes */
 
@@ -55,25 +52,15 @@
 ADC_HandleTypeDef hadc1;
 
 CAN_HandleTypeDef hcan1;
-CAN_HandleTypeDef hcan2;
 
 CRC_HandleTypeDef hcrc;
 
 DMA2D_HandleTypeDef hdma2d;
 
-I2C_HandleTypeDef hi2c2;
-
 LTDC_HandleTypeDef hltdc;
 
-SPI_HandleTypeDef hspi1;
-SPI_HandleTypeDef hspi3;
-
 TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim13;
-
-UART_HandleTypeDef huart1;
-UART_HandleTypeDef huart3;
 
 SDRAM_HandleTypeDef hsdram1;
 
@@ -91,13 +78,6 @@ const osThreadAttr_t TouchGFXTask_attributes = {
   .stack_size = 2048 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
-/* Definitions for SD_Task */
-osThreadId_t SD_TaskHandle;
-const osThreadAttr_t SD_Task_attributes = {
-  .name = "SD_Task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
 /* Definitions for LED_Task */
 osThreadId_t LED_TaskHandle;
 const osThreadAttr_t LED_Task_attributes = {
@@ -112,54 +92,12 @@ const osThreadAttr_t CAN_Task_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
-/* Definitions for BTN_Task */
-osThreadId_t BTN_TaskHandle;
-const osThreadAttr_t BTN_Task_attributes = {
-  .name = "BTN_Task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
 /* Definitions for ALERT_Task */
 osThreadId_t ALERT_TaskHandle;
 const osThreadAttr_t ALERT_Task_attributes = {
   .name = "ALERT_Task",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
-};
-/* Definitions for RGB_Task */
-osThreadId_t RGB_TaskHandle;
-const osThreadAttr_t RGB_Task_attributes = {
-  .name = "RGB_Task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
-/* Definitions for INPUT_Task */
-osThreadId_t INPUT_TaskHandle;
-const osThreadAttr_t INPUT_Task_attributes = {
-  .name = "INPUT_Task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
-/* Definitions for OUTPUT_Task */
-osThreadId_t OUTPUT_TaskHandle;
-const osThreadAttr_t OUTPUT_Task_attributes = {
-  .name = "OUTPUT_Task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
-/* Definitions for ADC_Task */
-osThreadId_t ADC_TaskHandle;
-const osThreadAttr_t ADC_Task_attributes = {
-  .name = "ADC_Task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
-/* Definitions for UART_Task */
-osThreadId_t UART_TaskHandle;
-const osThreadAttr_t UART_Task_attributes = {
-  .name = "UART_Task",
-  .stack_size = 256 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
 };
 /* USER CODE BEGIN PV */
 FMC_SDRAM_CommandTypeDef command;
@@ -170,12 +108,6 @@ CAN_TxHeaderTypeDef TxHeader;
 CAN_RxHeaderTypeDef RxHeader;
 uint8_t TxData[8];
 uint8_t RxData[8];
-uint32_t TxMailbox;
-
-FILE *File;
-
-FILE *FileBuffer;
-uint8_t BufferIsSet;
 
 /* USER CODE END PV */
 
@@ -188,27 +120,13 @@ static void MX_FMC_Init(void);
 static void MX_CRC_Init(void);
 static void MX_TIM13_Init(void);
 static void MX_CAN1_Init(void);
-static void MX_CAN2_Init(void);
-static void MX_I2C2_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM1_Init(void);
-static void MX_SPI1_Init(void);
-static void MX_USART1_UART_Init(void);
-static void MX_SPI3_Init(void);
-static void MX_TIM2_Init(void);
-static void MX_USART3_UART_Init(void);
 void Start_START_Task(void *argument);
 void TouchGFX_Task(void *argument);
-void Start_SD_Task(void *argument);
 void Start_LED_Task(void *argument);
 void Start_CAN_Task(void *argument);
-void Start_BTN_Task(void *argument);
 void Start_ALERT_Task(void *argument);
-void Start_RGB_Task(void *argument);
-void Start_INPUT_Task(void *argument);
-void Start_OUTPUT_Task(void *argument);
-void Start_ADC_Task(void *argument);
-void Start_UART_task(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -225,8 +143,6 @@ void Start_UART_task(void *argument);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	BufferIsSet = 0;
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -253,15 +169,8 @@ int main(void)
   MX_CRC_Init();
   MX_TIM13_Init();
   MX_CAN1_Init();
-  MX_CAN2_Init();
-  MX_I2C2_Init();
   MX_ADC1_Init();
   MX_TIM1_Init();
-  MX_SPI1_Init();
-  MX_USART1_UART_Init();
-  MX_SPI3_Init();
-  MX_TIM2_Init();
-  MX_USART3_UART_Init();
   MX_TouchGFX_Init();
   /* Call PreOsInit function */
   MX_TouchGFX_PreOSInit();
@@ -302,35 +211,14 @@ int main(void)
   /* creation of TouchGFXTask */
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
 
-  /* creation of SD_Task */
-  SD_TaskHandle = osThreadNew(Start_SD_Task, NULL, &SD_Task_attributes);
-
   /* creation of LED_Task */
   LED_TaskHandle = osThreadNew(Start_LED_Task, NULL, &LED_Task_attributes);
 
   /* creation of CAN_Task */
   CAN_TaskHandle = osThreadNew(Start_CAN_Task, NULL, &CAN_Task_attributes);
 
-  /* creation of BTN_Task */
-  BTN_TaskHandle = osThreadNew(Start_BTN_Task, NULL, &BTN_Task_attributes);
-
   /* creation of ALERT_Task */
   ALERT_TaskHandle = osThreadNew(Start_ALERT_Task, NULL, &ALERT_Task_attributes);
-
-  /* creation of RGB_Task */
-  RGB_TaskHandle = osThreadNew(Start_RGB_Task, NULL, &RGB_Task_attributes);
-
-  /* creation of INPUT_Task */
-  INPUT_TaskHandle = osThreadNew(Start_INPUT_Task, NULL, &INPUT_Task_attributes);
-
-  /* creation of OUTPUT_Task */
-  OUTPUT_TaskHandle = osThreadNew(Start_OUTPUT_Task, NULL, &OUTPUT_Task_attributes);
-
-  /* creation of ADC_Task */
-  ADC_TaskHandle = osThreadNew(Start_ADC_Task, NULL, &ADC_Task_attributes);
-
-  /* creation of UART_Task */
-  UART_TaskHandle = osThreadNew(Start_UART_task, NULL, &UART_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
 	/* add threads, ... */
@@ -367,7 +255,7 @@ void SystemClock_Config(void)
   /** Configure the main internal regulator output voltage
   */
   __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -377,9 +265,9 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 6;
-  RCC_OscInitStruct.PLL.PLLN = 168;
+  RCC_OscInitStruct.PLL.PLLN = 120;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 7;
+  RCC_OscInitStruct.PLL.PLLQ = 5;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -394,7 +282,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -425,7 +313,7 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.ScanConvMode = DISABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
@@ -476,8 +364,8 @@ static void MX_CAN1_Init(void)
   hcan1.Init.Prescaler = 12;
   hcan1.Init.Mode = CAN_MODE_NORMAL;
   hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan1.Init.TimeSeg1 = CAN_BS1_3TQ;
-  hcan1.Init.TimeSeg2 = CAN_BS2_3TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_2TQ;
+  hcan1.Init.TimeSeg2 = CAN_BS2_2TQ;
   hcan1.Init.TimeTriggeredMode = DISABLE;
   hcan1.Init.AutoBusOff = DISABLE;
   hcan1.Init.AutoWakeUp = DISABLE;
@@ -511,43 +399,6 @@ static void MX_CAN1_Init(void)
 	__HAL_RCC_CAN1_CLK_ENABLE();
 	//__HAL_RCC_CAN2_CLK_ENABLE();
   /* USER CODE END CAN1_Init 2 */
-
-}
-
-/**
-  * @brief CAN2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_CAN2_Init(void)
-{
-
-  /* USER CODE BEGIN CAN2_Init 0 */
-
-  /* USER CODE END CAN2_Init 0 */
-
-  /* USER CODE BEGIN CAN2_Init 1 */
-
-  /* USER CODE END CAN2_Init 1 */
-  hcan2.Instance = CAN2;
-  hcan2.Init.Prescaler = 12;
-  hcan2.Init.Mode = CAN_MODE_NORMAL;
-  hcan2.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan2.Init.TimeSeg1 = CAN_BS1_3TQ;
-  hcan2.Init.TimeSeg2 = CAN_BS2_3TQ;
-  hcan2.Init.TimeTriggeredMode = DISABLE;
-  hcan2.Init.AutoBusOff = DISABLE;
-  hcan2.Init.AutoWakeUp = DISABLE;
-  hcan2.Init.AutoRetransmission = DISABLE;
-  hcan2.Init.ReceiveFifoLocked = DISABLE;
-  hcan2.Init.TransmitFifoPriority = DISABLE;
-  if (HAL_CAN_Init(&hcan2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN CAN2_Init 2 */
-
-  /* USER CODE END CAN2_Init 2 */
 
 }
 
@@ -623,54 +474,6 @@ static void MX_DMA2D_Init(void)
 }
 
 /**
-  * @brief I2C2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_I2C2_Init(void)
-{
-
-  /* USER CODE BEGIN I2C2_Init 0 */
-
-  /* USER CODE END I2C2_Init 0 */
-
-  /* USER CODE BEGIN I2C2_Init 1 */
-
-  /* USER CODE END I2C2_Init 1 */
-  hi2c2.Instance = I2C2;
-  hi2c2.Init.ClockSpeed = 100000;
-  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c2.Init.OwnAddress1 = 0;
-  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c2.Init.OwnAddress2 = 0;
-  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure Analogue filter
-  */
-  if (HAL_I2CEx_ConfigAnalogFilter(&hi2c2, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure Digital filter
-  */
-  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c2, 0) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN I2C2_Init 2 */
-
-  /* USER CODE END I2C2_Init 2 */
-
-}
-
-/**
   * @brief LTDC Initialization Function
   * @param None
   * @retval None
@@ -733,82 +536,6 @@ static void MX_LTDC_Init(void)
 }
 
 /**
-  * @brief SPI1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_SPI1_Init(void)
-{
-
-  /* USER CODE BEGIN SPI1_Init 0 */
-
-  /* USER CODE END SPI1_Init 0 */
-
-  /* USER CODE BEGIN SPI1_Init 1 */
-
-  /* USER CODE END SPI1_Init 1 */
-  /* SPI1 parameter configuration*/
-  hspi1.Instance = SPI1;
-  hspi1.Init.Mode = SPI_MODE_MASTER;
-  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
-  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi1.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN SPI1_Init 2 */
-
-  /* USER CODE END SPI1_Init 2 */
-
-}
-
-/**
-  * @brief SPI3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_SPI3_Init(void)
-{
-
-  /* USER CODE BEGIN SPI3_Init 0 */
-
-  /* USER CODE END SPI3_Init 0 */
-
-  /* USER CODE BEGIN SPI3_Init 1 */
-
-  /* USER CODE END SPI3_Init 1 */
-  /* SPI3 parameter configuration*/
-  hspi3.Instance = SPI3;
-  hspi3.Init.Mode = SPI_MODE_MASTER;
-  hspi3.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi3.Init.NSS = SPI_NSS_SOFT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-  hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi3.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN SPI3_Init 2 */
-
-  /* USER CODE END SPI3_Init 2 */
-
-}
-
-/**
   * @brief TIM1 Initialization Function
   * @param None
   * @retval None
@@ -855,59 +582,6 @@ static void MX_TIM1_Init(void)
 }
 
 /**
-  * @brief TIM2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM2_Init(void)
-{
-
-  /* USER CODE BEGIN TIM2_Init 0 */
-
-  /* USER CODE END TIM2_Init 0 */
-
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-
-  /* USER CODE BEGIN TIM2_Init 1 */
-
-  /* USER CODE END TIM2_Init 1 */
-  htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 0;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4294967295;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM2_Init 2 */
-
-  /* USER CODE END TIM2_Init 2 */
-  HAL_TIM_MspPostInit(&htim2);
-
-}
-
-/**
   * @brief TIM13 Initialization Function
   * @param None
   * @retval None
@@ -950,72 +624,6 @@ static void MX_TIM13_Init(void)
 
   /* USER CODE END TIM13_Init 2 */
   HAL_TIM_MspPostInit(&htim13);
-
-}
-
-/**
-  * @brief USART1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART1_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART1_Init 0 */
-
-  /* USER CODE END USART1_Init 0 */
-
-  /* USER CODE BEGIN USART1_Init 1 */
-
-  /* USER CODE END USART1_Init 1 */
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART1_Init 2 */
-
-  /* USER CODE END USART1_Init 2 */
-
-}
-
-/**
-  * @brief USART3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART3_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART3_Init 0 */
-
-  /* USER CODE END USART3_Init 0 */
-
-  /* USER CODE BEGIN USART3_Init 1 */
-
-  /* USER CODE END USART3_Init 1 */
-  huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
-  huart3.Init.WordLength = UART_WORDLENGTH_8B;
-  huart3.Init.StopBits = UART_STOPBITS_1;
-  huart3.Init.Parity = UART_PARITY_NONE;
-  huart3.Init.Mode = UART_MODE_TX_RX;
-  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART3_Init 2 */
-
-  /* USER CODE END USART3_Init 2 */
 
 }
 
@@ -1146,6 +754,38 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : LED_TIM2_CH2_PA1_Pin LED_TIM2_CH3_PA2_Pin */
+  GPIO_InitStruct.Pin = LED_TIM2_CH2_PA1_Pin|LED_TIM2_CH3_PA2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : I2C2_SCL_PH4_Pin I2C2_SDA_PH5_Pin */
+  GPIO_InitStruct.Pin = I2C2_SCL_PH4_Pin|I2C2_SDA_PH5_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
+  HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : ESP_TX_Pin ESP_RX_Pin */
+  GPIO_InitStruct.Pin = ESP_TX_Pin|ESP_RX_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB12 PB13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF9_CAN2;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
   /*Configure GPIO pin : PA8 */
   GPIO_InitStruct.Pin = GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
@@ -1158,6 +798,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SD_CS_PIN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PC10 PC11 PC12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : IN_S0_Pin IN_S1_Pin IN_S2_Pin PUD_E_Pin */
   GPIO_InitStruct.Pin = IN_S0_Pin|IN_S1_Pin|IN_S2_Pin|PUD_E_Pin;
@@ -1174,6 +822,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB3 PB4 PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SPI1_FLASH_Pin */
   GPIO_InitStruct.Pin = SPI1_FLASH_Pin;
@@ -1221,10 +877,7 @@ void Start_START_Task(void *argument)
 	}
 	/* Infinite loop */
 	for (;;) {
-		Current_Status.ECT = 500;
-		Current_Status.IAT = 500;
-		Current_Status.RPM = Current_Status.RPM <= 8000 ? Current_Status.RPM + 2 : 0;
-		osDelay(2);
+		osDelay(1);
 	}
   /* USER CODE END 5 */
 }
@@ -1244,23 +897,6 @@ __weak void TouchGFX_Task(void *argument)
 		osDelay(1);
 	}
   /* USER CODE END TouchGFX_Task */
-}
-
-/* USER CODE BEGIN Header_Start_SD_Task */
-/**
- * @brief Function implementing the SD_Task thread.
- * @param argument: Not used
- * @retval None
- */
-/* USER CODE END Header_Start_SD_Task */
-void Start_SD_Task(void *argument)
-{
-  /* USER CODE BEGIN Start_SD_Task */
-	/* Infinite loop */
-	for (;;) {
-		osDelay(1);
-	}
-  /* USER CODE END Start_SD_Task */
 }
 
 /* USER CODE BEGIN Header_Start_LED_Task */
@@ -1499,74 +1135,6 @@ void Start_CAN_Task(void *argument)
 						break;
 					}
 					break;
-				case CAN_MX5:
-					switch (RxHeader.StdId) {
-					case 0x05: //PID-0x05 Engine coolant temperature , range is -40 to 215 deg C , formula == A-40
-						Current_Status.ECT = RxData[3] - 40;
-						break;
-					case 0x0B: // PID-0x0B , MAP , range is 0 to 255 kPa , Formula == A
-						Current_Status.MAP = RxData[3];
-						break;
-					case 0x0C: // PID-0x0C , RPM  , range is 0 to 16383.75 rpm , Formula == 256A+B / 4
-						Current_Status.RPM = (uint16_t) ((RxData[4] << 8)
-								+ (RxData[3] & 0x00ff));
-						break;
-					case 0x0D: //PID-0x0D , Vehicle speed , range is 0 to 255 km/h , formula == A
-						Current_Status.LF_SPEED = RxData[3];
-						break;
-					case 0x0E: //PID-0x0E , Ignition Timing advance, range is -64 to 63.5 BTDC , formula == A/2 - 64
-						Current_Status.IGN_TIM = RxData[3] / 2 - 64;
-						break;
-					case 0x0F: //PID-0x0F , Inlet air temperature , range is -40 to 215 deg C, formula == A-40
-						Current_Status.IAT = RxData[3] - 40;
-						break;
-					case 0x11: // PID-0x11 , TPS percentage, range is 0 to 100 percent, formula == 100/256 A
-						Current_Status.TPS = 100 / 256 * RxData[3];
-						break;
-					case 0x13: //PID-0x13 , oxygen sensors present, A0-A3 == bank1 , A4-A7 == bank2
-						break;
-					case 0x1C: // PID-0x1C obd standard
-						break;
-					case 0x20: // PID-0x20 PIDs supported [21-40]
-						break;
-					case 0x22: // PID-0x22 Fuel /Pressure (Relative to manifold vacuum) , range is 0 to 5177.265 kPa , formula == 0.079(256A+B)
-						Current_Status.FUELP = 0.079
-								* (256 * (uint16_t) (RxData[4] << 8)
-										+ (RxData[3] & 0x00ff));
-						break;
-					case 0x25: // PID-0x25 O2 sensor2, AB fuel/air equivalence ratio, CD voltage ,  2/65536(256A +B) ,8/65536(256C+D) , range is 0 to <2 and 0 to >8V
-						Current_Status.LAMBDA2 = (2 / 65536)
-								* (256 * (uint16_t) (RxData[4] << 8)
-										+ (RxData[3] & 0x00ff)); // , 8 / 65536 * (256 * (uint16_t)(RxData[5] << 8) + (RxData[6] & 0x00ff));
-						break;
-					case 0x33: // PID-0x33 Absolute Barometric pressure , range is 0 to 255 kPa , formula == A
-						Current_Status.BARO = RxData[3];
-						break;
-					case 0x34: // PID-0x24 O2 sensor2, AB: fuel/air equivalence ratio, CD: voltage ,  Formula == (2/65536)(256A +B) , 8/65536(256C+D) , Range is 0 to <2 and 0 to >8V
-						Current_Status.LAMBDA1 = (2 / 65536)
-								* (256 * (uint16_t) (RxData[4] << 8)
-										+ (RxData[3] & 0x00ff)); // , 8 / 65536 * (256 * (uint16_t)(RxData[5] << 8) + (RxData[6] & 0x00ff));
-						break;
-					case 0x40: // PIDs supported [41-60]
-						break;
-					case 0x42: // PID-0x42 control module voltage, 256A+B / 1000 , range is 0 to 65.535v
-						Current_Status.BATT = 256 * (uint16_t) (RxData[4] << 8)
-								+ (RxData[3] & 0x00ff) / 1000;
-						break;
-					case 0x46: // PID-0x46 Ambient Air Temperature , range is -40 to 215 deg C , formula == A-40
-						break;
-					case 0x52: // PID-0x52 Ethanol fuel % , range is 0 to 100% , formula == (100/255)A
-						Current_Status.ETHANOL = 100 / 255 * RxData[3];
-						break;
-					case 0x5C: // PID-0x5C Engine oil temperature , range is -40 to 210 deg C , formula == A-40
-						Current_Status.OILT = RxData[3] - 40;
-						break;
-					case 0x60: // PIDs supported [61-80]
-						break;
-					default:
-						break;
-					}
-					break;
 				case CAN_AIM:
 					switch (RxHeader.StdId) {
 					case 0x5F0:
@@ -1595,40 +1163,6 @@ void Start_CAN_Task(void *argument)
 						break;
 					}
 					break;
-					case CAN_BMW_PHEV:
-						switch (RxHeader.StdId) {
-							case 0x120:
-								Current_Status.CELL[0] = (RxData[0] + (RxData[1] & 0x3F) * 256);
-								Current_Status.CELL[1] = (RxData[2] + (RxData[3] & 0x3F) * 256);
-								Current_Status.CELL[2] = (RxData[4] + (RxData[5] & 0x3F) * 256);
-								break;
-							case 0x130:
-								Current_Status.CELL[3] = (RxData[0] + (RxData[1] & 0x3F) * 256);
-								Current_Status.CELL[4] = (RxData[2] + (RxData[3] & 0x3F) * 256);
-								Current_Status.CELL[5] = (RxData[4] + (RxData[5] & 0x3F) * 256);
-								break;
-							case 0x140:
-								Current_Status.CELL[6] = (RxData[0] + (RxData[1] & 0x3F) * 256);
-								Current_Status.CELL[7] = (RxData[2] + (RxData[3] & 0x3F) * 256);
-								Current_Status.CELL[8] = (RxData[4] + (RxData[5] & 0x3F) * 256);
-								break;
-							case 0x150:
-								Current_Status.CELL[9] = (RxData[0] + (RxData[1] & 0x3F) * 256);
-								Current_Status.CELL[10] = (RxData[2] + (RxData[3] & 0x3F) * 256);
-								Current_Status.CELL[11] = (RxData[4] + (RxData[5] & 0x3F) * 256);
-								break;
-							case 0x160:
-								Current_Status.CELL[12] = (RxData[0] + (RxData[1] & 0x3F) * 256);
-								Current_Status.CELL[13] = (RxData[2] + (RxData[3] & 0x3F) * 256);
-								Current_Status.CELL[14] = (RxData[4] + (RxData[5] & 0x3F) * 256);
-								break;
-							case 0x170:
-								Current_Status.CELL[15] = (RxData[0] + (RxData[1] & 0x3F) * 256);
-								break;
-							default:
-								break;
-						}
-						break;
 				default:
 					break;
 				}
@@ -1662,96 +1196,12 @@ void Start_CAN_Task(void *argument)
 			else {
 
 			}
+			osDelay(1);
 		} else {
 			osDelay(60000);
 		}
 	}
   /* USER CODE END Start_CAN_Task */
-}
-
-/* USER CODE BEGIN Header_Start_BTN_Task */
-/**
- * @brief Function implementing the BTN_Task thread.
- * @param argument: Not used
- * @retval None
- */
-/* USER CODE END Header_Start_BTN_Task */
-void Start_BTN_Task(void *argument)
-{
-  /* USER CODE BEGIN Start_BTN_Task */
-	/* Infinite loop */
-
-	//90Mhz
-	//Set timer prescaller
-	//Timer count frequency is set with
-	//timer_tick_frequency = Timer_default_frequency / (prescaller_set + 1)
-	//In our case, we want a max frequency for timer, so we set prescaller to 0
-	//And our timer will have tick frequency
-	//timer_tick_frequency = 84000000 / (0 + 1) = 84000000
-	//To get your frequency for PWM, equation is simple
-	//PWM_frequency = timer_tick_frequency / (TIM_Period + 1)
-	//If you know your PWM frequency you want to have timer period set correct
-	//TIM_Period = timer_tick_frequency / PWM_frequency - 1
-	//In our case, for 10Khz PWM_frequency, set Period to
-	//TIM_Period = 84000000 / 10000 - 1 = 8399
-	//uint32_t frequency = 90000000;
-
-
-//	uint32_t arr = 10000 * 1.2;
-//	uint32_t crr1 = arr / 2;
-//	uint32_t crr2 = arr / 2;
-//	htim9.Instance->ARR = arr - 1;
-
-
-	//htim9.Instance->CCR1 = crr1 - 1; //left
-	//htim9.Instance->CCR2 = crr2 - 1; //right
-
-	for (;;) {
-
-		//Current_Status.RPM = Current_Status.LCD_BRIGHTNESS;
-		//Current_Status.IND_LEFT = Current_Status.BTN_TOP_LEFT;
-		//Current_Status.IND_RIGHT = Current_Status.BTN_TOP_RIGHT;
-
-//		Current_Status.BTN_BOTTOM_RIGHT = HAL_GPIO_ReadPin(BTN_2_GPIO_Port,
-//		BTN_2_Pin);
-//		Current_Status.BTN_BOTTOM_LEFT = HAL_GPIO_ReadPin(BTN_4_GPIO_Port,
-//		BTN_4_Pin);
-//
-//		if (Current_Status.BTN_BOTTOM_LEFT == 1
-//				&& Current_Status.LCD_BRIGHTNESS_CHANGED == 0) {
-//			Current_Status.LCD_BRIGHTNESS =
-//					Current_Status.LCD_BRIGHTNESS >= 50 ?
-//							Current_Status.LCD_BRIGHTNESS - 50 :
-//							Current_Status.LCD_BRIGHTNESS;
-//			Current_Status.LCD_BRIGHTNESS_CHANGED = 1;
-//		} else if (Current_Status.BTN_BOTTOM_RIGHT == 1
-//				&& Current_Status.LCD_BRIGHTNESS_CHANGED == 0) {
-//			Current_Status.LCD_BRIGHTNESS =
-//					Current_Status.LCD_BRIGHTNESS <= 1000 ?
-//							Current_Status.LCD_BRIGHTNESS + 50 :
-//							Current_Status.LCD_BRIGHTNESS;
-//			Current_Status.LCD_BRIGHTNESS_CHANGED = 1;
-//		} else {
-//			Current_Status.LCD_BRIGHTNESS_CHANGED = 0;
-//		}
-//
-//		uint8_t in16 = HAL_GPIO_ReadPin(HALL_OUT_1_PI12_GPIO_Port,
-//		HALL_OUT_1_PI12_Pin);
-
-		//htim9.Instance->CCR1 = Current_Status.BTN_TOP_LEFT == 1 ? crr1 - 1 : 0;
-		//htim9.Instance->CCR2 = in16 == 0 ? crr2 - 1 : 0;
-
-//		Current_Status.IND_LEFT =
-//				Current_Status.BTN_TOP_LEFT == 1 && htim9.Instance->CNT < crr1 ?
-//						true : false;
-//		Current_Status.IND_RIGHT =
-//				in16 == 0 && htim9.Instance->CNT < crr2 ? true : false;
-
-		//Current_Status.ECT = htim9.Instance->CNT;
-
-		osDelay(1);
-	}
-  /* USER CODE END Start_BTN_Task */
 }
 
 /* USER CODE BEGIN Header_Start_ALERT_Task */
@@ -1965,14 +1415,6 @@ void Start_ALERT_Task(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  	Current_Status.ECT = 500;
-	  	Current_Status.IAT = 500;
-
-	  	xStart = xTaskGetTickCount();
-	  	osDelay(100);
-	  	Current_Status.TPS = xTaskGetTickCount() - xStart;
-
-
 //		Current_Status.OK_L1 = true;
 //		Current_Status.ALERT_L1 = false;
 //		Current_Status.WARNING_L1 = false;
@@ -2039,357 +1481,9 @@ void Start_ALERT_Task(void *argument)
 //		Current_Status.OK_L4 = false;
 //		Current_Status.ALERT_L4 = false;
 //		Current_Status.WARNING_L4 = false;
-//		osDelay(100);
+		osDelay(1);
   }
   /* USER CODE END Start_ALERT_Task */
-}
-
-/* USER CODE BEGIN Header_Start_RGB_Task */
-/**
- * @brief Function implementing the RGB_Task thread.
- * @param argument: Not used
- * @retval None
- */
-/* USER CODE END Header_Start_RGB_Task */
-void Start_RGB_Task(void *argument)
-{
-  /* USER CODE BEGIN Start_RGB_Task */
-
-	Current_Status.LED_BRIGHTNESS = LED_DEFAULT_BRIGHTNESS;
-
-	/* Infinite loop */
-	for (;;) {
-		Current_Status.ENGINE_PROTECTION = Current_Status.RPM >= PROTECTION_RPM_HIGH ? 1 : 0;
-
-			if (RGB_ENABLED) {
-
-				WS2812_Clear(0);
-				uint8_t RPMLED = LED_NUMBER;
-
-				uint16_t lowRange = mapInt(Current_Status.RPM, PROTECTION_RPM_LOW, 0, RPMLED - PROTECTION_RPM_LED, 1);
-				lowRange = lowRange > RPMLED - PROTECTION_RPM_LED ? RPMLED - PROTECTION_RPM_LED : lowRange;
-				lowRange = lowRange < 1 ? 1 : lowRange;
-
-				for (int i = 1; i <= lowRange; i++) {
-					WS2812_RGB_t color;
-					if (Current_Status.ENGINE_PROTECTION == 1) {
-						color.red = 255;
-						color.green = 0;
-						color.blue = 0;
-					} else {
-						color.red = 0;
-						color.green = 255;
-						color.blue = 0;
-					}
-					WS2812_One_RGB((RPMLED - i) + (LED_NUMBER - RPMLED), color, 0);
-				}
-
-				if (Current_Status.RPM > PROTECTION_RPM_LOW) {
-					uint16_t highRange = mapInt(Current_Status.RPM, PROTECTION_RPM_HIGH, PROTECTION_RPM_LOW, PROTECTION_RPM_LED, 1);
-					for (int i = 1; i <= highRange; i++) {
-						WS2812_RGB_t color;
-						color.red = 255;
-						color.green = 0;
-						color.blue = 0;
-
-						WS2812_One_RGB((PROTECTION_RPM_LED - i) + (LED_NUMBER - RPMLED), color, 0);
-					}
-				}
-
-				WS2812_Refresh();
-				osDelay(100);
-			}
-		}
-  /* USER CODE END Start_RGB_Task */
-}
-
-/* USER CODE BEGIN Header_Start_INPUT_Task */
-/**
- * @brief Function implementing the INPUT_Task thread.
- * @param argument: Not used
- * @retval None
- */
-/* USER CODE END Header_Start_INPUT_Task */
-void Start_INPUT_Task(void *argument)
-{
-  /* USER CODE BEGIN Start_INPUT_Task */
-	/* Infinite loop */
-
-	for (;;) {
-
-		//PIN SETUP
-		HAL_GPIO_WritePin(IN_E_GPIO_Port, IN_E_Pin, 0);
-		HAL_GPIO_WritePin(IN_S0_GPIO_Port, IN_S0_Pin, 1);
-		HAL_GPIO_WritePin(IN_S1_GPIO_Port, IN_S1_Pin, 1);
-		HAL_GPIO_WritePin(IN_S2_GPIO_Port, IN_S2_Pin, 1);
-
-		//PULL SETUP
-		HAL_GPIO_WritePin(PUD_E_GPIO_Port, PUD_E_Pin, 0);
-		HAL_GPIO_WritePin(PUD_S0_GPIO_Port, PUD_S0_Pin, 1);
-		HAL_GPIO_WritePin(PUD_S1_GPIO_Port, PUD_S1_Pin, 1);
-		HAL_GPIO_WritePin(PUD_S2_GPIO_Port, PUD_S2_Pin, 1);
-
-		//OUTPUT SETUP
-		HAL_GPIO_WritePin(OUT_S0_GPIO_Port, OUT_S0_Pin, 1);
-		//HAL_GPIO_WritePin(PUD_S1_GPIO_Port, PUD_S1_Pin, 1);
-		//HAL_GPIO_WritePin(PUD_S2_GPIO_Port, PUD_S2_Pin, 1);
-		//HAL_GPIO_WritePin(HALL_OUT_1_PI12_GPIO_Port, HALL_OUT_1_PI12_Pin, 0);
-
-		osDelay(1);
-	}
-  /* USER CODE END Start_INPUT_Task */
-}
-
-/* USER CODE BEGIN Header_Start_OUTPUT_Task */
-/**
- * @brief Function implementing the OUTPUT_Task thread.
- * @param argument: Not used
- * @retval None
- */
-/* USER CODE END Header_Start_OUTPUT_Task */
-void Start_OUTPUT_Task(void *argument)
-{
-  /* USER CODE BEGIN Start_OUTPUT_Task */
-////
-////
-//	uint32_t Address = 0x081E0000;
-//	uint8_t txData[8] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77};
-//	uint8_t rxData[8];
-////
-////	FLASH_SetSectorAddrs(23, 0x081E0000);
-////
-////	FLASH_WriteN(0, txData, 8, DATA_TYPE_8);
-////	FLASH_ReadN(0, rxData, 8, DATA_TYPE_8);
-////
-//
-//	#define PAGE(_x) _x* 0x100;
-//	#define SEC(_x)  _x* 0x1000;
-//	#define BLK(_x)  _x* 0x10000;
-//	uint32_t  StartAddress = SEC(7);
-//
-//	W25qxx_Init();
-//
-////	w25q128.PageSize=256;
-////	w25q128.SectorSize=4096;
-////	w25q128.SectorCount=4096;
-////	w25q128.PageCount=65536;
-////	w25q128.BlockSize=65536;
-////	w25q128.CapacityInBytes=16384;
-//	uint8_t rBuff[16];
-//	W25qxx_EraseSector(0); // erase page 0~15;
-//	W25qxx_WritePage("0123456789", 0, 0, 10);
-//	W25qxx_ReadPage(rBuff, 0,0,10);
-
-	//MESSAGE
-	CAN_Message msg;
-	strcpy(msg.Label, "MESSAGE");
-	msg.Type = CAN_ENUM_MESSAGE_FORMAT_NORMAL;
-	msg.IdType = CAN_ENUM_MESSAGE_ID_STANDARD;
-	msg.Id = 0x18;
-	msg.Bus = CAN_ENUM_BUS_0;
-	msg.Size = CAN_ENUM_MESSAGE_SIZE_1FRAME;
-	msg.Timeout = 100;
-
-	//SIGNAL IN
-	CAN_Input signal_IN;
-	//Message Object
-	strcpy(signal_IN.Label, "Signal IN");
-	signal_IN.Message = msg;
-	signal_IN.MessageOffset = 0;
-	//Type
-	signal_IN.Type = CAN_ENUM_DATA_TYPE_UNSIGNED;
-	signal_IN.Format = CAN_ENUM_DATA_FORMAT_BIT8;
-	signal_IN.Endian = CAN_ENUM_DATA_ENDIAN_LITTLE;
-	signal_IN.ByteOffset = 0;
-	//Data
-	signal_IN.Multiplier = 1;
-	signal_IN.Divider = 0;
-	signal_IN.Offset = 0;
-	signal_IN.DecimalPlaces = 0;
-	signal_IN.Default = 0;
-	//On Timeout
-	signal_IN.TimeoutAction = CAN_ENUM_DATA_TIMEOUT_SET_VALUE;
-	signal_IN.TimeoutValue = 0;
-
-	//SIGNAL OUT
-	CAN_Output signal_OUT;
-	strcpy(signal_OUT.Label, "Signal OUT");
-	signal_OUT.Bus = CAN_ENUM_BUS_0;
-	signal_OUT.IdType = CAN_ENUM_MESSAGE_ID_STANDARD;
-	signal_OUT.Id = 0x080;
-	signal_OUT.Frequency = 10;
-
-
-	signal_OUT.Data[0] = 1;
-	signal_OUT.Data[1] = 1;
-	signal_OUT.Data[2] = 1;
-	signal_OUT.Data[3] = 1;
-	signal_OUT.Data[4] = 1;
-	signal_OUT.Data[5] = 1;
-	signal_OUT.Data[6] = 1;
-	signal_OUT.Data[7] = 1;
-
-
-	CAN_TxHeaderTypeDef   TxHeader;
-	uint32_t              TxMailbox;
-
-	/* Infinite loop */
-	for (;;) {
-
-
-		TxHeader.IDE = signal_OUT.IdType == CAN_ENUM_MESSAGE_ID_STANDARD ? CAN_ID_STD : CAN_ID_EXT;
-		TxHeader.RTR = CAN_RTR_DATA;
-		TxHeader.DLC = 8;
-		TxHeader.StdId = signal_OUT.Id;
-
-		switch (signal_OUT.Bus) {
-			case CAN_ENUM_BUS_0:
-				if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, signal_OUT.Data, &TxMailbox) != HAL_OK)
-				{
-				 Error_Handler ();
-				}
-				break;
-			case CAN_ENUM_BUS_1:
-				if (HAL_CAN_AddTxMessage(&hcan2, &TxHeader, signal_OUT.Data, &TxMailbox) != HAL_OK)
-				{
-				 Error_Handler ();
-				}
-				break;
-		}
-
-
-		osDelay(100);
-
-	}
-  /* USER CODE END Start_OUTPUT_Task */
-}
-
-/* USER CODE BEGIN Header_Start_ADC_Task */
-/**
- * @brief Function implementing the ADC_Task thread.
- * @param argument: Not used
- * @retval None
- */
-/* USER CODE END Header_Start_ADC_Task */
-void Start_ADC_Task(void *argument)
-{
-  /* USER CODE BEGIN Start_ADC_Task */
-	/* Infinite loop */
-	for (;;) {
-
-		//osDelay(100);
-
-		ADC_ChannelConfTypeDef sConfig = { 0 };
-		sConfig.Channel = ADC_CHANNEL_0; //BATT
-		//sConfig.Channel = ADC_CHANNEL_11; //MULTISENSE
-		sConfig.Rank = 1;
-		sConfig.SamplingTime = ADC_SAMPLETIME_15CYCLES;
-		if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
-			Error_Handler();
-		}
-
-		uint32_t ADCValue = 0;
-		HAL_ADC_Start(&hadc1);
-		HAL_ADC_PollForConversion(&hadc1, 1000);
-		ADCValue = HAL_ADC_GetValue(&hadc1);
-		HAL_ADC_Stop(&hadc1);
-		Current_Status.BATT = ADCValue/10;//(ADCValue * 749) * (3.3 / 4096) / 100;
-		Current_Status.IND_BATT = Current_Status.BATT < 11.98 ? true : false;
-		osDelay(100);
-	}
-  /* USER CODE END Start_ADC_Task */
-}
-
-/* USER CODE BEGIN Header_Start_UART_task */
-/**
-* @brief Function implementing the UART_Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_Start_UART_task */
-void Start_UART_task(void *argument)
-{
-  /* USER CODE BEGIN Start_UART_task */
-
-	  MX_USB_DEVICE_Init();
-	    uint8_t dataLength;
-		uint8_t buffer[128];
-  /* Infinite loop */
-		osDelay(1000);
-  for(;;)
-  {
-	  	//1:1:2:1:1:1:1:32:32:1:
-	  	//W:type:R1:0:0:0:0:label:unit:source:
-	  	if(uartTransmitBufferSize > 0)
-	  	{
-	  		if(uartTransmitBuffer[0] == 'W')
-	  		{
-	  			uint8_t position = 0;
-	  			char *data[16] = {};
-	  			const char s[4] = ":";
-	  			char* tok;
-	  			tok = strtok(uartTransmitBuffer, s);
-	  		    while (tok != 0)
-	  		    {
-	  		    	data[position] = malloc(strlen(tok));
-	  		    	sprintf(data[position], "%s", tok);
-	  		    	tok = strtok(0, s);
-					position += 1;
-	  		    }
-
-	  		    if (strcmp(data[2], "R1") == 0) {
-
-	  		    	Current_Status.OK_R1 = (strcmp(data[3], "1") == 0);
-					Current_Status.WARNING_R1 = (strcmp(data[4], "1") == 0);
-					Current_Status.ALERT_R1 = (strcmp(data[5], "1") == 0);
-					sprintf(Current_Status.SCREEN_FIELDS[4].Label.Label, "%s", data[6]);
-					sprintf(Current_Status.SCREEN_FIELDS[4].Unit.Label, "%s", data[7]);
-					Current_Status.SCREEN_FIELDS_CHANGED = true;
-	  		    }
-	  		    if (strcmp(data[2], "R2") == 0) {
-
-					Current_Status.OK_R2 = (strcmp(data[3], "1") == 0);
-					Current_Status.WARNING_R2 = (strcmp(data[4], "1") == 0);
-					Current_Status.ALERT_R2 = (strcmp(data[5], "1") == 0);
-					sprintf(Current_Status.SCREEN_FIELDS[5].Label.Label, "%s", data[6]);
-					sprintf(Current_Status.SCREEN_FIELDS[5].Unit.Label, "%s", data[7]);
-					Current_Status.SCREEN_FIELDS_CHANGED = true;
-				}
-	  		}
-	  		memset (uartTransmitBuffer, '\0', uartTransmitBufferSize);
-	  		uartTransmitBufferSize = 0;
-	  	}
-
-
-		dataLength = sprintf(buffer, "%s:", "R");
-		dataLength += sprintf(buffer+dataLength, "rpm->%d:", Current_Status.RPM);
-		dataLength += sprintf(buffer+dataLength, "clt->%d:", Current_Status.ECT);
-		dataLength += sprintf(buffer+dataLength, "iat->%d:", Current_Status.IAT);
-		dataLength += sprintf(buffer+dataLength, "map->%d:", Current_Status.MAP);
-		dataLength += sprintf(buffer+dataLength, "baro->%d:", Current_Status.BARO);
-		dataLength += sprintf(buffer+dataLength, "battery->%d:", Current_Status.BATT);
-		dataLength += sprintf(buffer+dataLength, "%s", "\r\n");
-
-		osDelay(20);
-		CDC_Transmit_FS((uint8_t *)buffer, dataLength);
-
-		dataLength = sprintf(buffer, "%s:", "R");
-		dataLength += sprintf(buffer+dataLength, "protocol->%d:", Current_Status.CAN_PROTOCOL);
-		dataLength += sprintf(buffer+dataLength, "btr->%d:", Current_Status.BTN_TOP_RIGHT);
-		dataLength += sprintf(buffer+dataLength, "btl->%d:", Current_Status.BTN_TOP_LEFT);
-		dataLength += sprintf(buffer+dataLength, "bbr->%d:", Current_Status.BTN_BOTTOM_RIGHT);
-		dataLength += sprintf(buffer+dataLength, "bbl->%d:", Current_Status.BTN_BOTTOM_LEFT);
-		dataLength += sprintf(buffer+dataLength, "%s", "\r\n");
-
-		osDelay(20);
-		CDC_Transmit_FS((uint8_t *)buffer, dataLength);
-
-
-		dataLength = sprintf(buffer, "%s:", "P");
-		osDelay(10);
-		CDC_Transmit_FS((uint8_t *)buffer, dataLength);
-  }
-  /* USER CODE END Start_UART_task */
 }
 
 /**
