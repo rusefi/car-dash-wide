@@ -44,7 +44,7 @@ pins:
     type: 5v
     
   - pin: 12
-    function: Power supply from bintery.
+    function: Power supply from battery.
     type: 12v
     
   - pin: 13
