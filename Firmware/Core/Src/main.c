@@ -30,6 +30,7 @@
 #include "Globals.h"
 #include "extern.h"
 #include "sdram.h"
+#include "WS2812_Lib.h"
 
 /* USER CODE END Includes */
 
@@ -60,7 +61,9 @@ DMA2D_HandleTypeDef hdma2d;
 LTDC_HandleTypeDef hltdc;
 
 TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim13;
+DMA_HandleTypeDef hdma_tim2_ch2_ch4;
 
 SDRAM_HandleTypeDef hsdram1;
 
@@ -76,7 +79,7 @@ osThreadId_t TouchGFXTaskHandle;
 const osThreadAttr_t TouchGFXTask_attributes = {
   .name = "TouchGFXTask",
   .stack_size = 2048 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityHigh,
 };
 /* Definitions for LED_Task */
 osThreadId_t LED_TaskHandle;
@@ -99,6 +102,13 @@ const osThreadAttr_t ALERT_Task_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for RGB_Task */
+osThreadId_t RGB_TaskHandle;
+const osThreadAttr_t RGB_Task_attributes = {
+  .name = "RGB_Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
 FMC_SDRAM_CommandTypeDef command;
 
@@ -114,6 +124,7 @@ uint8_t RxData[8];
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_LTDC_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_FMC_Init(void);
@@ -122,11 +133,13 @@ static void MX_TIM13_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM1_Init(void);
+static void MX_TIM2_Init(void);
 void Start_START_Task(void *argument);
 void TouchGFX_Task(void *argument);
 void Start_LED_Task(void *argument);
 void Start_CAN_Task(void *argument);
 void Start_ALERT_Task(void *argument);
+void Start_RGB_Task(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -163,6 +176,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_LTDC_Init();
   MX_DMA2D_Init();
   MX_FMC_Init();
@@ -171,6 +185,7 @@ int main(void)
   MX_CAN1_Init();
   MX_ADC1_Init();
   MX_TIM1_Init();
+  MX_TIM2_Init();
   MX_TouchGFX_Init();
   /* Call PreOsInit function */
   MX_TouchGFX_PreOSInit();
@@ -220,6 +235,9 @@ int main(void)
   /* creation of ALERT_Task */
   ALERT_TaskHandle = osThreadNew(Start_ALERT_Task, NULL, &ALERT_Task_attributes);
 
+  /* creation of RGB_Task */
+  RGB_TaskHandle = osThreadNew(Start_RGB_Task, NULL, &RGB_Task_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
 	/* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -255,7 +273,7 @@ void SystemClock_Config(void)
   /** Configure the main internal regulator output voltage
   */
   __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -265,9 +283,9 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 6;
-  RCC_OscInitStruct.PLL.PLLN = 120;
+  RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 5;
+  RCC_OscInitStruct.PLL.PLLQ = 7;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -282,7 +300,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     Error_Handler();
   }
@@ -313,7 +331,7 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.ScanConvMode = DISABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
@@ -364,7 +382,7 @@ static void MX_CAN1_Init(void)
   hcan1.Init.Prescaler = 12;
   hcan1.Init.Mode = CAN_MODE_NORMAL;
   hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan1.Init.TimeSeg1 = CAN_BS1_2TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_4TQ;
   hcan1.Init.TimeSeg2 = CAN_BS2_2TQ;
   hcan1.Init.TimeTriggeredMode = DISABLE;
   hcan1.Init.AutoBusOff = DISABLE;
@@ -582,6 +600,65 @@ static void MX_TIM1_Init(void)
 }
 
 /**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 0;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 210;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+  HAL_TIM_MspPostInit(&htim2);
+
+}
+
+/**
   * @brief TIM13 Initialization Function
   * @param None
   * @retval None
@@ -624,6 +701,22 @@ static void MX_TIM13_Init(void)
 
   /* USER CODE END TIM13_Init 2 */
   HAL_TIM_MspPostInit(&htim13);
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Stream6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
 
 }
 
@@ -742,7 +835,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : CAN1_S0_Pin CAN2_S0_Pin */
   GPIO_InitStruct.Pin = CAN1_S0_Pin|CAN2_S0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
@@ -753,14 +846,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : LED_TIM2_CH2_PA1_Pin LED_TIM2_CH3_PA2_Pin */
-  GPIO_InitStruct.Pin = LED_TIM2_CH2_PA1_Pin|LED_TIM2_CH3_PA2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : I2C2_SCL_PH4_Pin I2C2_SDA_PH5_Pin */
   GPIO_InitStruct.Pin = I2C2_SCL_PH4_Pin|I2C2_SDA_PH5_Pin;
@@ -915,10 +1000,10 @@ void Start_LED_Task(void *argument)
 		osDelay(100);
 		HAL_GPIO_TogglePin(LED_ALERT_GPIO_Port, LED_ALERT_Pin);
 		osDelay(100);
-		HAL_GPIO_TogglePin(LED_CAN1_GPIO_Port, LED_CAN1_Pin);
-		osDelay(100);
-		HAL_GPIO_TogglePin(LED_CAN2_GPIO_Port, LED_CAN2_Pin);
-		osDelay(100);
+//		HAL_GPIO_TogglePin(CAN1_S0_GPIO_Port, CAN1_S0_Pin);
+//		osDelay(100);
+//		HAL_GPIO_TogglePin(CAN2_S0_GPIO_Port, CAN2_S0_Pin);
+//		osDelay(100);
 
 	}
   /* USER CODE END Start_LED_Task */
@@ -939,6 +1024,10 @@ void Start_CAN_Task(void *argument)
 	Current_Status.PRES_UNIT = kPa;
 	Current_Status.TEMP_UNIT = C;
 	Current_Status.SPEED_UNIT = Kmh;
+	HAL_GPIO_WritePin(CAN1_S0_GPIO_Port, CAN1_S0_Pin, SET);
+	HAL_GPIO_WritePin(CAN2_S0_GPIO_Port, CAN2_S0_Pin, SET);
+
+	//HAL_GPIO_WritePin(LED_CAN1_GPIO_Port, LED_CAN1_Pin, SET);
 
 	for (;;) {
 		if (CAN_ENABLED) {
@@ -1196,7 +1285,6 @@ void Start_CAN_Task(void *argument)
 			else {
 
 			}
-			osDelay(1);
 		} else {
 			osDelay(60000);
 		}
@@ -1484,6 +1572,77 @@ void Start_ALERT_Task(void *argument)
 		osDelay(1);
   }
   /* USER CODE END Start_ALERT_Task */
+}
+
+/* USER CODE BEGIN Header_Start_RGB_Task */
+/**
+* @brief Function implementing the RGB_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Start_RGB_Task */
+void Start_RGB_Task(void *argument)
+{
+  /* USER CODE BEGIN Start_RGB_Task */
+
+		Current_Status.LED_BRIGHTNESS = LED_DEFAULT_BRIGHTNESS;
+
+		/* Infinite loop */
+		for (;;) {
+			Current_Status.ENGINE_PROTECTION = Current_Status.RPM >= PROTECTION_RPM_HIGH ? 1 : 0;
+
+				if (RGB_ENABLED) {
+
+					WS2812_Clear(0);
+					uint8_t RPMLED = LED_NUMBER;
+
+					uint16_t lowRange = mapInt(Current_Status.RPM, PROTECTION_RPM_LOW, 0, RPMLED - PROTECTION_RPM_LED, 1);
+					lowRange = lowRange > RPMLED - PROTECTION_RPM_LED ? RPMLED - PROTECTION_RPM_LED : lowRange;
+					lowRange = lowRange < 1 ? 1 : lowRange;
+
+					for (int i = 1; i <= lowRange; i++) {
+						WS2812_RGB_t color;
+						if (Current_Status.ENGINE_PROTECTION == 1) {
+							color.red = 0;
+							color.green = 255;
+							color.blue = 0;
+						} else {
+							color.red = 0;
+							color.green = 255;
+							color.blue = 0;
+						}
+						WS2812_One_RGB((RPMLED - i) + (LED_NUMBER - RPMLED), color, 0);
+					}
+
+					if (Current_Status.RPM > PROTECTION_RPM_LOW) {
+						uint16_t highRange = mapInt(Current_Status.RPM, PROTECTION_RPM_HIGH, PROTECTION_RPM_LOW, PROTECTION_RPM_LED, 1);
+						for (int i = 1; i <= highRange; i++) {
+							WS2812_RGB_t color;
+							color.red = 255;
+							color.green = 0;
+							color.blue = 0;
+
+							WS2812_One_RGB((PROTECTION_RPM_LED - i) + (LED_NUMBER - RPMLED), color, 0);
+						}
+
+						WS2812_Refresh();
+						osDelay(50);
+
+						for (int i = 1; i <= highRange; i++) {
+							WS2812_RGB_t color;
+							color.red = 0;
+							color.green = 0;
+							color.blue = 0;
+
+							WS2812_One_RGB((PROTECTION_RPM_LED - i) + (LED_NUMBER - RPMLED), color, 0);
+						}
+					}
+
+					WS2812_Refresh();
+					osDelay(100);
+				}
+			}
+  /* USER CODE END Start_RGB_Task */
 }
 
 /**

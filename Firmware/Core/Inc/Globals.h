@@ -15,7 +15,7 @@ extern "C" {
 
 
 #define BH1750_ENABLED			0
-#define GPS_ENABLED				1
+#define GPS_ENABLED				0
 #define CAN_ENABLED				1
 #define RGB_ENABLED				1
 #define UART_ENABLED			0
@@ -24,7 +24,7 @@ extern "C" {
 #define DEMO		  			0
 
 #define LED_NUMBER				24
-#define LED_DEFAULT_BRIGHTNESS		2
+#define LED_DEFAULT_BRIGHTNESS		50
 
 #define LCD_DEFAULT_BRIGHTNESS	400
 
