@@ -14,25 +14,18 @@ extern "C" {
 #include <Def/SCREEN_Def.h>
 
 
-#define BH1750_ENABLED			0
 #define GPS_ENABLED				0
-#define CAN_ENABLED				1
+#define CAN_ENABLED				0
 #define RGB_ENABLED				1
 #define UART_ENABLED			0
-#define IND_ENABLED 			0
-#define ALERT_ENABLED  			0
-#define DEMO		  			0
 
-#define LED_NUMBER				24
-#define LED_DEFAULT_BRIGHTNESS		50
+#define CAN_SETUP_ID			0x580
 
+#define LED_DEFAULT_BRIGHTNESS	50
 #define LCD_DEFAULT_BRIGHTNESS	400
 
-#define LCD_RPM_HIGH 			8000
-
 #define PROTECTION_RPM_LOW 		6500
-#define PROTECTION_RPM_HIGH 	7800
-
+#define PROTECTION_RPM_HIGH 	8000
 #define PROTECTION_RPM_LED 		6
 
 #define PROTECTION_OIL_LOW 		40

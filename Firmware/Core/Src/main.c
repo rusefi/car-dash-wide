@@ -30,7 +30,11 @@
 #include "Globals.h"
 #include "extern.h"
 #include "sdram.h"
-#include "WS2812_Lib.h"
+#include "WS2812/WS2812.hpp"
+
+//Setup
+#include "Setup/Dash/setupDash.h"
+#include "Setup/Field/setupField.h"
 
 /* USER CODE END Includes */
 
@@ -61,9 +65,7 @@ DMA2D_HandleTypeDef hdma2d;
 LTDC_HandleTypeDef hltdc;
 
 TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim13;
-DMA_HandleTypeDef hdma_tim2_ch2_ch4;
 
 SDRAM_HandleTypeDef hsdram1;
 
@@ -106,7 +108,7 @@ const osThreadAttr_t ALERT_Task_attributes = {
 osThreadId_t RGB_TaskHandle;
 const osThreadAttr_t RGB_Task_attributes = {
   .name = "RGB_Task",
-  .stack_size = 128 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* USER CODE BEGIN PV */
@@ -119,12 +121,14 @@ CAN_RxHeaderTypeDef RxHeader;
 uint8_t TxData[8];
 uint8_t RxData[8];
 
+uint8_t uartTransmitBufferSize;
+uint8_t uartTransmitBuffer[128];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
 static void MX_LTDC_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_FMC_Init(void);
@@ -133,7 +137,6 @@ static void MX_TIM13_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM1_Init(void);
-static void MX_TIM2_Init(void);
 void Start_START_Task(void *argument);
 void TouchGFX_Task(void *argument);
 void Start_LED_Task(void *argument);
@@ -176,7 +179,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_LTDC_Init();
   MX_DMA2D_Init();
   MX_FMC_Init();
@@ -185,18 +187,13 @@ int main(void)
   MX_CAN1_Init();
   MX_ADC1_Init();
   MX_TIM1_Init();
-  MX_TIM2_Init();
   MX_TouchGFX_Init();
   /* Call PreOsInit function */
   MX_TouchGFX_PreOSInit();
   /* USER CODE BEGIN 2 */
 
-	HAL_TIM_PWM_Start(&htim13, TIM_CHANNEL_1);
-
-	//BH1750_sensor = BH1750_init_dev_struct(&hi2c2, "BH1750 device", true);
-
-	//BH1750_init_dev(BH1750_sensor);
-
+  HAL_TIM_PWM_Start(&htim13, TIM_CHANNEL_1);
+  initWS2812();
 
   /* USER CODE END 2 */
 
@@ -600,65 +597,6 @@ static void MX_TIM1_Init(void)
 }
 
 /**
-  * @brief TIM2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM2_Init(void)
-{
-
-  /* USER CODE BEGIN TIM2_Init 0 */
-
-  /* USER CODE END TIM2_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-
-  /* USER CODE BEGIN TIM2_Init 1 */
-
-  /* USER CODE END TIM2_Init 1 */
-  htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 0;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 210;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM2_Init 2 */
-
-  /* USER CODE END TIM2_Init 2 */
-  HAL_TIM_MspPostInit(&htim2);
-
-}
-
-/**
   * @brief TIM13 Initialization Function
   * @param None
   * @retval None
@@ -701,22 +639,6 @@ static void MX_TIM13_Init(void)
 
   /* USER CODE END TIM13_Init 2 */
   HAL_TIM_MspPostInit(&htim13);
-
-}
-
-/**
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void)
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Stream6_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
 
 }
 
@@ -1255,28 +1177,50 @@ void Start_CAN_Task(void *argument)
 				default:
 					break;
 				}
+
+				if(RxHeader.StdId == CAN_SETUP_ID)
+				{
+					switch (RxData[0]) {
+						case 0x00: //READ START
+
+							break;
+						case 0xA0: //SETUP DEVICE
+
+							break;
+						case 0xB0: //SETUP FIELD
+							//setAllFields(&RxData);
+							break;
+						case 0xC0: //SETUP CHANNEL
+
+							break;
+						case 0xD0: //SETUP ERROR
+
+							break;
+					}
+				}
+
 				Current_Status.RPM_100 = mapInt(Current_Status.RPM, 0,
-				LCD_RPM_HIGH, 0, 100);
+						PROTECTION_RPM_HIGH, 0, 100);
 				Current_Status.RPM_100 =
 						Current_Status.RPM_100 >= 100 ?
 								100 : Current_Status.RPM_100;
 				Current_Status.RPM_180 = mapInt(Current_Status.RPM, 0,
-				LCD_RPM_HIGH, 0, 180);
+						PROTECTION_RPM_HIGH, 0, 180);
 				Current_Status.RPM_180 =
 						Current_Status.RPM_180 >= 180 ?
 								810 : Current_Status.RPM_180;
 				Current_Status.RPM_270 = mapInt(Current_Status.RPM, 0,
-				LCD_RPM_HIGH, 0, 270);
+						PROTECTION_RPM_HIGH, 0, 270);
 				Current_Status.RPM_270 =
 						Current_Status.RPM_270 >= 270 ?
 								270 : Current_Status.RPM_270;
 				Current_Status.RPM_240 = mapInt(Current_Status.RPM, 0,
-				LCD_RPM_HIGH, 0, 240);
+						PROTECTION_RPM_HIGH, 0, 240);
 				Current_Status.RPM_240 =
 						Current_Status.RPM_240 >= 240 ?
 								240 : Current_Status.RPM_240;
 				Current_Status.RPM_360 = mapInt(Current_Status.RPM, 0,
-				LCD_RPM_HIGH, 0, 360);
+						PROTECTION_RPM_HIGH, 0, 360);
 				Current_Status.RPM_360 =
 						Current_Status.RPM_360 >= 360 ?
 								360 : Current_Status.RPM_360;
@@ -1584,17 +1528,17 @@ void Start_ALERT_Task(void *argument)
 void Start_RGB_Task(void *argument)
 {
   /* USER CODE BEGIN Start_RGB_Task */
-
-		Current_Status.LED_BRIGHTNESS = LED_DEFAULT_BRIGHTNESS;
-
 		/* Infinite loop */
 		for (;;) {
-			Current_Status.ENGINE_PROTECTION = Current_Status.RPM >= PROTECTION_RPM_HIGH ? 1 : 0;
-
 				if (RGB_ENABLED) {
+					Current_Status.RPM = Current_Status.RPM >= PROTECTION_RPM_HIGH ? 0 : Current_Status.RPM;
+					Current_Status.RPM = Current_Status.RPM + 100;
 
-					WS2812_Clear(0);
-					uint8_t RPMLED = LED_NUMBER;
+					Current_Status.ENGINE_PROTECTION = Current_Status.RPM >= PROTECTION_RPM_HIGH ? 1 : 0;
+
+
+					clearWS2812All();
+					uint8_t RPMLED = WS2812_LED_N;
 
 					uint16_t lowRange = mapInt(Current_Status.RPM, PROTECTION_RPM_LOW, 0, RPMLED - PROTECTION_RPM_LED, 1);
 					lowRange = lowRange > RPMLED - PROTECTION_RPM_LED ? RPMLED - PROTECTION_RPM_LED : lowRange;
@@ -1611,7 +1555,7 @@ void Start_RGB_Task(void *argument)
 							color.green = 255;
 							color.blue = 0;
 						}
-						WS2812_One_RGB((RPMLED - i) + (LED_NUMBER - RPMLED), color, 0);
+						setWS2812One((RPMLED - i) + (WS2812_LED_N - RPMLED), color);
 					}
 
 					if (Current_Status.RPM > PROTECTION_RPM_LOW) {
@@ -1622,10 +1566,10 @@ void Start_RGB_Task(void *argument)
 							color.green = 0;
 							color.blue = 0;
 
-							WS2812_One_RGB((PROTECTION_RPM_LED - i) + (LED_NUMBER - RPMLED), color, 0);
+							setWS2812One((PROTECTION_RPM_LED - i) + (WS2812_LED_N - RPMLED), color);
 						}
 
-						WS2812_Refresh();
+						updateWS2812();
 						osDelay(50);
 
 						for (int i = 1; i <= highRange; i++) {
@@ -1634,11 +1578,12 @@ void Start_RGB_Task(void *argument)
 							color.green = 0;
 							color.blue = 0;
 
-							WS2812_One_RGB((PROTECTION_RPM_LED - i) + (LED_NUMBER - RPMLED), color, 0);
+							setWS2812One((PROTECTION_RPM_LED - i) + (WS2812_LED_N - RPMLED), color);
 						}
 					}
 
-					WS2812_Refresh();
+
+					updateWS2812();
 					osDelay(100);
 				}
 			}

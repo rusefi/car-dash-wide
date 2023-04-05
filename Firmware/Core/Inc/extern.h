@@ -14,6 +14,8 @@ extern Statuses Current_Status;
 extern FILE *FileBuffer;
 extern uint8_t BufferIsSet;
 
+extern uint8_t uartTransmitBufferSize;
+extern uint8_t uartTransmitBuffer[128];
 
 
 

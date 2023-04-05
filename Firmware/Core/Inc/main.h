@@ -109,10 +109,6 @@ void show_neopixels();
 #define HALL_OUT_GPIO_Port GPIOC
 #define BRV_CPU_Pin GPIO_PIN_0
 #define BRV_CPU_GPIO_Port GPIOA
-#define LED_TIM2_CH2_PA1_Pin GPIO_PIN_1
-#define LED_TIM2_CH2_PA1_GPIO_Port GPIOA
-#define LED_TIM2_CH3_PA2_Pin GPIO_PIN_2
-#define LED_TIM2_CH3_PA2_GPIO_Port GPIOA
 #define I2C2_SCL_PH4_Pin GPIO_PIN_4
 #define I2C2_SCL_PH4_GPIO_Port GPIOH
 #define I2C2_SDA_PH5_Pin GPIO_PIN_5
