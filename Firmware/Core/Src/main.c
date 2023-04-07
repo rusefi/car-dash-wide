@@ -946,8 +946,8 @@ void Start_CAN_Task(void *argument)
 	Current_Status.PRES_UNIT = kPa;
 	Current_Status.TEMP_UNIT = C;
 	Current_Status.SPEED_UNIT = Kmh;
-	HAL_GPIO_WritePin(CAN1_S0_GPIO_Port, CAN1_S0_Pin, SET);
-	HAL_GPIO_WritePin(CAN2_S0_GPIO_Port, CAN2_S0_Pin, SET);
+	//HAL_GPIO_WritePin(CAN1_S0_GPIO_Port, CAN1_S0_Pin, SET);
+	//HAL_GPIO_WritePin(CAN2_S0_GPIO_Port, CAN2_S0_Pin, SET);
 
 	//HAL_GPIO_WritePin(LED_CAN1_GPIO_Port, LED_CAN1_Pin, SET);
 
@@ -1528,11 +1528,13 @@ void Start_ALERT_Task(void *argument)
 void Start_RGB_Task(void *argument)
 {
   /* USER CODE BEGIN Start_RGB_Task */
+
+    setWS2812Brightness(5);
 		/* Infinite loop */
 		for (;;) {
 				if (RGB_ENABLED) {
-					Current_Status.RPM = Current_Status.RPM >= PROTECTION_RPM_HIGH ? 0 : Current_Status.RPM;
-					Current_Status.RPM = Current_Status.RPM + 100;
+					//Current_Status.RPM = Current_Status.RPM >= PROTECTION_RPM_HIGH ? 0 : Current_Status.RPM;
+					//Current_Status.RPM = Current_Status.RPM + 100;
 
 					Current_Status.ENGINE_PROTECTION = Current_Status.RPM >= PROTECTION_RPM_HIGH ? 1 : 0;
 

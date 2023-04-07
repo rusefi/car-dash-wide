@@ -6,13 +6,14 @@
  * @author Benas Brazdziunas
  */
 
-#include "WS2812/WS2812.hpp"
+#include "WS2812.hpp"
 
 
 static WS2812_RGB_t WS2812_LED_BUF[WS2812_LED_N];
 static uint32_t WS2812_TIM_BUF[WS2812_BUFLEN];
 static uint8_t WS2812_BRIGHTNESS = 5;
 static bool WS2812_INVERT_ORDER = true;
+static bool WS2812_DMA_READY = false;
 
 TIM_HandleTypeDef WS2812_PWM_DRIVER;
 DMA_HandleTypeDef WS2812_PWM_DMA;
@@ -21,12 +22,14 @@ extern void DMA1_Stream1_IRQHandler(void);
 
 void initWS2812()
 {
-	ConfigureTimerPeripheral();
-	ConfigureTimerGPIO();
-	ConfigureTimerChannel();
 
-	HAL_TIM_PWM_Start_DMA(&WS2812_PWM_DRIVER, WS2812_PWM_TIM_CH, (uint32_t *)WS2812_TIM_BUF, WS2812_BUFLEN);
+	uint32_t freq = HAL_RCC_GetHCLKFreq();
+	ConfigureTimerGPIO();
+	ConfigureTimerPeripheral();
+	ConfigureDMA();
+	ConfigureTimerChannel();
 	//HAL_TIM_PWM_Start(&WS2812_PWM_DRIVER, WS2812_PWM_TIM_CH);
+	HAL_TIM_PWM_Start_DMA(&WS2812_PWM_DRIVER, WS2812_PWM_TIM_CH, (uint32_t *)WS2812_TIM_BUF, WS2812_BUFLEN);
 }
 
 /**
@@ -88,7 +91,9 @@ void setWS2812Brightness(uint8_t num)
  */
 void updateWS2812()
 {
-	uint32_t pos = WS2812_INVERT_ORDER ? (WS2812_LED_N * 24) : 0;
+    while(!WS2812_DMA_READY);
+
+    uint32_t pos = WS2812_INVERT_ORDER ? (WS2812_LED_N * 24) : 0;
 
 	for (uint32_t num = 0; num < WS2812_LED_N; num++)
 	{
@@ -132,6 +137,7 @@ void updateWS2812()
 			WS2812_TIM_BUF[pos--] = ((led.green & 0x01) != 0) ? WS2812_DUTYCYCLE_1 : WS2812_DUTYCYCLE_0;
 
 		} else {
+
 			// Col:Green , Bit:7..0
 			WS2812_TIM_BUF[pos++] = ((led.green & 0x80) != 0) ? WS2812_DUTYCYCLE_1 : WS2812_DUTYCYCLE_0;
 			WS2812_TIM_BUF[pos++] = ((led.green & 0x40) != 0) ? WS2812_DUTYCYCLE_1 : WS2812_DUTYCYCLE_0;
@@ -162,17 +168,17 @@ void updateWS2812()
 			WS2812_TIM_BUF[pos++] = ((led.blue & 0x02) != 0) ? WS2812_DUTYCYCLE_1 : WS2812_DUTYCYCLE_0;
 			WS2812_TIM_BUF[pos++] = ((led.blue & 0x01) != 0) ? WS2812_DUTYCYCLE_1 : WS2812_DUTYCYCLE_0;
 		}
-
 	}
+	HAL_TIM_PWM_Start_DMA(&WS2812_PWM_DRIVER, WS2812_PWM_TIM_CH, (uint32_t *)WS2812_TIM_BUF, WS2812_BUFLEN);
+	WS2812_DMA_READY = false;
 }
 
 void ConfigureTimerPeripheral()
 {
 	TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-	TIM_MasterConfigTypeDef sMasterConfig = {0};
-	TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
 	__HAL_RCC_TIM2_CLK_ENABLE();
+
 	WS2812_PWM_DRIVER.Instance = WS2812_PWM_TIMER;
 	WS2812_PWM_DRIVER.Init.CounterMode = TIM_COUNTERMODE_UP;
 	WS2812_PWM_DRIVER.Init.RepetitionCounter = 0;
@@ -185,6 +191,7 @@ void ConfigureTimerPeripheral()
 	{
 		return;
 	}
+
 
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
 	if (HAL_TIM_ConfigClockSource(&WS2812_PWM_DRIVER, &sClockSourceConfig) != HAL_OK)
@@ -202,6 +209,8 @@ void ConfigureTimerPeripheral()
 
 void ConfigureTimerGPIO(void)
 {
+
+
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
@@ -240,7 +249,6 @@ void ConfigureDMA(void)
 
 	/* Enable DMA clock */
 	__HAL_RCC_DMA1_CLK_ENABLE();
-
 	/*##- 3- Configure DMA #####################################################*/
 	/*********************** Configure DMA parameters ***************************/
 	WS2812_PWM_DMA.Instance = DMA1_Stream1;
@@ -251,22 +259,24 @@ void ConfigureDMA(void)
 	WS2812_PWM_DMA.Init.MemInc              = DMA_MINC_ENABLE;
 	WS2812_PWM_DMA.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
 	WS2812_PWM_DMA.Init.MemDataAlignment    = DMA_PDATAALIGN_WORD;
-	WS2812_PWM_DMA.Init.Mode                = DMA_CIRCULAR;
-	WS2812_PWM_DMA.Init.Priority            = DMA_PRIORITY_VERY_HIGH;
+	WS2812_PWM_DMA.Init.Mode                = DMA_NORMAL;
+	WS2812_PWM_DMA.Init.Priority            = DMA_PRIORITY_LOW;
 	WS2812_PWM_DMA.Init.FIFOMode 		 	= DMA_FIFOMODE_DISABLE;
 
 	/* Associate the DMA handle */
 	__HAL_LINKDMA(&WS2812_PWM_DRIVER, hdma[TIM_DMA_ID_CC3], WS2812_PWM_DMA);
-
-	/* Initialize DMA handle */
+//
+//	/* Initialize DMA handle */
 	HAL_DMA_Init(WS2812_PWM_DRIVER.hdma[TIM_DMA_ID_CC3]);
-
-	/* NVIC configuration for DMA transfer complete interrupt */
-	HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 5, 0);
+//
+//	/* NVIC configuration for DMA transfer complete interrupt */
+	HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+//
 }
 
 void DMA1_Stream1_IRQHandler(void)
 {
+	WS2812_DMA_READY = true;
 	HAL_DMA_IRQHandler(WS2812_PWM_DRIVER.hdma[TIM_DMA_ID_CC3]);
 }

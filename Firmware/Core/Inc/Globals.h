@@ -14,10 +14,8 @@ extern "C" {
 #include <Def/SCREEN_Def.h>
 
 
-#define GPS_ENABLED				0
-#define CAN_ENABLED				0
+#define CAN_ENABLED				1
 #define RGB_ENABLED				1
-#define UART_ENABLED			0
 
 #define CAN_SETUP_ID			0x580
 
